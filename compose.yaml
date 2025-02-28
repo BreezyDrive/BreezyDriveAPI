@@ -1,0 +1,6 @@
+﻿services:
+  breezydrive:
+    image: breezydrive
+    build:
+      context: .
+      dockerfile: Dockerfile
