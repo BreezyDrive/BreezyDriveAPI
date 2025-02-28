@@ -1,0 +1,6 @@
+﻿services:
+  apicontroller:
+    image: apicontroller
+    build:
+      context: .
+      dockerfile: APIController/Dockerfile
