@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.Common.csproj" />
+  </ItemGroup>
+
 </Project>
