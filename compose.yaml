@@ -4,3 +4,51 @@
     build:
       context: .
       dockerfile: APIController/Dockerfile
+
+  breezydrive.users:
+    image: breezydrive.users
+    build:
+      context: .
+      dockerfile: BreezyDrive.users/Dockerfile
+
+  breezydrive.cars:
+    image: breezydrive.cars
+    build:
+      context: .
+      dockerfile: BreezyDrive.cars/Dockerfile
+
+  breezydrive.bookings:
+    image: breezydrive.bookings
+    build:
+      context: .
+      dockerfile: BreezyDrive.bookings/Dockerfile
+
+  breezydrive.cars-1:
+    image: breezydrive.cars-1
+    build:
+      context: .
+      dockerfile: BreezyDrive.Cars/Dockerfile
+
+  breezydrive.users-1:
+    image: breezydrive.users-1
+    build:
+      context: .
+      dockerfile: BreezyDrive.Users/Dockerfile
+
+  breezydrive.bookings-1:
+    image: breezydrive.bookings-1
+    build:
+      context: .
+      dockerfile: BreezyDrive.Bookings/Dockerfile
+
+  breezydrive.notifications:
+    image: breezydrive.notifications
+    build:
+      context: .
+      dockerfile: BreezyDrive.Notifications/Dockerfile
+
+  breezydrive.conversations:
+    image: breezydrive.conversations
+    build:
+      context: .
+      dockerfile: BreezyDrive.Conversations/Dockerfile
