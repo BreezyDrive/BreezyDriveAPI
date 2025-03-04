@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BreezyDrive.Common.Entity
 {
-    public class CommonEntity
+    public interface IEntities
     {
+        public Guid Id { get; set; }
     }
 }
