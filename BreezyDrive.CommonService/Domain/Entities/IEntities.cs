@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Entity
+namespace BreezyDrive.Common.Domain.Entities
 {
     public interface IEntities
     {
