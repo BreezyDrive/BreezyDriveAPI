@@ -1,0 +1,6 @@
+@BreezyDrive.Cars_HostAddress = http://localhost:5242
+
+GET {{BreezyDrive.Cars_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
