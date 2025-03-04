@@ -1,4 +1,5 @@
 ﻿using BreezyDrive.Common.Entity;
+using FluffyPaw_Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace BreezyDrive.Common.Domain.Interface
 
         // async
         Task<IList<TEntity>> GetAllAsync();
-        //Task<IPaginatedList<TEntity>> GetPagging(IQueryable<TEntity> query, int? index, int? pageSize);
+        Task<IPaginatedList<TEntity>> GetPagging(IQueryable<TEntity> query, int? index, int? pageSize);
         Task<TEntity?> GetByIdAsync(object id);
         Task InsertAsync(TEntity obj);
         Task UpdateAsync(TEntity obj);
