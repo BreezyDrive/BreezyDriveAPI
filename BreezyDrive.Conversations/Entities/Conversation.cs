@@ -14,11 +14,5 @@ namespace BreezyDrive.Conversations.Entities
         public string LastMessage { get; set; }
         public bool IsOpen { get; set; }
         public Guid? CloseAccountId { get; set; }
-
-        [ForeignKey("UserId")]
-        public virtual Users UserId1 { get; set; }
-        [ForeignKey("UserId")]
-        public virtual Users UserId2 { get; set; }
-
     }
 }
