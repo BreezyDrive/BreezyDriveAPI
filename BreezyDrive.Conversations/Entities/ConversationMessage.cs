@@ -15,6 +15,7 @@ namespace BreezyDrive.Conversations.Entities
         public string Content { get; set; }
         public bool IsSeen { get; set; }
         public Guid Reply_To_MessageId { get; set; }
+        //
 
     }
 }
