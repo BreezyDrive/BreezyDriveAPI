@@ -1,11 +1,11 @@
-﻿using FluffyPaw_Domain.Interfaces;
+﻿using BreezyDrive.Common.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FluffyPaw_Application.Utils.Pagination
+namespace BreezyDrive.Common.Application.Utils.Pagination
 {
     public class PaginatedList<TEntity> : IPaginatedList<TEntity>
     {

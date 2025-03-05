@@ -1,4 +1,4 @@
-﻿using FluffyPaw_Domain.Interfaces;
+﻿using BreezyDrive.Common.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Domain.Interface
+namespace BreezyDrive.Common.Domain.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
