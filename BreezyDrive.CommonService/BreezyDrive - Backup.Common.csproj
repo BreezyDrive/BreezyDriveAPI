@@ -10,4 +10,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastuctures\Intergrations\Firebase\" />
+    <Folder Include="Infrastuctures\Intergrations\SignalR\" />
+    <Folder Include="Infrastuctures\Intergrations\Quartz\" />
+    <Folder Include="Middleware\" />
+  </ItemGroup>
+
 </Project>
