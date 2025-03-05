@@ -1,7 +1,6 @@
-﻿using BreezyDrive.Common.Domain.Interface;
+﻿using BreezyDrive.Common.Application.Utils.Pagination;
+using BreezyDrive.Common.Domain.Interfaces;
 using BreezyDrive.Common.Infrastuctures.Data;
-using FluffyPaw_Application.Utils.Pagination;
-using FluffyPaw_Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;

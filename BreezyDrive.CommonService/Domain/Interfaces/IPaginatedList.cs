@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FluffyPaw_Domain.Interfaces
+namespace BreezyDrive.Common.Domain.Interfaces
 {
     public interface IPaginatedList<TEntity>
     {
