@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Application.Utils.Pagination
+namespace BreezyDrive.Common.Application.Utils.PaginatedList
 {
     public class PaginatedList<TEntity> : IPaginatedList<TEntity>
     {

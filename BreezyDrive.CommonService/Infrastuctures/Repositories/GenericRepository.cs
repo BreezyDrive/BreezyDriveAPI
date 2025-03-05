@@ -1,4 +1,4 @@
-﻿using BreezyDrive.Common.Application.Utils.Pagination;
+﻿using BreezyDrive.Common.Application.Utils.PaginatedList;
 using BreezyDrive.Common.Domain.Interfaces;
 using BreezyDrive.Common.Infrastuctures.Data;
 using Microsoft.EntityFrameworkCore;

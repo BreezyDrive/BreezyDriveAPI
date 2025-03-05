@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BreezyDrive.Users.Entities
 {
+    [Table("UserDriveLisences")]
     public class UserDriveLisences
     {
         [Key]
