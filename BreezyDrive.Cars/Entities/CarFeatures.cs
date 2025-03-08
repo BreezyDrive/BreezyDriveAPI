@@ -2,12 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BreezyDrive.Cars.Entities;
-
-public class CarFeatures : IEntities
+namespace BreezyDrive.Cars.Entities
 {
     [Table("CarFeatures")]
-    public class CarFeatures
+    public class CarFeatures : IEntities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
