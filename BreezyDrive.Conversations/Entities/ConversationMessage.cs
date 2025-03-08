@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BreezyDrive.Common.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BreezyDrive.Conversations.Entities
 {
     [Table("ConversationMessage")]
-    public class ConversationMessage
+    public class ConversationMessage : IEntities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public Guid ConverationId { get; set; }
         public Guid SenderId { get; set; }
         public DateTime CreateTime { get; set; }

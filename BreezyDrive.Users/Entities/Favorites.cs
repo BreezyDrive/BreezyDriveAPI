@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using BreezyDrive.Common.Domain.Entities;
 
 namespace BreezyDrive.Users.Entities
 {
     [Table("Favorites")]
-    public class Favorites
+    public class Favorites : IEntities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public Guid UserId { get; set; }
 

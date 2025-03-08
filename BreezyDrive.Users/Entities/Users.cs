@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using BreezyDrive.Common.Domain.Entities;
 
 namespace BreezyDrive.Users.Entities
 {
-    public class Users
+    [Table("Users")]
+    public class Users : IEntities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
