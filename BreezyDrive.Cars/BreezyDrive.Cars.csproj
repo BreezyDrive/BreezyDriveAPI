@@ -22,4 +22,18 @@
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Entities\CarFeatures.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="API\Controllers\" />
+      <Folder Include="API\Middlewares\" />
+      <Folder Include="Application\DTO\Requests\" />
+      <Folder Include="Application\DTO\Responses\" />
+      <Folder Include="Domain\Enums\" />
+      <Folder Include="Infrastructure\Plugins\" />
+      <Folder Include="Infrastructure\Repositories\" />
+    </ItemGroup>
+
 </Project>

@@ -1,8 +1,8 @@
-﻿using BreezyDrive.Common.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BreezyDrive.Common.Domain.Entities;
 
-namespace BreezyDrive.Cars.Entities
+namespace BreezyDrive.Cars.Domain.Entities
 {
     [Table("Cars")]
     public class Cars : BaseEntities
