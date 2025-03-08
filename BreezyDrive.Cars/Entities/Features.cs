@@ -2,12 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BreezyDrive.Cars.Entities;
-
-public class Features : IEntities
+namespace BreezyDrive.Cars.Entities
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
-    public required string Name { get; set; }
+    [Table("Features")]
+    public class Features : IEntities
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+        public required string Name { get; set; }
+    }
 }
+
