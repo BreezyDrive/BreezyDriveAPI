@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -21,6 +21,21 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="API\Controllers\" />
+      <Folder Include="API\Middlewares\" />
+      <Folder Include="API\Filters\" />
+      <Folder Include="Application\DTOs\" />
+      <Folder Include="Application\Interfaces\" />
+      <Folder Include="Application\Exceptions\" />
+      <Folder Include="Application\Services\" />
+      <Folder Include="Domain\Enums\" />
+      <Folder Include="Infrasturcture\Identity\" />
+      <Folder Include="Infrasturcture\Email\" />
+      <Folder Include="Infrasturcture\Repositories\" />
+      <Folder Include="Infrasturcture\Persistance\" />
     </ItemGroup>
 
 </Project>

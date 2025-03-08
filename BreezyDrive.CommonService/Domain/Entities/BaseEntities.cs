@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace BreezyDrive.Common.Domain.Entities
 {
-    public interface IEntities
+    public abstract class BaseEntities
     {
+
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
     }
 }

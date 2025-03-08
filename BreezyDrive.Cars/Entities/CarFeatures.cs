@@ -5,12 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BreezyDrive.Cars.Entities
 {
     [Table("CarFeatures")]
-    public class CarFeatures : IEntities
+    public class CarFeatures : BaseEntities
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-    
         public Guid CarId { get; set; }
     
         public Guid FeatureId { get; set; }
@@ -20,8 +16,6 @@ namespace BreezyDrive.Cars.Entities
     
         [ForeignKey("FeatureId")]
         public virtual required Features Feature { get; set; }
-    
-    
     }
 }
 
