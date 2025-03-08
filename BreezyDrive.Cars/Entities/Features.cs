@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BreezyDrive.Cars.Entities
 {
     [Table("Features")]
-    public class Features : IEntities
+    public class Features : BaseEntities
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
         public required string Name { get; set; }
     }
 }

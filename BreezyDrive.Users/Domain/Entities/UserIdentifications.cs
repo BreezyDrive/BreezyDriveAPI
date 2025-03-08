@@ -2,15 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using BreezyDrive.Common.Domain.Entities;
 
-namespace BreezyDrive.Users.Entities
+namespace BreezyDrive.Users.Domain.Entities
 {
     [Table("UserIdentifications")]
-    public class UserIdentifications : IEntities
+    public class UserIdentifications : BaseEntities
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
         public Guid UserId { get; set; }
 
         public int Number { get; set; }

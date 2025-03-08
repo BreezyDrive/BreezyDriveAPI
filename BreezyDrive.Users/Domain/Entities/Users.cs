@@ -3,15 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using BreezyDrive.Common.Domain.Entities;
 
-namespace BreezyDrive.Users.Entities
+namespace BreezyDrive.Users.Domain.Entities
 {
     [Table("Users")]
-    public class Users : IEntities
+    public class Users : BaseEntities
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
         public int RoleId { get; set; }
 
         public string UserName { get; set; }
