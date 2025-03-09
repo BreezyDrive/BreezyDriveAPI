@@ -1,19 +1,18 @@
-﻿using BreezyDrive.Common.Domain.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BreezyDrive.Common.Domain.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        // query
-        IQueryable<TEntity> Entities { get; }
+        // Queryable collection
+        IQueryable<TEntity> Query { get; }
 
-        //non async
+        // Non-async methods
+        IEnumerable<TEntity> GetAll();
         IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
@@ -21,37 +20,32 @@ namespace BreezyDrive.Common.Domain.Interfaces
             int? pageIndex = null,
             int? pageSize = null);
 
-        IEnumerable<TEntity> GetAll();
-
-        TEntity GetByID(object id);
+        TEntity GetById(object id);
         void Insert(TEntity entity);
-        void InsertRange(IList<TEntity> obj);
+        void InsertRange(IEnumerable<TEntity> entities);
         void Delete(object id);
-        void Delete(TEntity entityToDelete);
-        void Update(TEntity entityToUpdate);
+        void Delete(TEntity entity);
+        void Update(TEntity entity);
+        bool Exists(Expression<Func<TEntity, bool>> predicate);
+        void Commit();
 
-        bool Exists(Expression<Func<TEntity, bool>> filter);
-
-        void Save();
-
-        // async
+        // Async methods
         Task<IList<TEntity>> GetAllAsync();
-        Task<IPaginatedList<TEntity>> GetPagging(IQueryable<TEntity> query, int? index, int? pageSize);
         Task<TEntity?> GetByIdAsync(object id);
-        Task InsertAsync(TEntity obj);
-        Task UpdateAsync(TEntity obj);
-        Task DeleteAsync(object id);
-        Task SaveAsync();
+        Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, string includeProperties = "");
         Task<IEnumerable<TEntity>> GetAsync(
-        Expression<Func<TEntity, bool>> filter = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        string includeProperties = "",
-        int? pageIndex = null,
-        int? pageSize = null);
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "",
+            int? pageIndex = null,
+            int? pageSize = null);
 
-        Task<TEntity?> GetFirstOrDefaultAsync(
-        Expression<Func<TEntity, bool>> filter = null,
-        string includeProperties = "");
+        Task InsertAsync(TEntity entity);
+        Task UpdateAsync(TEntity entity);
+        Task DeleteAsync(object id);
+        Task CommitAsync();
 
+        // Pagination support
+        Task<IPaginatedList<TEntity>> GetPagingAsync(IQueryable<TEntity> query, int? pageIndex, int? pageSize);
     }
 }

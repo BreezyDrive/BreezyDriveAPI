@@ -7,25 +7,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BreezyDrive.Common.Infrastuctures.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity>
+        where TEntity : class
+        where TContext : BaseDbContext<TContext>
     {
-        internal MyDBContext context;
+        internal TContext context;
         internal DbSet<TEntity> dbSet;
 
-        public IQueryable<TEntity> Entities => context.Set<TEntity>();
+        public IQueryable<TEntity> Query => context.Set<TEntity>();
 
-        public GenericRepository(MyDBContext context)
+        public GenericRepository(TContext context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();
         }
 
-        public virtual IEnumerable<TEntity> Get(
+        // Query
+        public bool Exists(Expression<Func<TEntity, bool>> predicate)
+        {
+            return dbSet.Any(predicate);
+        }
+
+        public IQueryable<TEntity> Entities => context.Set<TEntity>();
+
+        // Non-Async Methods
+        public IEnumerable<TEntity> GetAll()
+        {
+            return dbSet.AsEnumerable();
+        }
+
+        public IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "",
@@ -39,8 +54,7 @@ namespace BreezyDrive.Common.Infrastuctures.Repositories
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
@@ -61,49 +75,55 @@ namespace BreezyDrive.Common.Infrastuctures.Repositories
             return query.ToList();
         }
 
-        public virtual TEntity GetByID(object id)
+        public TEntity GetById(object id)
         {
             return dbSet.Find(id);
         }
 
-        public virtual void Insert(TEntity entity)
+        public void Insert(TEntity entity)
         {
             dbSet.Add(entity);
             context.SaveChanges();
         }
 
-        public virtual void Delete(object id)
+        public void InsertRange(IEnumerable<TEntity> entities)
         {
-            TEntity entityToDelete = dbSet.Find(id);
-            Delete(entityToDelete);
+            dbSet.AddRange(entities);
+            context.SaveChanges();
         }
 
-        public virtual void Delete(TEntity entityToDelete)
+        public void Update(TEntity entity)
         {
-            if (context.Entry(entityToDelete).State == EntityState.Detached)
+            dbSet.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+            context.SaveChanges();
+        }
+
+        public void Delete(object id)
+        {
+            TEntity entity = dbSet.Find(id);
+            if (entity != null)
             {
-                dbSet.Attach(entityToDelete);
+                Delete(entity);
             }
-            dbSet.Remove(entityToDelete);
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public void Delete(TEntity entity)
         {
-            dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            if (context.Entry(entity).State == EntityState.Detached)
+            {
+                dbSet.Attach(entity);
+            }
+            dbSet.Remove(entity);
+            context.SaveChanges();
         }
 
-
-        public bool Exists(Expression<Func<TEntity, bool>> filter)
+        public void Commit()
         {
-            return dbSet.Any(filter);
+            context.SaveChanges();
         }
 
-        public IEnumerable<TEntity> GetAll()
-        {
-            return dbSet.AsEnumerable();
-        }
-
+        // Async Methods
         public async Task<IList<TEntity>> GetAllAsync()
         {
             return await dbSet.ToListAsync();
@@ -114,84 +134,31 @@ namespace BreezyDrive.Common.Infrastuctures.Repositories
             return await dbSet.FindAsync(id);
         }
 
-        public async Task<IPaginatedList<TEntity>> GetPagging(IQueryable<TEntity> query, int? pageIndex, int? pageSize)
+        public async Task<TEntity?> GetFirstOrDefaultAsync(
+            Expression<Func<TEntity, bool>> predicate = null,
+            string includeProperties = "")
         {
-            // Kiểm tra xem query có hỗ trợ IAsyncQueryProvider hay không
-            if (query.Provider is IAsyncQueryProvider)
+            IQueryable<TEntity> query = dbSet;
+
+            if (predicate != null)
             {
-                // Đảm bảo rằng truy vấn đang được thực hiện trên cơ sở dữ liệu với Entity Framework
-                query = query.AsNoTracking();
-
-                // Nếu pageIndex hoặc pageSize không được truyền, trả về tất cả các bản ghi
-                if (!pageIndex.HasValue || !pageSize.HasValue)
-                {
-                    var allItems = await query.ToListAsync();  // Đổi tên items thành allItems để tránh trùng lặp
-                    return new PaginatedList<TEntity>(allItems, allItems.Count, 1, allItems.Count); // Trả về toàn bộ dữ liệu
-                }
-
-                // Nếu có truyền pageIndex và pageSize, thực hiện phân trang
-                int count = await query.CountAsync();  // Đếm tổng số bản ghi
-                var paginatedItems = await query  // Đổi tên items thành paginatedItems
-                    .Skip((pageIndex.Value - 1) * pageSize.Value)
-                    .Take(pageSize.Value)
-                    .ToListAsync();
-
-                return new PaginatedList<TEntity>(paginatedItems, count, pageIndex.Value, pageSize.Value);
+                query = query.Where(predicate);
             }
-            else
+
+            foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                // Nếu không hỗ trợ IAsyncQueryProvider, thực hiện truy vấn đồng bộ
-                if (!pageIndex.HasValue || !pageSize.HasValue)
-                {
-                    var allItems = query.ToList();  // Đổi tên items thành allItems
-                    return new PaginatedList<TEntity>(allItems, allItems.Count, 1, allItems.Count); // Trả về toàn bộ dữ liệu
-                }
-
-                int count = query.Count();
-                var paginatedItems = query  // Đổi tên items thành paginatedItems
-                    .Skip((pageIndex.Value - 1) * pageSize.Value)
-                    .Take(pageSize.Value)
-                    .ToList();
-
-                return new PaginatedList<TEntity>(paginatedItems, count, pageIndex.Value, pageSize.Value);
+                query = query.Include(includeProperty);
             }
+
+            return await query.FirstOrDefaultAsync();
         }
 
-
-        public async Task InsertAsync(TEntity obj)
-        {
-            await dbSet.AddAsync(obj);
-        }
-
-        public void InsertRange(IList<TEntity> obj)
-        {
-            dbSet.AddRange(obj);
-        }
-        public void Save()
-        {
-            context.SaveChanges();
-        }
-
-        public async Task SaveAsync()
-        {
-            await context.SaveChangesAsync();
-        }
-        public Task UpdateAsync(TEntity obj)
-        {
-            return Task.FromResult(dbSet.Update(obj));
-        }
-
-        public async Task DeleteAsync(object id)
-        {
-            TEntity entity = await dbSet.FindAsync(id) ?? throw new Exception();
-            dbSet.Remove(entity);
-        }
         public async Task<IEnumerable<TEntity>> GetAsync(
-        Expression<Func<TEntity, bool>> filter = null,
-        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        string includeProperties = "",
-        int? pageIndex = null,
-        int? pageSize = null)
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "",
+            int? pageIndex = null,
+            int? pageSize = null)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -199,10 +166,12 @@ namespace BreezyDrive.Common.Infrastuctures.Repositories
             {
                 query = query.Where(filter);
             }
+
             foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
+
             if (orderBy != null)
             {
                 query = orderBy(query);
@@ -212,26 +181,72 @@ namespace BreezyDrive.Common.Infrastuctures.Repositories
             {
                 query = query.Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value);
             }
+
             return await query.ToListAsync();
         }
-        public async Task<TEntity?> GetFirstOrDefaultAsync(
-        Expression<Func<TEntity, bool>> filter = null,
-        string includeProperties = "")
+
+        public async Task InsertAsync(TEntity entity)
         {
-            IQueryable<TEntity> query = Entities;
+            await dbSet.AddAsync(entity);
+            await context.SaveChangesAsync();
+        }
 
-            if (filter != null)
+        public async Task UpdateAsync(TEntity entity)
+        {
+            dbSet.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(object id)
+        {
+            TEntity entity = await dbSet.FindAsync(id);
+            if (entity != null)
             {
-                query = query.Where(filter);
+                dbSet.Remove(entity);
+                await context.SaveChangesAsync();
             }
+        }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        public async Task CommitAsync()
+        {
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<IPaginatedList<TEntity>> GetPagingAsync(IQueryable<TEntity> query, int? pageIndex, int? pageSize)
+        {
+            if (query.Provider is IAsyncQueryProvider)
             {
-                query = query.Include(includeProperty);
-            }
+                query = query.AsNoTracking();
 
-            return await query.FirstOrDefaultAsync();
+                if (!pageIndex.HasValue || !pageSize.HasValue)
+                {
+                    var allItems = await query.ToListAsync();
+                    return new PaginatedList<TEntity>(allItems, allItems.Count, 1, allItems.Count);
+                }
+
+                int count = await query.CountAsync();
+                var paginatedItems = await query.Skip((pageIndex.Value - 1) * pageSize.Value)
+                                                .Take(pageSize.Value)
+                                                .ToListAsync();
+
+                return new PaginatedList<TEntity>(paginatedItems, count, pageIndex.Value, pageSize.Value);
+            }
+            else
+            {
+                if (!pageIndex.HasValue || !pageSize.HasValue)
+                {
+                    var allItems = query.ToList();
+                    return new PaginatedList<TEntity>(allItems, allItems.Count, 1, allItems.Count);
+                }
+
+                int count = query.Count();
+                var paginatedItems = query.Skip((pageIndex.Value - 1) * pageSize.Value)
+                                          .Take(pageSize.Value)
+                                          .ToList();
+
+                return new PaginatedList<TEntity>(paginatedItems, count, pageIndex.Value, pageSize.Value);
+            }
         }
     }
 }
