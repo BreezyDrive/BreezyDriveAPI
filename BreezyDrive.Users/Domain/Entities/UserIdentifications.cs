@@ -22,6 +22,6 @@ namespace BreezyDrive.Users.Domain.Entities
         public string Back { get; set; }
 
         [ForeignKey("UserId")]
-        public virtual Users Users { get; set; }
+        public virtual User Users { get; set; }
     }
 }

@@ -6,9 +6,9 @@ using BreezyDrive.Common.Domain.Entities;
 namespace BreezyDrive.Users.Domain.Entities
 {
     [Table("Users")]
-    public class Users : BaseEntities
+    public class User : BaseEntities
     {
-        public int RoleId { get; set; }
+        public Guid RoleId { get; set; }
 
         public string UserName { get; set; }
 
@@ -27,7 +27,7 @@ namespace BreezyDrive.Users.Domain.Entities
         [ForeignKey("RoleId")]
         public virtual Roles Role { get; set; }
 
-        public Users()
+        public User()
         {
             CreateAt = DateTimeOffset.Now;
         }
