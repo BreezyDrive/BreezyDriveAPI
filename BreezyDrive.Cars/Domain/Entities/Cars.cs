@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BreezyDrive.Cars.Domain.Enums;
 using BreezyDrive.Common.Domain.Entities;
 
 namespace BreezyDrive.Cars.Domain.Entities
@@ -21,7 +22,7 @@ namespace BreezyDrive.Cars.Domain.Entities
 
         public string? RightImage { get; set; }
 
-        public required Enum TransmissionType { get; set; }
+        public required TransmissionTypeEnum TransmissionType { get; set; }
 
         public required string FuelType { get; set; }
 
