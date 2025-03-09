@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BreezyDrive.Conversations.Entities
+namespace BreezyDrive.Conversations.Domain.Entities
 {
     [Table("MessageFile")]
     public class MessageFile : BaseEntities
