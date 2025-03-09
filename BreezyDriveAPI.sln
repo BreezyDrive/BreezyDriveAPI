@@ -12,15 +12,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.Common", "BreezyDrive.CommonService\BreezyDrive.Common.csproj", "{F289111A-A4F4-48AA-8C2E-1A36D28A52F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.Cars", "BreezyDrive.Cars\BreezyDrive.Cars.csproj", "{3A8860DC-8B63-4198-B8BE-D1319CF6C811}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.CarServices", "BreezyDrive.CarServices\BreezyDrive.CarServices.csproj", "{3A8860DC-8B63-4198-B8BE-D1319CF6C811}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.Users", "BreezyDrive.Users\BreezyDrive.Users.csproj", "{7ACF7778-F874-4030-AF8A-1736C049D6F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.UserServices", "BreezyDrive.UserServices\BreezyDrive.UserServices.csproj", "{7ACF7778-F874-4030-AF8A-1736C049D6F6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.Bookings", "BreezyDrive.Bookings\BreezyDrive.Bookings.csproj", "{CBEDDDF0-61FE-46E1-A17B-6195ED01095E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.BookingServices", "BreezyDrive.BookingServices\BreezyDrive.BookingServices.csproj", "{CBEDDDF0-61FE-46E1-A17B-6195ED01095E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.Notifications", "BreezyDrive.Notifications\BreezyDrive.Notifications.csproj", "{951A7BED-7E11-45A3-ACC4-63D6BD05109C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.NotificationServices", "BreezyDrive.NotificationServices\BreezyDrive.NotificationServices.csproj", "{951A7BED-7E11-45A3-ACC4-63D6BD05109C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.Conversations", "BreezyDrive.Conversations\BreezyDrive.Conversations.csproj", "{BBF77A01-4B64-4F47-ADAE-54148DCC12DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.ConversationServices", "BreezyDrive.ConversationServices\BreezyDrive.ConversationServices.csproj", "{BBF77A01-4B64-4F47-ADAE-54148DCC12DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
