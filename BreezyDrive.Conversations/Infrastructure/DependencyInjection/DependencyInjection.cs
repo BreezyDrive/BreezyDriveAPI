@@ -1,0 +1,35 @@
+﻿using BreezyDrive.Conversations.Infrastructure.Persistance;
+using Microsoft.EntityFrameworkCore;
+
+namespace BreezyDrive.Conversations.Infrastructure.DependencyInjection
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection InfrastructureService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDatabase(configuration);
+
+            /*services.AddRepositories();
+
+            services.AddService();
+
+            services.AddAuthen(configuration);
+
+            services.AddAutoMapper(typeof(AutoMapperProfile));*/
+
+            return services;
+        }
+
+        public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<ConversationDbContext>(options =>
+            {
+                var connectionString = configuration.GetConnectionString("ConversationDB");
+                options.UseSqlServer(connectionString, sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(DependencyInjection).Assembly.FullName);
+                });
+            });
+        }
+    }
+}
