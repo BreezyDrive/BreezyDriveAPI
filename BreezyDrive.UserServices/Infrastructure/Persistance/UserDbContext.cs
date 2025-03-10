@@ -10,7 +10,7 @@ namespace BreezyDrive.UserServices.Infrastructure.Persistance
 
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Users> Users { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Favorites> Favorites { get; set; }
         public DbSet<UserDriveLisences> UserDriveLisences { get; set; }
