@@ -20,7 +20,10 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddRepositories();         // UnitOfWork, Repository
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
-            services.AddAutoMapper(typeof(BaseAutoMapperProfile));
+            //services.AddAutoMapper(typeof(BaseAutoMapperProfile));
+            services.AddAutoMapper(typeof(BaseAutoMapperProfile).Assembly);
+
+
 
             return services;
         }
@@ -117,6 +120,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
         }
     }
 }

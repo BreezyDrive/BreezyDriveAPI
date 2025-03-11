@@ -37,7 +37,6 @@
     <ItemGroup>
       <Folder Include="API\Middlewares\" />
       <Folder Include="API\Filters\" />
-      <Folder Include="Application\DTOs\Request\" />
       <Folder Include="Application\Exceptions\" />
       <Folder Include="Domain\Enums\" />
       <Folder Include="Infrastructure\Identity\" />
