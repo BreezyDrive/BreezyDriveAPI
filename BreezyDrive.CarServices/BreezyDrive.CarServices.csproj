@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="CoreApiResponse" Version="1.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
           <PrivateAssets>all</PrivateAssets>
@@ -32,7 +33,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="API\Controllers\" />
       <Folder Include="API\Middlewares\" />
       <Folder Include="Application\DTO\Requests\" />
       <Folder Include="Application\DTO\Responses\" />
