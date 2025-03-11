@@ -33,6 +33,7 @@ namespace BreezyDrive.UserServices.Application.Services
             {
                 RoleId = role.Id,
                 UserName = "a",
+                RoleId = new Guid("00000000-0000-0000-0000-000000000001"),
                 DrivingLicense = "a",
                 Phone = "a",
                 Email = "a",

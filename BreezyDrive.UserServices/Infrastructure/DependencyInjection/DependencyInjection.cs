@@ -3,6 +3,7 @@ using BreezyDrive.Common.Domain.Interfaces;
 using BreezyDrive.Common.Infrastuctures.Data;
 using BreezyDrive.Common.Infrastuctures.Repositories;
 using BreezyDrive.UserServices.Application.Interfaces;
+using BreezyDrive.UserServices.Application.Mapper;
 using BreezyDrive.UserServices.Application.Services;
 using BreezyDrive.UserServices.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
@@ -20,9 +21,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddRepositories();         // UnitOfWork, Repository
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
-            //services.AddAutoMapper(typeof(BaseAutoMapperProfile));
-            services.AddAutoMapper(typeof(BaseAutoMapperProfile).Assembly);
-
+            services.AddAutoMapper(typeof(UserServiceMapperProfile).Assembly);
 
 
             return services;
