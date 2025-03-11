@@ -27,8 +27,14 @@ namespace BreezyDrive.UserServices.Application.Services
 
         public async Task<UserResponse> CreateUser()
         {
-            var role = _unitOfWork.Repository<Roles>().Get(r => r.Name.Equals("Admin")).FirstOrDefault();
+            //var role = _unitOfWork.Repository<Roles>().Get(r => r.Name.Equals("Admin")).FirstOrDefault();
 
+            var role = new Roles
+            {
+                Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                Name = "User",
+            };
+            _unitOfWork.Repository<Roles>().Insert(role);
             var newuser = new Users
             {
                 RoleId = role.Id,
