@@ -34,8 +34,6 @@
 
     <ItemGroup>
       <Folder Include="API\Middlewares\" />
-      <Folder Include="Application\DTO\Requests\" />
-      <Folder Include="Application\DTO\Responses\" />
       <Folder Include="Infrastructure\Plugins\" />
       <Folder Include="Infrastructure\Repositories\" />
       <Folder Include="Migrations\" />
