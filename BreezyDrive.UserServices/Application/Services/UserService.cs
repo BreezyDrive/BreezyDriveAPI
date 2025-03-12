@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.UserServices.Application.DTOs.Response;
 using BreezyDrive.UserServices.Application.Interfaces;
 using BreezyDrive.UserServices.Domain.Entities;
@@ -20,6 +21,10 @@ namespace BreezyDrive.UserServices.Application.Services
         public async Task<List<UserResponse>> GetUsers()
         {
             var users = _unitOfWork.Repository<Users>().GetAll();
+            if (!users.Any())
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy người dùng nào.");
+            }
             
             var userResponses = _mapper.Map<List<UserResponse>>(users);
             return userResponses;

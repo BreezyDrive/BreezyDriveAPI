@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.UserServices.Application.DTOs.Request;
 using BreezyDrive.UserServices.Application.DTOs.Response;
 using BreezyDrive.UserServices.Application.Interfaces;
@@ -21,6 +22,10 @@ namespace BreezyDrive.UserServices.Application.Services
         public async Task<List<RoleResponse>> GetAllRoles()
         {
             var roles = _unitOfWork.Repository<Roles>().Get();
+            if (!roles.Any())
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy role nào.");
+            }
 
             var roleResponses = _mapper.Map<List<RoleResponse>>(roles);
 
@@ -30,6 +35,24 @@ namespace BreezyDrive.UserServices.Application.Services
         public async Task<RoleResponse> GetRoleByGuid(Guid id)
         {
             var role = _unitOfWork.Repository<Roles>().GetById(id);
+            if (role == null)
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy role với Guid này.");
+            }
+
+            var roleResponse = _mapper.Map<RoleResponse>(role);
+
+            return roleResponse;
+
+        }
+
+        public async Task<RoleResponse> GetRoleByName(string name)
+        {
+            var role = _unitOfWork.Repository<Roles>().Get(r => r.Name == name).FirstOrDefault();
+            if (role == null)
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy tên role này.");
+            }
 
             var roleResponse = _mapper.Map<RoleResponse>(role);
 
@@ -45,6 +68,39 @@ namespace BreezyDrive.UserServices.Application.Services
             };
 
             _unitOfWork.Repository<Roles>().Insert(newRole);
+            await _unitOfWork.SaveAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateRole(RoleRequest roleRequest)
+        {
+            return true;
+        }
+
+        public async Task<bool> DeleteRoleByGuid(Guid id)
+        {
+            var existingRole = _unitOfWork.Repository<Roles>().GetById(id);
+            if (existingRole == null)
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy id của role này.");
+            }
+
+            _unitOfWork.Repository<Roles>().Delete(existingRole);
+            await _unitOfWork.SaveAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteRoleByName(string name)
+        {
+            var existingRole = _unitOfWork.Repository<Roles>().Get(er => er.Name == name).FirstOrDefault();
+            if (existingRole == null)
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy id của role này.");
+            }
+
+            _unitOfWork.Repository<Roles>().Delete(existingRole);
             await _unitOfWork.SaveAsync();
 
             return true;
