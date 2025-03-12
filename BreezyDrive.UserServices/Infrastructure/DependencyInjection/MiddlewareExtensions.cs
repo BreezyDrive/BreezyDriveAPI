@@ -1,4 +1,6 @@
-﻿namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
+﻿using BreezyDrive.Common.Middleware;
+
+namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
     public static class MiddlewareExtensions
     {
@@ -8,7 +10,7 @@
             app.UseRouting();
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
-            //app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthorization();
 
             return app;

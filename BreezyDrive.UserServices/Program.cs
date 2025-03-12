@@ -11,6 +11,6 @@ var app = builder.Build();
 app.UseSwaggerDocumentation();
 
 // Cấu hình Middleware
-//app.UseApplicationMiddleware();
+app.UseApplicationMiddleware();
 app.MapControllers();
 app.Run();
