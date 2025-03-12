@@ -31,11 +31,39 @@ namespace BreezyDrive.UserServices.API.Controllers
             return CustomResult("Lấy dữ liệu thành công", role);
         }
 
+        [HttpGet("GetRoleByName")]
+        public async Task<IActionResult> GetRoleByName(string name)
+        {
+            var role = _roleService.GetRoleByName(name);
+            return CustomResult("Lấy dữ liệu thành công", role);
+        }
+
         [HttpPost("CreateRole")]
         public async Task<IActionResult> CreateRole(RoleRequest roleRequest)
         {
             var role = await _roleService.CreateRole(roleRequest);
             return CustomResult("Tạo role thành công.", role);
+        }
+
+        [HttpPatch("UpdateRole")]
+        public async Task<IActionResult> UpdateRole(RoleRequest roleRequest)
+        {
+            var role = await _roleService.UpdateRole(roleRequest);
+            return CustomResult("Cập nhật role thành công.", role);
+        }
+
+        [HttpDelete("DeleteRoleByGuid")]
+        public async Task<IActionResult> DeleteRoleByGuid(Guid id)
+        {
+            await _roleService.DeleteRoleByGuid(id);
+            return CustomResult("Xóa role thành công.");
+        }
+
+        [HttpDelete("DeleteRoleByName")]
+        public async Task<IActionResult> DeleteRoleByName(string name)
+        {
+            await _roleService.DeleteRoleByName(name);
+            return CustomResult("Xóa role thành công.");
         }
     }
 }
