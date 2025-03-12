@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+		<PackageReference Include="CoreApiResponse" Version="1.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
@@ -33,6 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="API\Middlewares\" />
       <Folder Include="Domain\Enums\" />
     </ItemGroup>
 
