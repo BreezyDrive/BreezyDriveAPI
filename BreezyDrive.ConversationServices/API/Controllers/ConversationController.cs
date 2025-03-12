@@ -3,6 +3,7 @@ using BreezyDrive.ConversationServices.Application.Interfaces;
 using CoreApiResponse;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BreezyDrive.ConversationServices.API.Controllers
 {
@@ -16,38 +17,23 @@ namespace BreezyDrive.ConversationServices.API.Controllers
             _conversationService = conversationService;
         }
 
-        /// <summary>
-        /// Get All Conversation For System
-        /// </summary>
-        /// <returns></returns>
-        ///
-
+        [SwaggerOperation(Summary = "Get All Conversation For System")]
         [HttpGet("GetAllConversation")]
         public async Task<IActionResult> GetAllConversations()
         {
             var conversations = await _conversationService.GetAllConversations();
             return CustomResult("Lấy dữ liệu thành công", conversations);
         }
-
-        /// <summary>
-        /// Get Conversation Id For System
-        /// </summary>
-        /// <returns></returns>
-        ///
-
+        
+        [SwaggerOperation(Summary = "Get Conversation Id For System")]
         [HttpGet("GetConversation/{id}")]
         public async Task<IActionResult> GetConversationByID(Guid id)
         {
             var conversations = await _conversationService.GetConversationByID(id);
             return CustomResult("Lấy dữ liệu thành công", conversations);
         }
-
-        /// <summary>
-        /// Create Conversation For System
-        /// </summary>
-        /// <returns></returns>
-        ///
-
+        
+        [SwaggerOperation(Summary = "Create Conversation For System")]
         [HttpPost("CreateConversation")]
         public async Task<IActionResult> CreateConversation(ConversationRequest request)
         {
@@ -55,12 +41,7 @@ namespace BreezyDrive.ConversationServices.API.Controllers
             return CustomResult("Tạo dữ liệu thành công", conversations);
         }
 
-        /// <summary>
-        /// Update Conversation Ids For System
-        /// </summary>
-        /// <returns></returns>
-        ///
-
+        [SwaggerOperation(Summary = "Update Conversation Ids For System")]
         [HttpPatch("UpdateConversation/{id}")]
         public async Task<IActionResult> UpdateConversationById(Guid id, ConversationRequest request)
         {
@@ -68,12 +49,7 @@ namespace BreezyDrive.ConversationServices.API.Controllers
             return CustomResult("Cập nhật dữ liệu thành công", conversations);
         }
 
-        /// <summary>
-        /// Thu hồi Conversation Id For System
-        /// </summary>
-        /// <returns></returns>
-        ///
-
+        [SwaggerOperation(Summary = "Thu hồi Conversation Id For System")]
         [HttpPatch("DeleteConversation/{id}")]
         public async Task<IActionResult> DeleteConversation (Guid id, ConversationRequest request)
         {

@@ -1,19 +1,16 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using BreezyDrive.ConversationServices.Infrastructure.DependencyInjection;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var builder = WebApplication.CreateBuilder(args);
+
+// Đăng ký các services
+builder.Services.InfrastructureService(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Cấu hình Swagger
+app.UseSwaggerDocumentation();
 
-app.UseHttpsRedirection();
+// Cấu hình Middleware
+app.UseApplicationMiddleware();
 app.MapControllers();
 app.Run();
