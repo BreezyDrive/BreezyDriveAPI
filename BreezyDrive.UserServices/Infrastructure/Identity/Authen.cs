@@ -1,5 +1,4 @@
-﻿using BreezyDrive.Common.Domain.Interfaces;
-using BreezyDrive.Domain.Exceptions;
+﻿using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.UserServices.Domain.Entities;
 using BreezyDrive.UserServices.Domain.Interfaces;
 using Microsoft.IdentityModel.Tokens;
