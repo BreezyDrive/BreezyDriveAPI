@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using BreezyDrive.Domain.Exceptions;
 
-namespace BreezyDrive.Common.Middleware
+namespace BreezyDrive.CommonService.Middleware
 {
     public class ExceptionMiddleware
     {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
+using BreezyDrive.Domain.Exceptions;
 using BreezyDrive.UserServices.Application.DTOs.Request;
 using BreezyDrive.UserServices.Application.DTOs.Response;
 using BreezyDrive.UserServices.Application.Interfaces;

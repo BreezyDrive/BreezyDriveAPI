@@ -1,4 +1,4 @@
-﻿namespace BreezyDrive.Domain.Exceptions;
+﻿namespace BreezyDrive.CommonService.Domain.Exceptions;
 
 public class CustomExceptions
 {

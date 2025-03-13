@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.Common", "BreezyDrive.CommonService\BreezyDrive.Common.csproj", "{F289111A-A4F4-48AA-8C2E-1A36D28A52F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.CommonService", "BreezyDrive.CommonService\BreezyDrive.CommonService.csproj", "{F289111A-A4F4-48AA-8C2E-1A36D28A52F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreezyDrive.CarServices", "BreezyDrive.CarServices\BreezyDrive.CarServices.csproj", "{3A8860DC-8B63-4198-B8BE-D1319CF6C811}"
 EndProject

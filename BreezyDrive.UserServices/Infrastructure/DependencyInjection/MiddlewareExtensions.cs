@@ -1,4 +1,4 @@
-﻿using BreezyDrive.Common.Middleware;
+﻿using BreezyDrive.CommonService.Middleware;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {

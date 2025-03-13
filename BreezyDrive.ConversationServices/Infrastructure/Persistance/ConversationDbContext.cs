@@ -1,4 +1,4 @@
-﻿using BreezyDrive.Common.Infrastuctures.Data;
+﻿using BreezyDrive.CommonService.Infrastuctures.Data;
 using BreezyDrive.ConversationServices.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

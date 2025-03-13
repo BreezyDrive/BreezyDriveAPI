@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Application.Mapper
+namespace BreezyDrive.CommonService.Application.Mapper
 {
     public class AutoMapperProfile : Profile
     {
