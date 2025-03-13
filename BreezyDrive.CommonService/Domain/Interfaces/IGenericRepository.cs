@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Domain.Interfaces
+namespace BreezyDrive.CommonService.Domain.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {

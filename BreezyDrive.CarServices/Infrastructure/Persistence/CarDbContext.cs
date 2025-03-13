@@ -1,5 +1,5 @@
 ﻿using BreezyDrive.CarServices.Domain.Entities;
-using BreezyDrive.Common.Infrastuctures.Data;
+using BreezyDrive.CommonService.Infrastuctures.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace BreezyDrive.CarServices.Infrastructure.Persistence;

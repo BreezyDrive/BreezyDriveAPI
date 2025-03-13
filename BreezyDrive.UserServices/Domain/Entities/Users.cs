@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using BreezyDrive.Common.Domain.Entities;
+using BreezyDrive.CommonService.Domain.Entities;
 
 namespace BreezyDrive.UserServices.Domain.Entities
 {

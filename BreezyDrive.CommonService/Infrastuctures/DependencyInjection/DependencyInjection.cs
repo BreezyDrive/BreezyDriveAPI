@@ -1,11 +1,11 @@
-﻿using BreezyDrive.Common.Application.Mapper;
-using BreezyDrive.Common.Domain.Interfaces;
-using BreezyDrive.Common.Infrastuctures.Data;
-using BreezyDrive.Common.Infrastuctures.Repositories;
+﻿using BreezyDrive.CommonService.Application.Mapper;
+using BreezyDrive.CommonService.Domain.Interfaces;
+using BreezyDrive.CommonService.Infrastuctures.Data;
+using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BreezyDrive.Common.Infrastuctures.DependencyInjection
+namespace BreezyDrive.CommonService.Infrastuctures.DependencyInjection
 {
     public class DependencyInjection
     {

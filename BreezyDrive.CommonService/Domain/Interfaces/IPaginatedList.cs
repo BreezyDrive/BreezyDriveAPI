@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Domain.Interfaces
+namespace BreezyDrive.CommonService.Domain.Interfaces
 {
     public interface IPaginatedList<TEntity>
     {

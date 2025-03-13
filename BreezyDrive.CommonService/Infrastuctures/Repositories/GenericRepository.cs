@@ -1,15 +1,15 @@
-﻿using BreezyDrive.Common.Application.Utils.PaginatedList;
-using BreezyDrive.Common.Domain.Interfaces;
-using BreezyDrive.Common.Infrastuctures.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using BreezyDrive.CommonService.Application.Utils.PaginatedList;
+using BreezyDrive.CommonService.Domain.Interfaces;
+using BreezyDrive.CommonService.Infrastuctures.Data;
 
-namespace BreezyDrive.Common.Infrastuctures.Repositories
+namespace BreezyDrive.CommonService.Infrastuctures.Repositories
 {
     public class GenericRepository<TEntity, TContext> : IGenericRepository<TEntity>
         where TEntity : class

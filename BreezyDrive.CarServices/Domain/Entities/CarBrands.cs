@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BreezyDrive.Common.Domain.Entities;
+using BreezyDrive.CommonService.Domain.Entities;
 
 namespace BreezyDrive.CarServices.Domain.Entities
 {
