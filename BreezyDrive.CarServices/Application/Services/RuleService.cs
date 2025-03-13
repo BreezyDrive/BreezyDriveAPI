@@ -38,7 +38,7 @@ public class RuleService(IUnitOfWork unitOfWork, IMapper mapper) : IRuleService
         return ruleResponse;
     }
 
-    public async Task<RuleResponse> Create(RuleRequest request)
+    public async Task<RuleResponse> CreateRule(RuleRequest request)
     {
         var rule = mapper.Map<Rules>(request);
         await unitOfWork.Repository<Rules>().InsertAsync(rule);
@@ -50,7 +50,7 @@ public class RuleService(IUnitOfWork unitOfWork, IMapper mapper) : IRuleService
     }
 
     
-    public async Task<RuleResponse> Update(Guid guid, RuleRequest request)
+    public async Task<RuleResponse> UpdateRule(Guid guid, RuleRequest request)
     {
         var rule = await unitOfWork.Repository<Rules>().GetByIdAsync(guid);
 
@@ -66,14 +66,14 @@ public class RuleService(IUnitOfWork unitOfWork, IMapper mapper) : IRuleService
         return mapper.Map<RuleResponse>(rule);
     }
 
-    public async Task<bool> Delete(Guid guid)
+    public async Task<bool> DeleteRule(Guid guid)
     {
         var rule = await unitOfWork.Repository<Rules>().GetByIdAsync(guid);
         if (rule == null)
         {
             throw new CustomExceptions.DataNotFoundException("No rule found");
         }
-        await unitOfWork.Repository<Rules>().DeleteAsync(rule);
+        await unitOfWork.Repository<Rules>().DeleteAsync(guid);
 
         return true;
     }

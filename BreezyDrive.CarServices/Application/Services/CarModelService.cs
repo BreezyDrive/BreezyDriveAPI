@@ -1,38 +1,73 @@
-﻿using BreezyDrive.CarServices.Application.DTO.Requests;
+﻿using AutoMapper;
+using BreezyDrive.CarServices.Application.DTO.Requests;
 using BreezyDrive.CarServices.Application.DTO.Responses;
 using BreezyDrive.CarServices.Application.Interfaces;
+using BreezyDrive.CarServices.Domain.Entities;
 using BreezyDrive.Common.Application.Mapper;
+using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Exceptions;
 
 namespace BreezyDrive.CarServices.Application.Services;
 
-public class CarModelService : ICarModelService
+public class CarModelService(IUnitOfWork unitOfWork, IMapper mapper) : ICarModelService
 {
-    public Task<IEnumerable<CarModelResponse>> GetAllAsync()
+    public async Task<IEnumerable<CarModelResponse>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var carModels = unitOfWork.Repository<CarModels>().GetAllAsync();
+
+        if (carModels == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Models not found");
+        }
+        
+        return mapper.Map<IEnumerable<CarModelResponse>>(carModels);
     }
 
-    public Task<CarModelResponse> GetByGuid(Guid guid)
+    public async Task<CarModelResponse> GetByGuid(Guid guid)
     {
-        throw new NotImplementedException();
+        
+        var carModel = await unitOfWork.Repository<CarModels>().GetByIdAsync(guid);
+        if (carModel == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Model not found");
+        }
+        
+        return mapper.Map<CarModelResponse>(carModel);
     }
 
     public Task<CarModelResponse> GetByModelName(string modelName)
     {
+        //var carModel = unitOfWork.Repository<CarModels>().
         throw new NotImplementedException();
     }
 
-    public Task<CarModelResponse> Create(CarModelRequest request)
+    public async Task<CarModelResponse> CreateCarModel(CarModelRequest request)
     {
-        throw new NotImplementedException();
+        var carModel = mapper.Map<CarModels>(request);
+        await unitOfWork.Repository<CarModels>().InsertAsync(carModel);
+
+        await unitOfWork.SaveAsync();
+        return mapper.Map<CarModelResponse>(carModel);
+
     }
 
-    public Task<CarModelResponse> Update(Guid guid, CarModelRequest request)
+    public async Task<CarModelResponse> UpdateCarModel(Guid guid, CarModelRequest request)
     {
-        throw new NotImplementedException();
+        var carModel = await unitOfWork.Repository<CarModels>().GetByIdAsync(guid);
+        if (carModel == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Model not found");
+        }
+        
+        mapper.Map(request, carModel);
+        
+        await unitOfWork.Repository<CarModels>().UpdateAsync(carModel);
+        
+        await unitOfWork.SaveAsync();
+        return mapper.Map<CarModelResponse>(carModel);
     }
 
-    public Task<CarModelResponse> Delete(Guid guid)
+    public Task<CarModelResponse> DeleteCarModel(Guid guid)
     {
         throw new NotImplementedException();
     }

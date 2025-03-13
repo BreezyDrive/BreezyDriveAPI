@@ -39,7 +39,7 @@ public class FeatureService (IUnitOfWork unitOfWork, IMapper mapper) : IFeatureS
         return featureResponse;
     }
 
-    public async Task<FeatureResponse> Create(FeatureRequest request)
+    public async Task<FeatureResponse> CreateFeature(FeatureRequest request)
     {
         var feature = mapper.Map<Features>(request);
         await unitOfWork.Repository<Features>().InsertAsync(feature);
@@ -51,7 +51,7 @@ public class FeatureService (IUnitOfWork unitOfWork, IMapper mapper) : IFeatureS
     }
 
     
-    public async Task<FeatureResponse> Update(Guid guid, FeatureRequest request)
+    public async Task<FeatureResponse> UpdateFeature(Guid guid, FeatureRequest request)
     {
         var feature = await unitOfWork.Repository<Features>().GetByIdAsync(guid);
 
@@ -67,7 +67,7 @@ public class FeatureService (IUnitOfWork unitOfWork, IMapper mapper) : IFeatureS
         return mapper.Map<FeatureResponse>(feature);
     }
 
-    public async Task<bool> Delete(Guid guid)
+    public async Task<bool> DeleteFeature(Guid guid)
     {
         var feature = await unitOfWork.Repository<Features>().GetByIdAsync(guid);
         if (feature == null)

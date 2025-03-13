@@ -12,11 +12,11 @@ public interface ICarModelService
     
     Task<CarModelResponse> GetByModelName(string modelName);
     
-    Task<CarModelResponse> Create(CarModelRequest request);
+    Task<CarModelResponse> CreateCarModel(CarModelRequest request);
     
-    Task<CarModelResponse> Update(Guid guid, CarModelRequest request); 
+    Task<CarModelResponse> UpdateCarModel(Guid guid, CarModelRequest request); 
     
-    Task<CarModelResponse> Delete(Guid guid);
+    Task<CarModelResponse> DeleteCarModel(Guid guid);
     
 
 }

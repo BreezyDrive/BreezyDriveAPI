@@ -9,9 +9,9 @@ public interface IFeatureService
     
     Task<FeatureResponse> GetByGuidAsync(Guid guid);
     
-    Task<FeatureResponse> Create(FeatureRequest request);
+    Task<FeatureResponse> CreateFeature(FeatureRequest request);
     
-    Task<FeatureResponse> Update(Guid guid, FeatureRequest request); 
+    Task<FeatureResponse> UpdateFeature(Guid guid, FeatureRequest request); 
     
-    Task<bool> Delete(Guid guid);
+    Task<bool> DeleteFeature(Guid guid);
 }

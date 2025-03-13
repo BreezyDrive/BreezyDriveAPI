@@ -1,6 +1,9 @@
-﻿namespace BreezyDrive.CarServices.Application.DTO.Requests;
+﻿using BreezyDrive.CarServices.Domain.Entities;
+using BreezyDrive.Common.Application.Mapper;
 
-public class CarBrandRequest
+namespace BreezyDrive.CarServices.Application.DTO.Requests;
+
+public class CarBrandRequest : IMapFrom<CarBrands>
 {
     
 }

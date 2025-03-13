@@ -9,9 +9,9 @@ public interface IRuleService
     
     Task<RuleResponse> GetByGuidAsync(Guid guid);
     
-    Task<RuleResponse> Create(RuleRequest request);
+    Task<RuleResponse> CreateRule(RuleRequest request);
     
-    Task<RuleResponse> Update(Guid guid, RuleRequest request); 
+    Task<RuleResponse> UpdateRule(Guid guid, RuleRequest request); 
     
-    Task<bool> Delete(Guid guid);
+    Task<bool> DeleteRule(Guid guid);
 }

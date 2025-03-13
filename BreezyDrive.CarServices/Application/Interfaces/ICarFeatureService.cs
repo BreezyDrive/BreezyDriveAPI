@@ -10,9 +10,9 @@ public interface ICarFeatureService
     
     Task<CarFeatureResponse> GetByGuid(Guid guid);
     
-    Task<CarFeatureResponse> Create(CarBrandRequest request);
+    Task<CarFeatureResponse> CreateCarFeature(CarBrandRequest request);
     
-    Task<CarFeatureResponse> Update(Guid guid, CarBrandRequest request); 
+    Task<CarFeatureResponse> UpdateCarFeature(Guid guid, CarBrandRequest request); 
     
-    Task<CarFeatureResponse> Delete(Guid guid);
+    Task<bool> DeleteCarFeature(Guid guid);
 }

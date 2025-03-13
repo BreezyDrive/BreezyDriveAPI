@@ -9,9 +9,9 @@ public interface ICarBrandService
     
     Task<CarBrandResponse> GetByGuid(Guid guid);
     
-    Task<CarBrandResponse> Create(CarBrandRequest request);
+    Task<CarBrandResponse> CreateCarBrand(CarBrandRequest request);
     
-    Task<CarBrandResponse> Update(Guid guid, CarBrandRequest request); 
+    Task<CarBrandResponse> UpdateCarBrand(Guid guid, CarBrandRequest request); 
     
-    Task<CarBrandResponse> Delete(Guid guid);
+    Task<bool> DeleteCarBrand(Guid guid);
 }

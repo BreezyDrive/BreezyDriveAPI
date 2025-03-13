@@ -1,6 +1,10 @@
-﻿namespace BreezyDrive.CarServices.Application.DTO.Requests;
+﻿using BreezyDrive.CarServices.Domain.Entities;
+using BreezyDrive.Common.Application.Mapper;
 
-public class RuleRequest
+namespace BreezyDrive.CarServices.Application.DTO.Requests;
+
+public class RuleRequest : IMapFrom<Rules>
 {
-    
+    public Guid Id { get; set; }
+    public string Name { get; set; }
 }

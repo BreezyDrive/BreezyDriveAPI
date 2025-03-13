@@ -1,33 +1,75 @@
-﻿using BreezyDrive.CarServices.Application.DTO.Requests;
+﻿using AutoMapper;
+using BreezyDrive.CarServices.Application.DTO.Requests;
 using BreezyDrive.CarServices.Application.DTO.Responses;
 using BreezyDrive.CarServices.Application.Interfaces;
+using BreezyDrive.CarServices.Domain.Entities;
+using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Exceptions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BreezyDrive.CarServices.Application.Services;
 
-public class CarFeatureService : ICarFeatureService
+public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFeatureService
 {
-    public Task<IEnumerable<CarFeatureResponse>> GetAllAsync()
+    public async Task<IEnumerable<CarFeatureResponse>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var carFeatures = new List<CarFeatureResponse>();
+        
+        if (carFeatures.IsNullOrEmpty())
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Features");
+        }
+
+        return mapper.Map<IEnumerable<CarFeatureResponse>>(carFeatures);
     }
 
-    public Task<CarFeatureResponse> GetByGuid(Guid guid)
+    public async Task<CarFeatureResponse> GetByGuid(Guid guid)
     {
-        throw new NotImplementedException();
+        var carFeature = await unitOfWork.Repository<CarResponse>().GetByIdAsync(guid);
+        if (carFeature == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Feature");
+        }
+        return mapper.Map<CarFeatureResponse>(carFeature);
     }
 
-    public Task<CarFeatureResponse> Create(CarBrandRequest request)
+    public async Task<CarFeatureResponse> CreateCarFeature(CarBrandRequest request)
     {
-        throw new NotImplementedException();
+        var carFeature = mapper.Map<CarFeatures>(request);
+        
+        await unitOfWork.Repository<CarFeatures>().InsertAsync(carFeature);
+        
+        await unitOfWork.SaveAsync();
+        
+        return mapper.Map<CarFeatureResponse>(carFeature);
+        
     }
 
-    public Task<CarFeatureResponse> Update(Guid guid, CarBrandRequest request)
+    public async Task<CarFeatureResponse> UpdateCarFeature(Guid guid, CarBrandRequest request)
     {
-        throw new NotImplementedException();
+        var carFeature = await unitOfWork.Repository<CarFeatures>().GetByIdAsync(guid);
+        if (carFeature == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Feature");
+        }
+        
+        mapper.Map(request, carFeature);
+        await unitOfWork.Repository<CarFeatures>().UpdateAsync(carFeature);
+        await unitOfWork.SaveAsync();
+        
+        return mapper.Map<CarFeatureResponse>(carFeature);
     }
 
-    public Task<CarFeatureResponse> Delete(Guid guid)
+    public async Task<bool> DeleteCarFeature(Guid guid)
     {
-        throw new NotImplementedException();
+        var carFeature = await unitOfWork.Repository<CarFeatures>().GetByIdAsync(guid);
+        if (carFeature == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Feature");
+        }
+        await unitOfWork.Repository<CarFeatures>().DeleteAsync(carFeature);
+
+        return true;
+        
     }
 }
