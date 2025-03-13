@@ -7,5 +7,6 @@ namespace BreezyDrive.UserServices.Application.Interfaces
     {
         Task<List<UserResponse>> GetAllUsers();
         Task<bool> Register(CreateUserRequest createUserRequest);
+        Task<string> Login(LoginRequest loginRequest);
     }
 }

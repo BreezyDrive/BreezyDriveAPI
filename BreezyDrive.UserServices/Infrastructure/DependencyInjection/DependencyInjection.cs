@@ -4,11 +4,17 @@ using BreezyDrive.CommonService.Infrastuctures.Data;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using BreezyDrive.UserServices.Application.Interfaces;
 using BreezyDrive.UserServices.Application.Services;
+using BreezyDrive.UserServices.Domain.Interfaces;
+using BreezyDrive.UserServices.Infrastructure.Identity;
 using BreezyDrive.UserServices.Infrastructure.Persistance;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -18,7 +24,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
         {
             services.AddCoreServices();         // CORS, Controllers, HttpContext
             services.AddInfrastructure(configuration);  // Database, Repository, External APIs
-            services.AddAuthenticationServices(); // JWT, Identity
+            services.AddAuthenticationServices(configuration); // JWT, Identity
             services.AddRepositories();         // UnitOfWork, Repository
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
@@ -55,8 +61,47 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             return services;
         }
 
-        private static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
+        private static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"]; // Lấy token từ query string
+
+                        // Nếu request là cho SignalR thì sử dụng token từ query
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            context.HttpContext.Request.Path.StartsWithSegments("/NotificationHub"))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+            services.AddScoped<IAuthentication, Authen>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IHashing, Hash>();
+            
             return services;
         }
 
@@ -122,6 +167,8 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IFavoriteService, FavoriteService>();
+            services.AddScoped<IUserDriveLisenceService, UserDriveLisenceService>();
         }
     }
 }
