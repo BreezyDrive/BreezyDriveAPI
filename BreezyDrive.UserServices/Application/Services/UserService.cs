@@ -18,7 +18,7 @@ namespace BreezyDrive.UserServices.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<List<UserResponse>> GetUsers()
+        public async Task<List<UserResponse>> GetAllUsers()
         {
             var users = _unitOfWork.Repository<Users>().GetAll();
             if (!users.Any())
@@ -30,33 +30,43 @@ namespace BreezyDrive.UserServices.Application.Services
             return userResponses;
         }
 
-        public async Task<UserResponse> CreateUser()
+        public async Task<bool> Register(CreateUserRequest createUserRequest)
         {
-            //var role = _unitOfWork.Repository<Roles>().Get(r => r.Name.Equals("Admin")).FirstOrDefault();
-
-            var role = new Roles
+            if (createUserRequest.Password.ToUpper() != createUserRequest.ConfirmPassword.ToUpper())
             {
-                Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                Name = "User",
-            };
-            _unitOfWork.Repository<Roles>().Insert(role);
+                throw new CustomExceptions.InvalidDataException("Mật khẩu không trùng khớp.");
+            }
+
+            var existingRole = _unitOfWork.Repository<Roles>().Get(r => r.Name.Equals("User")).FirstOrDefault();
+            if (existingRole == null)
+            {
+                var newRole = new Roles
+                {
+                    Name = "User"
+                };
+
+                _unitOfWork.Repository<Roles>().Insert(newRole);
+                await _unitOfWork.SaveAsync();
+
+                existingRole = newRole;
+            }
+
             var newuser = new Users
             {
-                RoleId = role.Id,
-                UserName = "a",
-                DrivingLicense = "a",
-                Phone = "a",
-                Email = "a",
-                Point = 1,
-                TotalReservation = 1,
+                RoleId = existingRole.Id,
+                FullName = createUserRequest.FullName,
+                Password = createUserRequest.Password,
+                Phone = createUserRequest.Phone,
+                IsPhoneVerification = false,
+                Point = 0,
+                TotalReservation = 0,
                 CreateAt = DateTime.Now,
             };
 
             _unitOfWork.Repository<Users>().Insert(newuser);
             await _unitOfWork.SaveAsync();
 
-            var userResponse = _mapper.Map<UserResponse>(newuser);
-            return userResponse;
+            return true;
         }
     }
 }

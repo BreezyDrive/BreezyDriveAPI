@@ -74,8 +74,14 @@ namespace BreezyDrive.UserServices.Application.Services
             return true;
         }
 
-        public async Task<bool> UpdateRole(RoleRequest roleRequest)
+        public async Task<bool> UpdateRole(Guid id, RoleRequest roleRequest)
         {
+            var existingRole = _unitOfWork.Repository<Roles>().GetById(id);
+            if (existingRole == null)
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy role với Guid này.");
+            }
+
             return true;
         }
 
