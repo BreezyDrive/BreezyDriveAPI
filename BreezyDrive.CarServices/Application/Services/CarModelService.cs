@@ -13,7 +13,7 @@ public class CarModelService(IUnitOfWork unitOfWork, IMapper mapper) : ICarModel
 {
     public async Task<IEnumerable<CarModelResponse>> GetAllAsync()
     {
-        var carModels = unitOfWork.Repository<CarModels>().GetAllAsync();
+        var carModels = await unitOfWork.Repository<CarModels>().GetAllAsync();
 
         if (carModels == null)
         {
@@ -33,12 +33,6 @@ public class CarModelService(IUnitOfWork unitOfWork, IMapper mapper) : ICarModel
         }
         
         return mapper.Map<CarModelResponse>(carModel);
-    }
-
-    public Task<CarModelResponse> GetByModelName(string modelName)
-    {
-        //var carModel = unitOfWork.Repository<CarModels>().
-        throw new NotImplementedException();
     }
 
     public async Task<CarModelResponse> CreateCarModel(CarModelRequest request)
@@ -67,8 +61,16 @@ public class CarModelService(IUnitOfWork unitOfWork, IMapper mapper) : ICarModel
         return mapper.Map<CarModelResponse>(carModel);
     }
 
-    public Task<CarModelResponse> DeleteCarModel(Guid guid)
+    public async Task<bool> DeleteCarModel(Guid guid)
     {
-        throw new NotImplementedException();
+        var carModel = await unitOfWork.Repository<CarModels>().GetByIdAsync(guid);
+        if (carModel == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Model not found");
+        }
+        
+        await unitOfWork.Repository<CarModels>().DeleteAsync(guid);
+        
+        return true;
     }
 }

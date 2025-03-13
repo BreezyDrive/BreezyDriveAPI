@@ -67,7 +67,7 @@ public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFe
         {
             throw new CustomExceptions.DataNotFoundException("Car Feature");
         }
-        await unitOfWork.Repository<CarFeatures>().DeleteAsync(carFeature);
+        await unitOfWork.Repository<CarFeatures>().DeleteAsync(guid);
 
         return true;
         
