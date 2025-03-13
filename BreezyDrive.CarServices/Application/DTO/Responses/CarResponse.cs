@@ -1,6 +1,6 @@
 ﻿using BreezyDrive.CarServices.Domain.Entities;
 using BreezyDrive.CarServices.Domain.Enums;
-using BreezyDrive.Common.Application.Mapper;
+using BreezyDrive.CommonService.Application.Mapper;
 
 namespace BreezyDrive.CarServices.Application.DTO.Responses;
 

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Domain.Entities
+namespace BreezyDrive.CommonService.Domain.Entities
 {
     public abstract class BaseEntities
     {

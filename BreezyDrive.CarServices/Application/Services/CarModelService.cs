@@ -3,8 +3,8 @@ using BreezyDrive.CarServices.Application.DTO.Requests;
 using BreezyDrive.CarServices.Application.DTO.Responses;
 using BreezyDrive.CarServices.Application.Interfaces;
 using BreezyDrive.CarServices.Domain.Entities;
-using BreezyDrive.Common.Application.Mapper;
-using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Application.Mapper;
+using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
 
 namespace BreezyDrive.CarServices.Application.Services;

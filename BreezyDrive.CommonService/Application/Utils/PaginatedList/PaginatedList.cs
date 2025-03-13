@@ -1,11 +1,11 @@
-﻿using BreezyDrive.Common.Domain.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BreezyDrive.CommonService.Domain.Interfaces;
 
-namespace BreezyDrive.Common.Application.Utils.PaginatedList
+namespace BreezyDrive.CommonService.Application.Utils.PaginatedList
 {
     public class PaginatedList<TEntity> : IPaginatedList<TEntity>
     {

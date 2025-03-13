@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.Common.csproj" />
+      <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
     </ItemGroup>
 
     <ItemGroup>

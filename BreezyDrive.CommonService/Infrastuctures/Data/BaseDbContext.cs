@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Infrastuctures.Data
+namespace BreezyDrive.CommonService.Infrastuctures.Data
 {
     public class BaseDbContext<TContext> : DbContext where TContext : DbContext
     {
