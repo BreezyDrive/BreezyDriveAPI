@@ -1,4 +1,4 @@
-﻿using BreezyDrive.Common.Application.Mapper;
+﻿using BreezyDrive.CommonService.Application.Mapper;
 
 namespace BreezyDrive.UserServices.Application.DTOs.Response
 {
