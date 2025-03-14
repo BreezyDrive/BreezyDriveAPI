@@ -10,7 +10,7 @@ namespace BreezyDrive.UserServices.Domain.Entities
     {
         public Guid RoleId { get; set; }
 
-        public string? Avatar { get; set; }
+        public string Avatar { get; set; }
 
         public string FullName { get; set; }
 

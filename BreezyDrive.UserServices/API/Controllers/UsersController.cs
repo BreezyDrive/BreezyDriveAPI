@@ -31,5 +31,12 @@ namespace BreezyDrive.UserServices.API.Controllers
             var user = await _userService.Register(createUserRequest);
             return CustomResult("Tạo thành công", user);
         }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        {
+            var token = await _userService.Login(loginRequest);
+            return CustomResult("Đăng nhập thành công", token);
+        }
     }
 }
