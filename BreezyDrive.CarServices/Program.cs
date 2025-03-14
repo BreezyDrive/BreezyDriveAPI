@@ -1,5 +1,7 @@
 using BreezyDrive.CarServices;
 using BreezyDrive.CarServices.Infrastructure.DependencyInjection;
+using BreezyDrive.CarServices.Infrastructure.Persistence;
+using BreezyDrive.CarServices.Infrastructure.Plugins;
 
 var builder = WebApplication.CreateBuilder(args);
 

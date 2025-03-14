@@ -33,7 +33,7 @@ public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFe
         return mapper.Map<CarFeatureResponse>(carFeature);
     }
 
-    public async Task<CarFeatureResponse> CreateCarFeature(CarBrandRequest request)
+    public async Task<CarFeatureResponse> CreateCarFeature(CarFeatureRequest request)
     {
         var carFeature = mapper.Map<CarFeatures>(request);
         
@@ -45,7 +45,7 @@ public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFe
         
     }
 
-    public async Task<CarFeatureResponse> UpdateCarFeature(Guid guid, CarBrandRequest request)
+    public async Task<CarFeatureResponse> UpdateCarFeature(Guid guid, CarFeatureRequest request)
     {
         var carFeature = await unitOfWork.Repository<CarFeatures>().GetByIdAsync(guid);
         if (carFeature == null)

@@ -3,7 +3,7 @@ using BreezyDrive.CarServices.Application.Services;
 using BreezyDrive.CarServices.Infrastructure.Persistence;
 using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastuctures.Data;
+using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
