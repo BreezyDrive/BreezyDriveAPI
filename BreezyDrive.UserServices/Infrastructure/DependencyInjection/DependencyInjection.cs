@@ -15,6 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using BreezyDrive.UserServices.RabbitMQ;
+using MassTransit;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -29,6 +31,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            services.AddMasstransit(configuration); //RabbitMQ
 
 
             return services;
@@ -169,6 +172,42 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IUserDriveLisenceService, UserDriveLisenceService>();
+        }
+        
+        private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMassTransit(configure =>
+            {
+                configure.SetKebabCaseEndpointNameFormatter();
+
+                configure.AddConsumer<CheckUserExistConsumer>();
+                
+                configure.UsingRabbitMq((context, cfg) =>
+                {
+                    var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+                    var host = rabbitMqConfig["Host"];
+                    var username = rabbitMqConfig["Username"];
+                    var password = rabbitMqConfig["Password"];
+                    
+                    // Kiểm tra xem các giá trị có null hoặc rỗng không
+                    if (string.IsNullOrWhiteSpace(host))
+                        throw new Exception("RabbitMQ Host is not configured.");
+                    if (string.IsNullOrWhiteSpace(username))
+                        throw new Exception("RabbitMQ Username is not configured.");
+                    if (string.IsNullOrWhiteSpace(password))
+                        throw new Exception("RabbitMQ Password is not configured.");
+                    
+                    cfg.Host(new Uri(host), h =>
+                    {
+                        h.Username(username);
+                        h.Password(password);
+                    });
+
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
+            return services;
+
         }
     }
 }
