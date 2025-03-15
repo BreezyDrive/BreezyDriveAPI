@@ -14,6 +14,6 @@ public interface ICarRatingService
     
     Task<CarRatingsResponse> Update(Guid guid, CarRatingRequest request); 
     
-    Task<CarRatingsResponse> Delete(Guid guid);
+    Task<bool> Delete(Guid guid);
     
 }

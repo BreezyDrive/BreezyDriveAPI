@@ -39,10 +39,10 @@ public class RuleController(IRuleService ruleService) : BaseController
         
     }
 
-    [HttpPatch("UpdateRule")]
-    public async Task<IActionResult> UpdateRule([FromBody] RuleRequest ruleRequest)
+    [HttpPatch("UpdateRule/{ruleId}")]
+    public async Task<IActionResult> UpdateRule(Guid ruleId, [FromBody] RuleRequest ruleRequest)
     {
-        var rule = await ruleService.UpdateRule(ruleRequest.Id, ruleRequest);
+        var rule = await ruleService.UpdateRule(ruleId, ruleRequest);
         return CustomResult("Success", rule);
     }
 

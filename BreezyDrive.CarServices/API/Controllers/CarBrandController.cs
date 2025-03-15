@@ -27,10 +27,10 @@ public class CarBrandController(ICarBrandService carBrandService) : BaseControll
         return CustomResult("Success", await carBrandService.CreateCarBrand(carBrandController));
     }
 
-    [HttpPatch("UpdateFeature")]
-    public async Task<IActionResult> UpdateFeature([FromBody]CarBrandRequest carBrandController)
+    [HttpPatch("UpdateFeature/{featureId}")]
+    public async Task<IActionResult> UpdateFeature(Guid featureId, [FromBody]CarBrandRequest carBrandController)
     {
-        return CustomResult("Success", await carBrandService.UpdateCarBrand(carBrandController.Id, carBrandController));
+        return CustomResult("Success", await carBrandService.UpdateCarBrand(featureId, carBrandController));
     }
 
     [HttpDelete("DeleteFeature")]

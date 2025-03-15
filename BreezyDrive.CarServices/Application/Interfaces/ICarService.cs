@@ -16,7 +16,7 @@ public interface ICarService
     
     Task<CarResponse> Update(Guid guid, CarRequest carRequest);
     
-    Task<CarResponse> DeleteCarByGuid(Guid guid);
+    Task<bool> DeleteCarByGuid(Guid guid);
 
 
 }

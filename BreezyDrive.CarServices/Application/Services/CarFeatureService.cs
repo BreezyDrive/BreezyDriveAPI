@@ -13,7 +13,7 @@ public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFe
 {
     public async Task<IEnumerable<CarFeatureResponse>> GetAllAsync()
     {
-        var carFeatures = new List<CarFeatureResponse>();
+        var carFeatures = await unitOfWork.Repository<CarFeatures>().GetAllAsync();
         
         if (carFeatures.IsNullOrEmpty())
         {
@@ -25,11 +25,8 @@ public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFe
 
     public async Task<CarFeatureResponse> GetByGuid(Guid guid)
     {
-        var carFeature = await unitOfWork.Repository<CarResponse>().GetByIdAsync(guid);
-        if (carFeature == null)
-        {
-            throw new CustomExceptions.DataNotFoundException("Car Feature");
-        }
+        var carFeature = await GetCarFeatureById(guid);
+
         return mapper.Map<CarFeatureResponse>(carFeature);
     }
 
@@ -47,11 +44,7 @@ public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFe
 
     public async Task<CarFeatureResponse> UpdateCarFeature(Guid guid, CarFeatureRequest request)
     {
-        var carFeature = await unitOfWork.Repository<CarFeatures>().GetByIdAsync(guid);
-        if (carFeature == null)
-        {
-            throw new CustomExceptions.DataNotFoundException("Car Feature");
-        }
+        var carFeature = await GetCarFeatureById(guid);
         
         mapper.Map(request, carFeature);
         await unitOfWork.Repository<CarFeatures>().UpdateAsync(carFeature);
@@ -62,14 +55,20 @@ public class CarFeatureService (IUnitOfWork unitOfWork, IMapper mapper) : ICarFe
 
     public async Task<bool> DeleteCarFeature(Guid guid)
     {
-        var carFeature = await unitOfWork.Repository<CarFeatures>().GetByIdAsync(guid);
-        if (carFeature == null)
-        {
-            throw new CustomExceptions.DataNotFoundException("Car Feature");
-        }
+        var carFeature = await GetCarFeatureById(guid);
         await unitOfWork.Repository<CarFeatures>().DeleteAsync(guid);
 
         return true;
         
+    }
+    
+    private async Task<CarFeatures> GetCarFeatureById(Guid guid)
+    {
+        var carFeature = await unitOfWork.Repository<CarFeatures>().GetByIdAsync(guid);
+        if (carFeature == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Ratings not found");
+        }
+        return carFeature;
     }
 }

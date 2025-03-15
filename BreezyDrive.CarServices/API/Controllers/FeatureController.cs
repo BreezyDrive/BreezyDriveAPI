@@ -27,10 +27,10 @@ public class FeatureController(IFeatureService featureService) : BaseController
         return CustomResult("Success", await featureService.CreateFeature(featureRequest));
     }
 
-    [HttpPatch("UpdateFeature")]
-    public async Task<IActionResult> UpdateFeature([FromBody]FeatureRequest featureRequest)
+    [HttpPatch("UpdateFeature/{featureId}")]
+    public async Task<IActionResult> UpdateFeature(Guid featureId, [FromBody]FeatureRequest featureRequest)
     {
-        return CustomResult("Success", await featureService.UpdateFeature(featureRequest.Id, featureRequest));
+        return CustomResult("Success", await featureService.UpdateFeature(featureId, featureRequest));
     }
 
     [HttpDelete("DeleteFeature")]

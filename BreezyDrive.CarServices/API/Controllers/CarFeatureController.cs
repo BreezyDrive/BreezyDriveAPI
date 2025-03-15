@@ -27,10 +27,10 @@ public class CarFeatureController(ICarFeatureService carFeatureService) : BaseCo
         return CustomResult("Success", await carFeatureService.CreateCarFeature(carFeatureRequest));
     }
 
-    [HttpPatch("UpdateCarFeature")]
-    public async Task<IActionResult> UpdateCarFeature([FromBody] CarFeatureRequest carFeatureRequest)
+    [HttpPatch("UpdateCarFeature/{carFeatureId}")]
+    public async Task<IActionResult> UpdateCarFeature(Guid carFeatureId, [FromBody] CarFeatureRequest carFeatureRequest)
     {
-        return CustomResult("Success", await carFeatureService.UpdateCarFeature(carFeatureRequest.Id, carFeatureRequest));
+        return CustomResult("Success", await carFeatureService.UpdateCarFeature(carFeatureId, carFeatureRequest));
     }
 
     [HttpDelete("DeleteCarFeature")]

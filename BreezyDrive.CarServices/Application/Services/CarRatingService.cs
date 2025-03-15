@@ -1,33 +1,72 @@
-﻿using BreezyDrive.CarServices.Application.DTO.Requests;
+﻿using AutoMapper;
+using BreezyDrive.CarServices.Application.DTO.Requests;
 using BreezyDrive.CarServices.Application.DTO.Responses;
 using BreezyDrive.CarServices.Application.Interfaces;
+using BreezyDrive.CarServices.Domain.Entities;
+using BreezyDrive.CommonService.Domain.Exceptions;
+using BreezyDrive.CommonService.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BreezyDrive.CarServices.Application.Services;
 
-public class CarRatingService : ICarRatingService
+public class CarRatingService (IUnitOfWork unitOfWork, IMapper mapper) : ICarRatingService
 {
-    public Task<IEnumerable<CarRatingsResponse>> GetAllAsync()
+    public async Task<IEnumerable<CarRatingsResponse>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var carRatings = await unitOfWork.Repository<CarRatings>().GetAllAsync();
+
+        if (carRatings.IsNullOrEmpty())
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Ratings not found");
+        }
+        
+        return mapper.Map<IEnumerable<CarRatingsResponse>>(carRatings);
     }
 
-    public Task<CarRatingsResponse> GetByGuid(Guid guid)
+    public async Task<CarRatingsResponse> GetByGuid(Guid guid)
     {
-        throw new NotImplementedException();
+        var carRating = await GetCarRatingById(guid);
+        return mapper.Map<CarRatingsResponse>(carRating);
     }
 
-    public Task<CarRatingsResponse> Create(CarModelRequest request)
+    public async Task<CarRatingsResponse> Create(CarModelRequest request)
     {
-        throw new NotImplementedException();
+        var carRating = mapper.Map<CarRatings>(request);
+        await unitOfWork.Repository<CarRatings>().InsertAsync(carRating);
+        
+        await unitOfWork.SaveAsync();
+        
+        return mapper.Map<CarRatingsResponse>(carRating);
+
     }
 
-    public Task<CarRatingsResponse> Update(Guid guid, CarRatingRequest request)
+    public async Task<CarRatingsResponse> Update(Guid guid, CarRatingRequest request)
     {
-        throw new NotImplementedException();
+        var carRating = await GetCarRatingById(guid);
+
+        mapper.Map(request, carRating);
+        await unitOfWork.Repository<CarRatings>().UpdateAsync(carRating);
+        await unitOfWork.SaveAsync();
+        return mapper.Map<CarRatingsResponse>(carRating);
     }
 
-    public Task<CarRatingsResponse> Delete(Guid guid)
+    public async Task<bool> Delete(Guid guid)
     {
-        throw new NotImplementedException();
+        var carRating = await GetCarRatingById(guid);
+
+        await unitOfWork.Repository<CarRatings>().DeleteAsync(carRating);
+        await unitOfWork.SaveAsync();
+        return true;
+    }
+
+
+    private async Task<CarRatings> GetCarRatingById(Guid guid)
+    {
+        var carRating = await unitOfWork.Repository<CarRatings>().GetByIdAsync(guid);
+        if (carRating == null)
+        {
+            throw new CustomExceptions.DataNotFoundException("Car Ratings not found");
+        }
+        return carRating;
     }
 }

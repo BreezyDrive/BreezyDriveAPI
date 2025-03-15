@@ -95,7 +95,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             return services;
         }
 
-        public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
+        private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<CarDbContext>(options =>
             {
@@ -107,17 +107,25 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             });
         }
 
-        public static void AddRepositories(this IServiceCollection services)
+        private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork<CarDbContext>>();
 
         }
 
         /// Đăng ký Interface với Service
-        public static void AddServices(this IServiceCollection services)
+        private static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IRuleService, RuleService>();
+            services.AddScoped<ICarBrandService, CarBrandService>();
+            services.AddScoped<ICarFeatureService, CarFeatureService>();
+            services.AddScoped<ICarModelService, CarModelService>();
+            services.AddScoped<ICarRatingService, CarRatingService>();
+            services.AddScoped<ICarRegistrationService, CarRegistrationService>();
+            services.AddScoped<ICarRuleService, CarRuleService>();
+            services.AddScoped<IFeatureService, FeatureService>();
+            
         }
     }
 }
