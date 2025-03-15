@@ -37,6 +37,18 @@ namespace BreezyDrive.UserServices.Application.Services
             var userResponses = _mapper.Map<List<UserResponse>>(users);
             return userResponses;
         }
+        
+        public async Task<UserResponse> GetUserById(Guid id)
+        {
+            var user = _unitOfWork.Repository<Users>().GetById(id);
+            if (user == null)
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy người dùng nào.");
+            }
+
+            var userResponse = _mapper.Map<UserResponse>(user);
+            return userResponse;
+        }
 
         public async Task<bool> Register(CreateUserRequest createUserRequest)
         {

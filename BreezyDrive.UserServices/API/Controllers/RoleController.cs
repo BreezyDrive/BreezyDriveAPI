@@ -24,14 +24,14 @@ namespace BreezyDrive.UserServices.API.Controllers
             return CustomResult("Lấy dữ liệu thành công", roles);
         }
         
-        [HttpGet("GetRoleByGuid")]
+        [HttpGet("GetRoleByGuid/{id}")]
         public async Task<IActionResult> GetRoleByGuid(Guid id)
         {
             var role = await _roleService.GetRoleByGuid(id);
             return CustomResult("Lấy dữ liệu thành công", role);
         }
 
-        [HttpGet("GetRoleByName")]
+        [HttpGet("GetRoleByName/{name}")]
         public async Task<IActionResult> GetRoleByName(string name)
         {
             var role = await _roleService.GetRoleByName(name);
@@ -45,21 +45,21 @@ namespace BreezyDrive.UserServices.API.Controllers
             return CustomResult("Tạo role thành công.", role);
         }
 
-        [HttpPatch("UpdateRole")]
+        [HttpPatch("UpdateRole/{id}")]
         public async Task<IActionResult> UpdateRole(Guid id, RoleRequest roleRequest)
         {
             var role = await _roleService.UpdateRole(id, roleRequest);
             return CustomResult("Cập nhật role thành công.", role);
         }
 
-        [HttpDelete("DeleteRoleByGuid")]
+        [HttpDelete("DeleteRoleByGuid/{id}")]
         public async Task<IActionResult> DeleteRoleByGuid(Guid id)
         {
             await _roleService.DeleteRoleByGuid(id);
             return CustomResult("Xóa role thành công.");
         }
 
-        [HttpDelete("DeleteRoleByName")]
+        [HttpDelete("DeleteRoleByName/{name}")]
         public async Task<IActionResult> DeleteRoleByName(string name)
         {
             await _roleService.DeleteRoleByName(name);

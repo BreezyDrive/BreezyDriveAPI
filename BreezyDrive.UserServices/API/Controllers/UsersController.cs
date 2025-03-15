@@ -24,6 +24,13 @@ namespace BreezyDrive.UserServices.API.Controllers
             var users = await _userService.GetAllUsers();
             return CustomResult("Danh sách Users:", users);
         }
+        
+        [HttpGet("GetUserById/{id}")]
+        public async Task<IActionResult> GetUserById(Guid id)
+        {
+            var users = await _userService.GetUserById(id);
+            return CustomResult("Danh sách Users:", users);
+        }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register(CreateUserRequest createUserRequest)
