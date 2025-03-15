@@ -22,17 +22,10 @@ public class CheckUserExistConsumer : IConsumer<CheckUserExistRequest>
         _logger.LogInformation("Received request to check existence of userId: {UserId}", request.UserId);
         
         
-        var user = await  _userService.GetUserById(request.UserId);
-
-        if (user == null)
-        {
-            _logger.LogInformation("This user not found: {UserId}", request.UserId);
-            await context.RespondAsync(new CheckUserExistResponse { IsUserExists = false });
-            return;
-        }
+        var isUserExists = await  _userService.isUserExists(request.UserId);
         
-        // Gửi phản hồi về cho requester
-        await context.RespondAsync(new CheckUserExistResponse { IsUserExists = true });
+        await context.RespondAsync(new CheckUserExistResponse { IsUserExists = isUserExists });
+
         
     }
 }

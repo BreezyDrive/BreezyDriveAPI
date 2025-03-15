@@ -125,6 +125,11 @@ namespace BreezyDrive.UserServices.Application.Services
             string token = _authentication.GenerateJWTToken(users);
             return token;
         }
+
+        public async Task<bool> isUserExists(Guid userId)
+        {
+            return _unitOfWork.Repository<Users>().Exists(u => u.Id == userId);
+        }
     }
 }
 
