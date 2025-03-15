@@ -14,11 +14,11 @@ namespace BreezyDrive.UserServices.Domain.Entities
 
         public string FullName { get; set; }
 
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public string? DrivingLicense { get; set; }
 
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         public bool IsPhoneVerification { get; set; }
 

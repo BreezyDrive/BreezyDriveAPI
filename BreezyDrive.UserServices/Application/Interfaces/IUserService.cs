@@ -9,5 +9,6 @@ namespace BreezyDrive.UserServices.Application.Interfaces
         Task<UserResponse> GetUserById(Guid id);
         Task<bool> Register(CreateUserRequest createUserRequest);
         Task<string> Login(LoginRequest loginRequest);
+        Task<string> LoginGoogle(GoogleLoginRequest googleLoginRequest);
     }
 }

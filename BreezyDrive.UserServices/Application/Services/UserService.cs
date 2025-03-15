@@ -8,6 +8,9 @@ using BreezyDrive.UserServices.Domain.Entities;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Drawing;
 using BreezyDrive.UserServices.Domain.Interfaces;
+using Azure.Core;
+using Google.Apis.Auth;
+using Microsoft.AspNetCore.Identity;
 
 namespace BreezyDrive.UserServices.Application.Services
 {
@@ -17,13 +20,15 @@ namespace BreezyDrive.UserServices.Application.Services
         private readonly IMapper _mapper;
         private readonly IHashing _hashing;
         private readonly IAuthentication _authentication;
+        private readonly IConfiguration _configuration;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHashing hashing, IAuthentication authentication)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHashing hashing, IAuthentication authentication, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _hashing = hashing;
             _authentication = authentication;
+            _configuration = configuration;
         }
 
         public async Task<List<UserResponse>> GetAllUsers()
@@ -124,6 +129,73 @@ namespace BreezyDrive.UserServices.Application.Services
             Users users = check.First();
             string token = _authentication.GenerateJWTToken(users);
             return token;
+        }
+
+        public async Task<string> LoginGoogle(GoogleLoginRequest googleLoginRequest)
+        {
+            var payload = await VerifyGoogleToken(googleLoginRequest.IdToken);
+            if (payload == null)
+            {
+                throw new CustomExceptions.InvalidDataException("Token Google không hợp lệ.");
+            }
+
+            var user = await _unitOfWork.Repository<Users>().GetFirstOrDefaultAsync(x => x.Email == payload.Email);
+            string token = "";
+            if (user == null)
+            {
+                var password = Guid.NewGuid().ToString();
+                var registerRequest = new RegisterGoogleRequest
+                {
+                    FullName = payload.Name,
+                    Email = payload.Email,
+                    Password = password,
+                    Avatar = payload.Picture,
+                };
+
+                if (await RegisterGoogle(registerRequest))
+                {
+                    var newUser = _unitOfWork.Repository<Users>().Get(nu => nu.Email == payload.Email).FirstOrDefault();
+                    token = _authentication.GenerateJWTToken(newUser);
+/*
+                    string refreshToken = _authentication.GenerateRefreshToken();
+                    await _authentication.SaveRefreshToken(newUser, refreshToken);
+                    return new LoginResponse { token = token, refreshToken = refreshToken };*/
+                }
+                else
+                {
+                    throw new CustomExceptions.InvalidDataException("Đăng nhập Google thất bại");
+                }
+            }
+
+            return token;
+        }
+
+        private async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string idToken)
+        {
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings
+                {
+                    Audience = new List<string> { _configuration["Google:ClientId"] }
+                };
+                var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+                return payload;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<bool> RegisterGoogle(RegisterGoogleRequest registerRequest)
+        {
+            var newuser = _mapper.Map<Users>(registerRequest);
+            newuser.RoleId = _unitOfWork.Repository<Roles>().Get(r => r.Name == "User").Select(r => r.Id).FirstOrDefault();
+            newuser.Password = _hashing.SHA512Hash(registerRequest.Password);
+            _unitOfWork.Repository<Users>().Insert(newuser);
+            await _unitOfWork.SaveAsync();
+
+            return true;
         }
     }
 }
