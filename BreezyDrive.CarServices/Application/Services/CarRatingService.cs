@@ -29,7 +29,7 @@ public class CarRatingService (IUnitOfWork unitOfWork, IMapper mapper) : ICarRat
         return mapper.Map<CarRatingsResponse>(carRating);
     }
 
-    public async Task<CarRatingsResponse> Create(CarModelRequest request)
+    public async Task<CarRatingsResponse> Create(CarRatingRequest request)
     {
         var carRating = mapper.Map<CarRatings>(request);
         await unitOfWork.Repository<CarRatings>().InsertAsync(carRating);

@@ -1,4 +1,5 @@
-﻿using BreezyDrive.CarServices.Application.Interfaces;
+﻿using System.Text.Json.Serialization;
+using BreezyDrive.CarServices.Application.Interfaces;
 using BreezyDrive.CarServices.Application.Services;
 using BreezyDrive.CarServices.Infrastructure.Persistence;
 using BreezyDrive.CommonService.Application.Mapper;
@@ -27,7 +28,11 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
 
         private static IServiceCollection AddCoreServices(this IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+            });
             services.AddHttpContextAccessor();
 
             services.AddCors(options =>

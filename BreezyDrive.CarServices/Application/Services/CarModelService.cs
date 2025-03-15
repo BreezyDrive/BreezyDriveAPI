@@ -6,6 +6,7 @@ using BreezyDrive.CarServices.Domain.Entities;
 using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BreezyDrive.CarServices.Application.Services;
 
@@ -15,7 +16,7 @@ public class CarModelService(IUnitOfWork unitOfWork, IMapper mapper) : ICarModel
     {
         var carModels = await unitOfWork.Repository<CarModels>().GetAllAsync();
 
-        if (carModels == null)
+        if (carModels.IsNullOrEmpty())
         {
             throw new CustomExceptions.DataNotFoundException("Car Models not found");
         }
