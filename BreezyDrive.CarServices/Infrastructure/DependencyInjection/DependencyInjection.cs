@@ -1,9 +1,10 @@
-﻿using BreezyDrive.CarServices.Application.Interfaces;
+﻿using System.Text.Json.Serialization;
+using BreezyDrive.CarServices.Application.Interfaces;
 using BreezyDrive.CarServices.Application.Services;
 using BreezyDrive.CarServices.Infrastructure.Persistence;
 using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastuctures.Data;
+using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -27,7 +28,11 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
 
         private static IServiceCollection AddCoreServices(this IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+            });
             services.AddHttpContextAccessor();
 
             services.AddCors(options =>
@@ -95,7 +100,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             return services;
         }
 
-        public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
+        private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<CarDbContext>(options =>
             {
@@ -107,17 +112,25 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             });
         }
 
-        public static void AddRepositories(this IServiceCollection services)
+        private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork<CarDbContext>>();
 
         }
 
         /// Đăng ký Interface với Service
-        public static void AddServices(this IServiceCollection services)
+        private static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IRuleService, RuleService>();
+            services.AddScoped<ICarBrandService, CarBrandService>();
+            services.AddScoped<ICarFeatureService, CarFeatureService>();
+            services.AddScoped<ICarModelService, CarModelService>();
+            services.AddScoped<ICarRatingService, CarRatingService>();
+            services.AddScoped<ICarRegistrationService, CarRegistrationService>();
+            services.AddScoped<ICarRuleService, CarRuleService>();
+            services.AddScoped<IFeatureService, FeatureService>();
+            
         }
     }
 }

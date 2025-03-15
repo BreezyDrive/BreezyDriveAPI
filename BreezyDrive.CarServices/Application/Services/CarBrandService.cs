@@ -72,7 +72,7 @@ public class CarBrandService (IUnitOfWork unitOfWork, IMapper mapper) : ICarBran
         {
             throw new CustomExceptions.DataNotFoundException("No carBrand found");
         }
-        await unitOfWork.Repository<CarBrands>().DeleteAsync(carBrand);
+        await unitOfWork.Repository<CarBrands>().DeleteAsync(guid);
         return true;
     }
 }

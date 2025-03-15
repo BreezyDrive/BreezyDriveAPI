@@ -10,6 +10,6 @@ public interface ICarRegistrationService
     Task<CarRegistrationResponse> GetByGuid(Guid guid);
     Task<CarRegistrationResponse> Create(CarRegistrationRequest request);
     Task<CarRegistrationResponse> Update(Guid guid, CarRegistrationRequest request);
-    Task<CarRegistrationResponse> Delete(Guid guid);
+    Task<bool> Delete(Guid guid);
     
 }

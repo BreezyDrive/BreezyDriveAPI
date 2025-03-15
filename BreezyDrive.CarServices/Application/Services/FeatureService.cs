@@ -74,7 +74,7 @@ public class FeatureService (IUnitOfWork unitOfWork, IMapper mapper) : IFeatureS
         {
             throw new CustomExceptions.DataNotFoundException("No rule found");
         }
-        await unitOfWork.Repository<Features>().DeleteAsync(feature);
+        await unitOfWork.Repository<Features>().DeleteAsync(guid);
 
         return true;
     }

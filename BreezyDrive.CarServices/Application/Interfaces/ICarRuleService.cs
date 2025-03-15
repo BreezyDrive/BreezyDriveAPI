@@ -13,5 +13,5 @@ public interface ICarRuleService
     
     Task<CarRuleResponse> Update(Guid guid, CarRuleRequest request);
     
-    Task<CarRuleResponse> Delete(Guid guid);
+    Task<bool> Delete(Guid guid);
 }

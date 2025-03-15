@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastuctures.Repositories;
+﻿using BreezyDrive.CommonService.Domain.Interfaces;
+using BreezyDrive.CommonService.Infrastuctures.Data;
 
-namespace BreezyDrive.CommonService.Infrastuctures.Data
+namespace BreezyDrive.CommonService.Infrastuctures.Repositories
 {
     public class UnitOfWork<TContext> : IUnitOfWork where TContext : BaseDbContext<TContext>
     {
