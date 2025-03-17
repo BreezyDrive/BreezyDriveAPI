@@ -74,7 +74,8 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            })
+            .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -87,30 +88,20 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey
                     (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
                 };
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"]; // Lấy token từ query string
-
-                        // Nếu request là cho SignalR thì sử dụng token từ query
-                        if (!string.IsNullOrEmpty(accessToken) &&
-                            context.HttpContext.Request.Path.StartsWithSegments("/NotificationHub"))
-                        {
-                            context.Token = accessToken;
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = configuration["Google:ClientId"]!;
+                options.ClientSecret = configuration["Google:ClientSecret"]!;
             });
 
             services.AddScoped<IAuthentication, Authen>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IHashing, Hash>();
-            
+
             return services;
         }
+
 
         private static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {

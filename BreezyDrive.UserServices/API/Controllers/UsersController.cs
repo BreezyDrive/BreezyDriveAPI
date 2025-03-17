@@ -45,5 +45,12 @@ namespace BreezyDrive.UserServices.API.Controllers
             var token = await _userService.Login(loginRequest);
             return CustomResult("Đăng nhập thành công", token);
         }
+        
+        [HttpPost("LoginGoogle")]
+        public async Task<IActionResult> LoginGoogle([FromBody] GoogleLoginRequest googleLoginRequest)
+        {
+            var token = await _userService.LoginGoogle(googleLoginRequest);
+            return CustomResult("Đăng nhập thành công", token);
+        }
     }
 }
