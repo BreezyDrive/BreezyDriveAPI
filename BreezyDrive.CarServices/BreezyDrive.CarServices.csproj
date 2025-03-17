@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="CoreApiResponse" Version="1.0.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0-develop.2236" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
           <PrivateAssets>all</PrivateAssets>
@@ -26,6 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
+      <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,7 +35,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="API\Middlewares\" />
       <Folder Include="Infrastructure\Plugins\" />
       <Folder Include="Infrastructure\Repositories\" />
       <Folder Include="Migrations\" />

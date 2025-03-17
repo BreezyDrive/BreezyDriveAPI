@@ -2,13 +2,16 @@
 using BreezyDrive.CarServices.Application.DTO.Requests;
 using BreezyDrive.CarServices.Application.Interfaces;
 using CoreApiResponse;
+using Library.EventContracts.Events;
+using Library.EventContracts.Events.UserEvents;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BreezyDrive.CarServices.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CarController (ICarService carService) : BaseController
+public class CarController(ICarService carService, IRequestClient<CheckUserExistRequest> client) : BaseController
 {
     [HttpGet("GetAllCars")]
     public async Task<IActionResult> GetAllCars()
@@ -38,6 +41,16 @@ public class CarController (ICarService carService) : BaseController
     public async Task<IActionResult> DeleteCar(Guid id)
     {
         return CustomResult("Success", await carService.DeleteCarByGuid(id));
+    }
+    
+    //test rabbitmq
+    [HttpGet("CheckIfUserExist/{id}")]
+    public async Task<IActionResult> CheckIfUserExist(Guid id)
+    {
+        var response = await client.GetResponse<CheckUserExistResponse>(
+            new CheckUserExistRequest { UserId = id });
+        
+        return CustomResult("Success", response);
     }
 
 
