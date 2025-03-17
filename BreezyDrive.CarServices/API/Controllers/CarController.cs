@@ -1,8 +1,8 @@
 ﻿using System.Security.AccessControl;
 using BreezyDrive.CarServices.Application.DTO.Requests;
 using BreezyDrive.CarServices.Application.Interfaces;
-using BreezyDrive.CommonService.Contracts;
 using CoreApiResponse;
+using Library.EventContracts.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 

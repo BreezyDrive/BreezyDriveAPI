@@ -1,4 +1,4 @@
-﻿namespace BreezyDrive.CommonService.Contracts;
+﻿namespace Library.EventContracts.Events;
 
 public record CheckUserExistRequest
 {

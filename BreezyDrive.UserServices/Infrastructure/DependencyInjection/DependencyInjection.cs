@@ -15,8 +15,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
-using BreezyDrive.UserServices.RabbitMQ;
+using BreezyDrive.CommonService.Infrastuctures.Messaging;
+using BreezyDrive.UserServices.Application.Messaging;
+using Library.EventContracts.Events;
 using MassTransit;
+using MassTransit.SagaStateMachine;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -176,11 +179,19 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
         
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
+            //services.AddScoped<IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>, CheckUserExistHandler>();
+            //thêm dòng này cho từng event
+            services.AddGenericConsumer<CheckUserExistRequest, CheckUserExistResponse, CheckUserExistHandler>();
+
+            
             services.AddMassTransit(configure =>
             {
                 configure.SetKebabCaseEndpointNameFormatter();
+                
+                //configure.AddConsumer(typeof(GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>));
+                //thêm consumer vào đây
+                configure.AddConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>();
 
-                configure.AddConsumer<CheckUserExistConsumer>();
                 
                 configure.UsingRabbitMq((context, cfg) =>
                 {
@@ -208,6 +219,20 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             });
             return services;
 
+        }
+        
+        private static IServiceCollection AddGenericConsumer<TMessage, TResponse, THandler>(this IServiceCollection services)
+            where TMessage : class
+            where TResponse : class
+            where THandler : class, IMessageHandler<TMessage, TResponse>
+        {
+            // Đăng ký handler cho message
+            services.AddScoped<IMessageHandler<TMessage, TResponse>, THandler>();
+
+            // Đăng ký GenericConsumer
+            services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
+
+            return services;
         }
     }
 }
