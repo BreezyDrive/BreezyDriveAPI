@@ -18,6 +18,7 @@ using System.Text;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.UserServices.Application.Messaging;
 using Library.EventContracts.Events;
+using Library.EventContracts.Events.UserEvents;
 using MassTransit;
 using MassTransit.SagaStateMachine;
 

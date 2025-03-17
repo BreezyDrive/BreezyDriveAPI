@@ -3,6 +3,7 @@ using BreezyDrive.CarServices.Application.DTO.Requests;
 using BreezyDrive.CarServices.Application.Interfaces;
 using CoreApiResponse;
 using Library.EventContracts.Events;
+using Library.EventContracts.Events.UserEvents;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 

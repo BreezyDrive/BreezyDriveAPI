@@ -1,4 +1,4 @@
-﻿namespace Library.EventContracts.Events;
+﻿namespace Library.EventContracts.Events.UserEvents;
 
 public record CheckUserExistResponse()
 {
