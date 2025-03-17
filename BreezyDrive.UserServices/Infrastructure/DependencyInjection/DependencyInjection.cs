@@ -15,6 +15,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using BreezyDrive.CommonService.Infrastuctures.Messaging;
+using BreezyDrive.UserServices.Application.Messaging;
+using Library.EventContracts.Events;
+using Library.EventContracts.Events.UserEvents;
+using MassTransit;
+using MassTransit.SagaStateMachine;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -29,6 +35,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            services.AddMasstransit(configuration); //RabbitMQ
 
 
             return services;
@@ -169,6 +176,64 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IUserDriveLisenceService, UserDriveLisenceService>();
+        }
+        
+        private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            //services.AddScoped<IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>, CheckUserExistHandler>();
+            //thêm dòng này cho từng event
+            services.AddGenericConsumer<CheckUserExistRequest, CheckUserExistResponse, CheckUserExistHandler>();
+
+            
+            services.AddMassTransit(configure =>
+            {
+                configure.SetKebabCaseEndpointNameFormatter();
+                
+                //configure.AddConsumer(typeof(GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>));
+                //thêm consumer vào đây
+                configure.AddConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>();
+
+                
+                configure.UsingRabbitMq((context, cfg) =>
+                {
+                    var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+                    var host = rabbitMqConfig["Host"];
+                    var username = rabbitMqConfig["Username"];
+                    var password = rabbitMqConfig["Password"];
+                    
+                    // Kiểm tra xem các giá trị có null hoặc rỗng không
+                    if (string.IsNullOrWhiteSpace(host))
+                        throw new Exception("RabbitMQ Host is not configured.");
+                    if (string.IsNullOrWhiteSpace(username))
+                        throw new Exception("RabbitMQ Username is not configured.");
+                    if (string.IsNullOrWhiteSpace(password))
+                        throw new Exception("RabbitMQ Password is not configured.");
+                    
+                    cfg.Host(new Uri(host), h =>
+                    {
+                        h.Username(username);
+                        h.Password(password);
+                    });
+
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
+            return services;
+
+        }
+        
+        private static IServiceCollection AddGenericConsumer<TMessage, TResponse, THandler>(this IServiceCollection services)
+            where TMessage : class
+            where TResponse : class
+            where THandler : class, IMessageHandler<TMessage, TResponse>
+        {
+            // Đăng ký handler cho message
+            services.AddScoped<IMessageHandler<TMessage, TResponse>, THandler>();
+
+            // Đăng ký GenericConsumer
+            services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
+
+            return services;
         }
     }
 }

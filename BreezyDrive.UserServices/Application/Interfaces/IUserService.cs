@@ -9,5 +9,7 @@ namespace BreezyDrive.UserServices.Application.Interfaces
         Task<UserResponse> GetUserById(Guid id);
         Task<bool> Register(CreateUserRequest createUserRequest);
         Task<string> Login(LoginRequest loginRequest);
+        
+        Task<bool> isUserExists(Guid userId);
     }
 }
