@@ -1,13 +1,16 @@
-﻿namespace BreezyDrive.UserServices.Application.DTOs.Request
+﻿using BreezyDrive.CommonService.Application.Mapper;
+using BreezyDrive.UserServices.Domain.Entities;
+
+namespace BreezyDrive.UserServices.Application.DTOs.Request
 {
-    public class CreateUserRequest
+    public class CreateUserRequest : IMapFrom<Users>
     {
-        public string UserName { get; set; }
-
-        public IFormFile DrivingLicense { get; set; }
-
         public string Phone { get; set; }
 
-        public string Email { get; set; }
+        public string FullName { get; set; }
+
+        public string Password { get; set; }
+
+        public string ConfirmPassword { get; set; }
     }
 }

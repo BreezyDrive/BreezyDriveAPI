@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BreezyDrive.Common.Application.Mapper
+namespace BreezyDrive.CommonService.Application.Mapper
 {
     public interface IMapFrom<T>
     {

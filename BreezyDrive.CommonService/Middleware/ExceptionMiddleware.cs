@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using BreezyDrive.Domain.Exceptions;
+using BreezyDrive.CommonService.Domain.Exceptions;
 
-namespace BreezyDrive.Common.Middleware
+namespace BreezyDrive.CommonService.Middleware
 {
     public class ExceptionMiddleware
     {
