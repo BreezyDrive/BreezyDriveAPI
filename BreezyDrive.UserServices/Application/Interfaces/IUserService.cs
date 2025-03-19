@@ -7,10 +7,9 @@ namespace BreezyDrive.UserServices.Application.Interfaces
     {
         Task<List<UserResponse>> GetAllUsers();
         Task<UserResponse> GetUserById(Guid id);
-        Task<bool> Register(CreateUserRequest createUserRequest);
-        Task<string> Login(LoginRequest loginRequest);
-        Task<string> LoginGoogle(GoogleLoginRequest googleLoginRequest);
-        
+        Task<UserResponse> CreateUser(CreateUserRequest createUserRequest);
         Task<bool> isUserExists(Guid userId);
+        Task<UserResponse> CheckPhonePassword(string phone, string password);
+        Task<UserResponse> CheckGoogleEmail(string email);
     }
 }

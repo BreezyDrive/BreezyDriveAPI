@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Library.EventContracts.Events.UserEvents.Request
+{
+    public record GetUserRequestEvent
+    {
+        public string? Phone { get; init; }
+
+        public string? Password { get; init; }
+
+        public string? Email { get; init; }
+    }
+}

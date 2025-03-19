@@ -13,7 +13,8 @@ namespace BreezyDrive.UserServices.API.Controllers
     {
         private readonly IUserService _userService;
 
-        public UsersController(IUserService userService) {
+        public UsersController(IUserService userService)
+        {
             _userService = userService;
         }
 
@@ -24,33 +25,12 @@ namespace BreezyDrive.UserServices.API.Controllers
             var users = await _userService.GetAllUsers();
             return CustomResult("Danh sách Users:", users);
         }
-        
+
         [HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var users = await _userService.GetUserById(id);
             return CustomResult("Danh sách Users:", users);
-        }
-
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register(CreateUserRequest createUserRequest)
-        {
-            var user = await _userService.Register(createUserRequest);
-            return CustomResult("Tạo thành công", user);
-        }
-
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
-        {
-            var token = await _userService.Login(loginRequest);
-            return CustomResult("Đăng nhập thành công", token);
-        }
-        
-        [HttpPost("LoginGoogle")]
-        public async Task<IActionResult> LoginGoogle([FromBody] GoogleLoginRequest googleLoginRequest)
-        {
-            var token = await _userService.LoginGoogle(googleLoginRequest);
-            return CustomResult("Đăng nhập thành công", token);
         }
     }
 }

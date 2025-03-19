@@ -7,6 +7,10 @@ namespace BreezyDrive.UserServices.Application.DTOs.Response
     {
         public Guid Id { get; set; }
 
+        public Guid RoleId { get; set; }
+
+        public string Avatar { get; set; }
+
         public string FullName { get; set; }
 
         public string DrivingLicense { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace BreezyDrive.UserServices.Domain.Interfaces
+﻿namespace BreezyDrive.CommonService.Domain.Interfaces
 {
     public interface IHashing
     {

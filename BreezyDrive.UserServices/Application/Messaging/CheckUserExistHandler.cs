@@ -1,7 +1,8 @@
 ﻿using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.UserServices.Application.Interfaces;
 using Library.EventContracts.Events;
-using Library.EventContracts.Events.UserEvents;
+using Library.EventContracts.Events.UserEvents.Request;
+using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.UserServices.Application.Messaging;
 
