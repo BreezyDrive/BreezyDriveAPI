@@ -20,6 +20,12 @@ namespace BreezyDrive.AuthenticationServices.API.Controllers
             _authenticationService = authenticationService;
         }
 
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromForm] RegisterRequest registerRequest)
+        {
+            return CustomResult("Đăng ký thành công.", await _authenticationService.Register(registerRequest));
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {

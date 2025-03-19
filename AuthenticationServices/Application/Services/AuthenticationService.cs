@@ -12,16 +12,14 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IHashing _hashing;
         private readonly IAuthentication _authentication;
         private readonly IConfiguration _configuration;
         private readonly IRequestClient<RegisterRequestEvent> _client;
 
-        public AuthenticationService(IUnitOfWork unitOfWork, IHashing hashing, IAuthentication authentication,
+        public AuthenticationService(IHashing hashing, IAuthentication authentication,
                                     IConfiguration configuration, IRequestClient<RegisterRequestEvent> client)
         {
-            _unitOfWork = unitOfWork;
             _hashing = hashing;
             _authentication = authentication;
             _configuration = configuration;

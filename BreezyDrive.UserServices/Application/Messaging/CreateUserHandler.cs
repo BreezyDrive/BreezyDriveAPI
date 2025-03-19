@@ -29,6 +29,7 @@ namespace BreezyDrive.UserServices.Application.Messaging
             };
 
             var newUser = await _userService.CreateUser(userRequest);
+
             return true;
         }
     }

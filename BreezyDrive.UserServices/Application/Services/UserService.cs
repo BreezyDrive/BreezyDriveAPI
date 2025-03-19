@@ -17,15 +17,11 @@ namespace BreezyDrive.UserServices.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IHashing _hashing;
-        private readonly IConfiguration _configuration;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IHashing hashing, IConfiguration configuration)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _hashing = hashing;
-            _configuration = configuration;
         }
 
         public async Task<List<UserResponse>> GetAllUsers()
