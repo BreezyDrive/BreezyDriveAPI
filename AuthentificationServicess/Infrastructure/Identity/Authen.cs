@@ -1,12 +1,14 @@
 ﻿using BreezyDrive.CommonService.Domain.Exceptions;
-using BreezyDrive.UserServices.Domain.Entities;
-using BreezyDrive.UserServices.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Interfaces;
+using Library.EventContracts.Events.UserEvents.Response;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace BreezyDrive.UserServices.Infrastructure.Identity
+namespace BreezyDrive.CommonService.Infrastructure.Identity
 {
     public class Authen : IAuthentication
     {
@@ -17,7 +19,7 @@ namespace BreezyDrive.UserServices.Infrastructure.Identity
             _configuration = configuration;
         }
 
-        public string GenerateJWTToken(Users users)
+        public string GenerateJWTToken(GetUserResponseEvent users)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

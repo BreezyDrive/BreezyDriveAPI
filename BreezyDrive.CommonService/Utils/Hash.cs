@@ -1,8 +1,8 @@
-﻿using BreezyDrive.UserServices.Domain.Interfaces;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using BreezyDrive.CommonService.Domain.Interfaces;
 
-namespace BreezyDrive.UserServices.Infrastructure.Identity
+namespace BreezyDrive.CommonService.Utils
 {
     public class Hash : IHashing
     {

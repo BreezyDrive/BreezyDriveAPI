@@ -44,7 +44,9 @@
       <Folder Include="API\Filters\" />
       <Folder Include="Application\Exceptions\" />
       <Folder Include="Domain\Enums\" />
+      <Folder Include="Domain\Interfaces\" />
       <Folder Include="Infrastructure\Email\" />
+      <Folder Include="Infrastructure\Identity\" />
       <Folder Include="Infrastructure\Repositories\" />
     </ItemGroup>
 

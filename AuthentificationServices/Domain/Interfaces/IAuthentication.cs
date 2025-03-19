@@ -1,6 +1,7 @@
 ﻿using BreezyDrive.UserServices.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
-namespace BreezyDrive.UserServices.Domain.Interfaces
+namespace BreezyDrive.CommonService.Domain.Interfaces
 {
     public interface IAuthentication
     {

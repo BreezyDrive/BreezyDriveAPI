@@ -1,26 +1,17 @@
 ﻿using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastuctures.Data;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using BreezyDrive.UserServices.Application.Interfaces;
 using BreezyDrive.UserServices.Application.Services;
-using BreezyDrive.UserServices.Domain.Interfaces;
-using BreezyDrive.UserServices.Infrastructure.Identity;
 using BreezyDrive.UserServices.Infrastructure.Persistance;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using System.Text;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.UserServices.Application.Messaging;
-using Library.EventContracts.Events;
-using Library.EventContracts.Events.UserEvents;
 using MassTransit;
-using MassTransit.SagaStateMachine;
+using Library.EventContracts.Events.UserEvents.Request;
+using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -30,13 +21,11 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
         {
             services.AddCoreServices();         // CORS, Controllers, HttpContext
             services.AddInfrastructure(configuration);  // Database, Repository, External APIs
-            services.AddAuthenticationServices(configuration); // JWT, Identity
             services.AddRepositories();         // UnitOfWork, Repository
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddMasstransit(configuration); //RabbitMQ
-
 
             return services;
         }
@@ -68,40 +57,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             return services;
         }
 
-        private static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
-                };
-            })
-            .AddGoogle(options =>
-            {
-                options.ClientId = configuration["Google:ClientId"]!;
-                options.ClientSecret = configuration["Google:ClientSecret"]!;
-            });
-
-            services.AddScoped<IAuthentication, Authen>();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IHashing, Hash>();
-
-            return services;
-        }
-
+        
 
         private static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
         {
@@ -174,6 +130,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             //services.AddScoped<IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>, CheckUserExistHandler>();
             //thêm dòng này cho từng event
             services.AddGenericConsumer<CheckUserExistRequest, CheckUserExistResponse, CheckUserExistHandler>();
+            services.AddGenericConsumer<CheckGoogleExistRequestEvent, CheckGoogleExistResponseEvent, CheckGoogleEmailHandler>();
 
             
             services.AddMassTransit(configure =>
