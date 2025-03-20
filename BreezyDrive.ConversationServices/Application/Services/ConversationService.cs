@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Exceptions;
+using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.ConversationServices.Application.DTOs.Requests;
 using BreezyDrive.ConversationServices.Application.DTOs.Responses;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Domain.Entities;
-using BreezyDrive.Domain.Exceptions;
 
 namespace BreezyDrive.ConversationServices.Application.Services
 {

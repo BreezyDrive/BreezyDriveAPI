@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BreezyDrive.Common.Domain.Interfaces;
+using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 
 namespace BreezyDrive.ConversationServices.Application.Services

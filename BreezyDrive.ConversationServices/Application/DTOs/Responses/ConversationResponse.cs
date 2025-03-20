@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BreezyDrive.Common.Application.Mapper;
+using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.ConversationServices.Domain.Entities;
 
 namespace BreezyDrive.ConversationServices.Application.DTOs.Responses
