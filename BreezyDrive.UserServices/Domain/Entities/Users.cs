@@ -12,7 +12,7 @@ namespace BreezyDrive.UserServices.Domain.Entities
 
         public string Avatar { get; set; }
 
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         public string? Password { get; set; }
 

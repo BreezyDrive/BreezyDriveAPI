@@ -132,8 +132,8 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             //thêm dòng này cho từng event
             services.AddGenericConsumer<CheckUserExistRequest, CheckUserExistResponse, CheckUserExistHandler>();
             services.AddGenericConsumer<CheckGoogleExistRequestEvent, CheckGoogleExistResponseEvent, CheckGoogleEmailHandler>();
-            services.AddGenericConsumer<RegisterRequestEvent, bool, CreateUserHandler>();
-            services.AddGenericConsumer<RegisterGoogleRequestEvent, bool, RegisterGoogleHandler>();
+            services.AddGenericConsumer<RegisterRequestEvent, EventSuccessResponse, CreateUserHandler>();
+            services.AddGenericConsumer<RegisterGoogleRequestEvent, EventSuccessResponse, RegisterGoogleHandler>();
             
             services.AddMassTransit(configure =>
             {
@@ -143,8 +143,8 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                 //thêm consumer vào đây
                 configure.AddConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>();
                 configure.AddConsumer<GenericConsumer<CheckGoogleExistRequestEvent, CheckGoogleExistResponseEvent>>();
-                configure.AddConsumer<GenericConsumer<RegisterRequestEvent, bool>>();
-                configure.AddConsumer<GenericConsumer<RegisterGoogleRequestEvent, bool>>();
+                configure.AddConsumer<GenericConsumer<RegisterRequestEvent, EventSuccessResponse>>();
+                configure.AddConsumer<GenericConsumer<RegisterGoogleRequestEvent, EventSuccessResponse>>();
                 
                 configure.UsingRabbitMq((context, cfg) =>
                 {
@@ -176,6 +176,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
         
         private static IServiceCollection AddGenericConsumer<TMessage, TResponse, THandler>(this IServiceCollection services)
             where TMessage : class
+            where TResponse : class
             where THandler : class, IMessageHandler<TMessage, TResponse>
         {
             // Đăng ký handler cho message

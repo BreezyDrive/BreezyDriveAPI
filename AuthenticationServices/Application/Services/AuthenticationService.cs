@@ -1,5 +1,6 @@
 ﻿using BreezyDrive.AuthenticationServices.Application.DTOs.Request;
 using BreezyDrive.AuthenticationServices.Application.Interfaces;
+using BreezyDrive.AuthenticationServices.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using Google.Apis.Auth;
@@ -36,7 +37,7 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
                 }
             }
 
-            var response = await _client.GetResponse<Task<bool>>(
+            var response = await _client.GetResponse<EventSuccessResponse>(
                 new RegisterRequestEvent
                 {
                     Email = registerRequest.Email,
@@ -64,7 +65,7 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
                     Password = hashedPass
                 });
 
-            string token = _authentication.GenerateJWTToken(response.Message);
+            string token = _authentication.GenerateJwtToken(response.Message);
             return token;
         }
 
@@ -102,7 +103,7 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
                         {
                             Email = payload.Email
                         });
-                    token = _authentication.GenerateJWTToken(newUserResponse.Message);
+                    token = _authentication.GenerateJwtToken(newUserResponse.Message);
                     /*
                                         string refreshToken = _authentication.GenerateRefreshToken();
                                         await _authentication.SaveRefreshToken(newUser, refreshToken);

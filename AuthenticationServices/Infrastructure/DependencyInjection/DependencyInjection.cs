@@ -1,15 +1,16 @@
 ﻿using BreezyDrive.AuthenticationServices.Application.Interfaces;
 using BreezyDrive.AuthenticationServices.Application.Services;
 using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastructure.Identity;
 using BreezyDrive.CommonService.Utils;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using BreezyDrive.AuthenticationServices.Domain.Interfaces;
+using BreezyDrive.AuthenticationServices.Infrastructure.Identity;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
 {

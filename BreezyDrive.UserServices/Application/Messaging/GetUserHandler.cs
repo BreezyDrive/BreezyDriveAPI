@@ -1,4 +1,5 @@
-﻿using BreezyDrive.CommonService.Infrastuctures.Messaging;
+﻿using BreezyDrive.CommonService.Domain.Exceptions;
+using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.UserServices.Application.Interfaces;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
@@ -18,19 +19,28 @@ namespace BreezyDrive.UserServices.Application.Messaging
 
         public async Task<GetUserResponseEvent> HandleMessageAsync(GetUserRequestEvent message)
         {
-            var checkAccount = string.IsNullOrEmpty(message.Email)
-            ? await _userService.CheckPhonePassword(message.Phone, message.Password)
-            : await _userService.CheckGoogleEmail(message.Email);
-
-            return new GetUserResponseEvent
+            try
             {
-                Id = checkAccount.Id,
-                RoleId = checkAccount.RoleId,
-                FullName = checkAccount.FullName,
-                Email = checkAccount.Email,
-                Phone = checkAccount.Phone,
-                Avatar = checkAccount.Avatar
-            };
+                var checkAccount = string.IsNullOrEmpty(message.Email)
+                    ? await _userService.CheckPhonePassword(message.Phone, message.Password)
+                    : await _userService.CheckGoogleEmail(message.Email);
+                
+                return new GetUserResponseEvent
+                {
+                    Id = checkAccount.Id,
+                    RoleId = checkAccount.RoleId,
+                    FullName = checkAccount.FullName,
+                    Email = checkAccount.Email,
+                    Phone = checkAccount.Phone,
+                    Avatar = checkAccount.Avatar
+                };
+            }
+            catch (CustomExceptions.InvalidDataException ex )
+            {
+                Console.WriteLine();
+                throw;
+            }
+            
         }
     }
 }
