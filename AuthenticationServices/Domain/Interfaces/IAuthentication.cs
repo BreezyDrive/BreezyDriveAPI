@@ -1,13 +1,10 @@
-﻿using BreezyDrive.AuthenticationServices.Application.DTOs.Request;
-using Library.EventContracts.Events.UserEvents.Response;
-using MassTransit;
-using Microsoft.AspNetCore.Http;
+﻿using Library.EventContracts.Events.UserEvents.Response;
 
-namespace BreezyDrive.CommonService.Domain.Interfaces
+namespace BreezyDrive.AuthenticationServices.Domain.Interfaces
 {
     public interface IAuthentication
     {
-        string GenerateJWTToken(GetUserResponseEvent users);
+        string GenerateJwtToken(GetUserResponseEvent users);
         long GetUserIdFromHttpContext(HttpContext httpContext);
     }
 }

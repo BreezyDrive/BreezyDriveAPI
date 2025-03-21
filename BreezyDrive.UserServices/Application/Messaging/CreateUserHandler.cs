@@ -7,7 +7,7 @@ using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.UserServices.Application.Messaging
 {
-    public class CreateUserHandler : IMessageHandler<RegisterRequestEvent, bool>
+    public class CreateUserHandler : IMessageHandler<RegisterRequestEvent, EventSuccessResponse>
     {
         private readonly IUserService _userService;
         private readonly ILogger<CreateUserHandler> _logger;
@@ -18,7 +18,7 @@ namespace BreezyDrive.UserServices.Application.Messaging
             _logger = logger;
         }
 
-        public async Task<bool> HandleMessageAsync(RegisterRequestEvent message)
+        public async Task<EventSuccessResponse> HandleMessageAsync(RegisterRequestEvent message)
         {
             var userRequest = new CreateUserRequest
             {
@@ -28,8 +28,9 @@ namespace BreezyDrive.UserServices.Application.Messaging
                 Phone = message.Phone,
             };
 
-            var newUser = await _userService.CreateUser(userRequest);
-            return true;
+            await _userService.CreateUser(userRequest);
+            
+            return new EventSuccessResponse{IsSuccess = true};
         }
     }
 }

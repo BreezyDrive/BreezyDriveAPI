@@ -1,4 +1,5 @@
-﻿using BreezyDrive.CommonService.Infrastuctures.Messaging;
+﻿using BreezyDrive.CommonService.Domain.Exceptions;
+using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.UserServices.Application.Interfaces;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
@@ -18,10 +19,11 @@ namespace BreezyDrive.UserServices.Application.Messaging
 
         public async Task<GetUserResponseEvent> HandleMessageAsync(GetUserRequestEvent message)
         {
-            var checkAccount = string.IsNullOrEmpty(message.Email)
-            ? await _userService.CheckPhonePassword(message.Phone, message.Password)
-            : await _userService.CheckGoogleEmail(message.Email);
 
+            var checkAccount = string.IsNullOrEmpty(message.Email)
+                    ? await _userService.CheckPhonePassword(message.Phone, message.Password)
+                    : await _userService.CheckGoogleEmail(message.Email);
+                
             return new GetUserResponseEvent
             {
                 Id = checkAccount.Id,
@@ -32,5 +34,8 @@ namespace BreezyDrive.UserServices.Application.Messaging
                 Avatar = checkAccount.Avatar
             };
         }
+
+            
     }
 }
+

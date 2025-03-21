@@ -8,7 +8,7 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
         {
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors("CorsPolicy");
+            //app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthorization();

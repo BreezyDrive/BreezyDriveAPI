@@ -2,10 +2,11 @@
 using BreezyDrive.UserServices.Application.DTOs.Request;
 using BreezyDrive.UserServices.Application.Interfaces;
 using Library.EventContracts.Events.UserEvents.Request;
+using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.UserServices.Application.Messaging
 {
-    public class RegisterGoogleHandler : IMessageHandler<RegisterGoogleRequestEvent, bool>
+    public class RegisterGoogleHandler : IMessageHandler<RegisterGoogleRequestEvent, EventSuccessResponse>
     {
         private readonly IUserService _userService;
         private readonly ILogger<RegisterGoogleRequestEvent> _logger;
@@ -16,7 +17,7 @@ namespace BreezyDrive.UserServices.Application.Messaging
             _logger = logger;
         }
 
-        public async Task<bool> HandleMessageAsync(RegisterGoogleRequestEvent message)
+        public async Task<EventSuccessResponse> HandleMessageAsync(RegisterGoogleRequestEvent message)
         {
             var userRequest = new CreateUserRequest
             {
@@ -25,9 +26,9 @@ namespace BreezyDrive.UserServices.Application.Messaging
                 Password = message.Password,
             };
 
-            var newUser = await _userService.CreateUser(userRequest);
+            await _userService.CreateUser(userRequest);
 
-            return true;
+            return new EventSuccessResponse{IsSuccess = true};
         }
     }
 }
