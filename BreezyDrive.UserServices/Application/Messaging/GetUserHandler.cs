@@ -19,28 +19,23 @@ namespace BreezyDrive.UserServices.Application.Messaging
 
         public async Task<GetUserResponseEvent> HandleMessageAsync(GetUserRequestEvent message)
         {
-            try
-            {
-                var checkAccount = string.IsNullOrEmpty(message.Email)
+
+            var checkAccount = string.IsNullOrEmpty(message.Email)
                     ? await _userService.CheckPhonePassword(message.Phone, message.Password)
                     : await _userService.CheckGoogleEmail(message.Email);
                 
-                return new GetUserResponseEvent
-                {
-                    Id = checkAccount.Id,
-                    RoleId = checkAccount.RoleId,
-                    FullName = checkAccount.FullName,
-                    Email = checkAccount.Email,
-                    Phone = checkAccount.Phone,
-                    Avatar = checkAccount.Avatar
-                };
-            }
-            catch (CustomExceptions.InvalidDataException ex )
+            return new GetUserResponseEvent
             {
-                Console.WriteLine();
-                throw;
-            }
-            
+                Id = checkAccount.Id,
+                RoleId = checkAccount.RoleId,
+                FullName = checkAccount.FullName,
+                Email = checkAccount.Email,
+                Phone = checkAccount.Phone,
+                Avatar = checkAccount.Avatar
+            };
         }
+
+            
     }
 }
+

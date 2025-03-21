@@ -134,6 +134,8 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddGenericConsumer<CheckGoogleExistRequestEvent, CheckGoogleExistResponseEvent, CheckGoogleEmailHandler>();
             services.AddGenericConsumer<RegisterRequestEvent, EventSuccessResponse, CreateUserHandler>();
             services.AddGenericConsumer<RegisterGoogleRequestEvent, EventSuccessResponse, RegisterGoogleHandler>();
+            services.AddGenericConsumer<GetUserRequestEvent, GetUserResponseEvent, GetUserHandler>();
+
             
             services.AddMassTransit(configure =>
             {
@@ -145,6 +147,8 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                 configure.AddConsumer<GenericConsumer<CheckGoogleExistRequestEvent, CheckGoogleExistResponseEvent>>();
                 configure.AddConsumer<GenericConsumer<RegisterRequestEvent, EventSuccessResponse>>();
                 configure.AddConsumer<GenericConsumer<RegisterGoogleRequestEvent, EventSuccessResponse>>();
+                configure.AddConsumer<GenericConsumer<GetUserRequestEvent, GetUserResponseEvent>>();
+                
                 
                 configure.UsingRabbitMq((context, cfg) =>
                 {

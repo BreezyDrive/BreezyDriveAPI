@@ -1,5 +1,4 @@
-﻿using BreezyDrive.AuthenticationServices.Application.Interfaces;
-using BreezyDrive.AuthenticationServices.Application.Services;
+﻿using BreezyDrive.AuthenticationServices.Application.Services;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Utils;
 using MassTransit;
@@ -10,7 +9,10 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using BreezyDrive.AuthenticationServices.Domain.Interfaces;
 using BreezyDrive.AuthenticationServices.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Swashbuckle.AspNetCore.Filters;
+using AuthenticationService = BreezyDrive.AuthenticationServices.Application.Services.AuthenticationService;
+using IAuthenticationService = BreezyDrive.AuthenticationServices.Application.Interfaces.IAuthenticationService;
 
 namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
 {
