@@ -1,6 +1,6 @@
 ﻿using BreezyDrive.CommonService.Middleware;
 
-namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
+namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
     public static class MiddlewareExtensions
     {
@@ -8,7 +8,7 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
         {
             app.UseHttpsRedirection();
             app.UseRouting();
-            //app.UseCors("CorsPolicy");
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthorization();
@@ -28,7 +28,7 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BreezyDrive.AuthenticationServices_API");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BreezyDrive.ConversationServices_API");
                     c.RoutePrefix = "";
                     c.EnableTryItOutByDefault();
                 });

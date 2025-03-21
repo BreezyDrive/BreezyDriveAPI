@@ -1,11 +1,18 @@
-﻿using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastructure.Identity;
+﻿using BreezyDrive.AuthenticationServices.Application.Services;
+using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Utils;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
+using BreezyDrive.AuthenticationServices.Domain.Interfaces;
+using BreezyDrive.AuthenticationServices.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Swashbuckle.AspNetCore.Filters;
+using AuthenticationService = BreezyDrive.AuthenticationServices.Application.Services.AuthenticationService;
+using IAuthenticationService = BreezyDrive.AuthenticationServices.Application.Interfaces.IAuthenticationService;
 
 namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
 {
@@ -15,6 +22,8 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
         {
             services.AddCoreServices();
             services.AddAuthenticationServices(configuration);
+            services.AddServices();
+            services.AddSwaggerDocumentation();
             services.AddMasstransit(configuration);
 
             return services;
@@ -36,6 +45,45 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
                         /*.AllowCredentials()*/
                         .SetIsOriginAllowed(_ => true);
                 });
+            });
+
+            return services;
+        }
+
+        private static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "BreezyDrive.AuthenticationServices_API", Version = "v1" });
+
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+
+                /*option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });*/
+                option.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 
             return services;
@@ -107,6 +155,11 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
             });
             return services;
 
+        }
+
+        public static void AddServices(this IServiceCollection services)
+        {
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
     }
 }

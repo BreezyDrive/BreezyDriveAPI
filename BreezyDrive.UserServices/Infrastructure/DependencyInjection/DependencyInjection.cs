@@ -12,6 +12,7 @@ using BreezyDrive.UserServices.Application.Messaging;
 using MassTransit;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
+using BreezyDrive.CommonService.Utils;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -124,13 +125,16 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IUserDriveLisenceService, UserDriveLisenceService>();
         }
-        
+
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
             //services.AddScoped<IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>, CheckUserExistHandler>();
             //thêm dòng này cho từng event
             services.AddGenericConsumer<CheckUserExistRequest, CheckUserExistResponse, CheckUserExistHandler>();
             services.AddGenericConsumer<CheckGoogleExistRequestEvent, CheckGoogleExistResponseEvent, CheckGoogleEmailHandler>();
+            services.AddGenericConsumer<RegisterRequestEvent, EventSuccessResponse, CreateUserHandler>();
+            services.AddGenericConsumer<RegisterGoogleRequestEvent, EventSuccessResponse, RegisterGoogleHandler>();
+            services.AddGenericConsumer<GetUserRequestEvent, GetUserResponseEvent, GetUserHandler>();
 
             
             services.AddMassTransit(configure =>
@@ -140,7 +144,11 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                 //configure.AddConsumer(typeof(GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>));
                 //thêm consumer vào đây
                 configure.AddConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>();
-
+                configure.AddConsumer<GenericConsumer<CheckGoogleExistRequestEvent, CheckGoogleExistResponseEvent>>();
+                configure.AddConsumer<GenericConsumer<RegisterRequestEvent, EventSuccessResponse>>();
+                configure.AddConsumer<GenericConsumer<RegisterGoogleRequestEvent, EventSuccessResponse>>();
+                configure.AddConsumer<GenericConsumer<GetUserRequestEvent, GetUserResponseEvent>>();
+                
                 
                 configure.UsingRabbitMq((context, cfg) =>
                 {

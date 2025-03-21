@@ -1,5 +1,6 @@
 ﻿using BreezyDrive.AuthenticationServices.Application.DTOs.Request;
 using BreezyDrive.AuthenticationServices.Application.Interfaces;
+using BreezyDrive.AuthenticationServices.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using Google.Apis.Auth;
@@ -12,20 +13,31 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IHashing _hashing;
         private readonly IAuthentication _authentication;
         private readonly IConfiguration _configuration;
-        private readonly IRequestClient<RegisterRequestEvent> _client;
+        private readonly IRequestClient<RegisterRequestEvent> _registerClient;
+        private readonly IRequestClient<GetUserRequestEvent> _userClient;
+        private readonly IRequestClient<CheckGoogleExistRequestEvent> _googleCheckClient;
+        private readonly IRequestClient<RegisterGoogleRequestEvent> _googleRegisterClient;
 
-        public AuthenticationService(IUnitOfWork unitOfWork, IHashing hashing, IAuthentication authentication,
-                                    IConfiguration configuration, IRequestClient<RegisterRequestEvent> client)
+        public AuthenticationService(
+            IHashing hashing,
+            IAuthentication authentication,
+            IConfiguration configuration,
+            IRequestClient<RegisterRequestEvent> registerClient,
+            IRequestClient<GetUserRequestEvent> userClient,
+            IRequestClient<CheckGoogleExistRequestEvent> googleCheckClient,
+            IRequestClient<RegisterGoogleRequestEvent> googleRegisterClient)
+        
         {
-            _unitOfWork = unitOfWork;
             _hashing = hashing;
             _authentication = authentication;
             _configuration = configuration;
-            _client = client;
+            _registerClient = registerClient;
+            _userClient = userClient;
+            _googleCheckClient = googleCheckClient;
+            _googleRegisterClient = googleRegisterClient;
         }
 
         public async Task<bool> Register(RegisterRequest registerRequest)
@@ -38,7 +50,7 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
                 }
             }
 
-            var response = await _client.GetResponse<Task<bool>>(
+            var response = await _registerClient.GetResponse<EventSuccessResponse>(
                 new RegisterRequestEvent
                 {
                     Email = registerRequest.Email,
@@ -59,14 +71,14 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
 
             string hashedPass = _hashing.SHA512Hash(loginRequest.Password);
 
-            var response = await _client.GetResponse<GetUserResponseEvent>(
+            var response = await _userClient.GetResponse<GetUserResponseEvent>(
                 new GetUserRequestEvent
                 {
                     Phone = loginRequest.Phone,
                     Password = hashedPass
                 });
 
-            string token = _authentication.GenerateJWTToken(response.Message);
+            string token = _authentication.GenerateJwtToken(response.Message);
             return token;
         }
 
@@ -78,7 +90,7 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
                 throw new CustomExceptions.InvalidDataException("Token Google không hợp lệ.");
             }
 
-            var response = await _client.GetResponse<CheckGoogleExistResponseEvent>(
+            var response = await _googleCheckClient.GetResponse<CheckGoogleExistResponseEvent>(
                 new CheckGoogleExistRequestEvent
                 {
                     Email = payload.Email,
@@ -99,12 +111,12 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
 
                 if (await RegisterGoogle(registerRequest))
                 {
-                    var newUserResponse = await _client.GetResponse<GetUserResponseEvent>(
+                    var newUserResponse = await _userClient.GetResponse<GetUserResponseEvent>(
                         new GetUserRequestEvent
                         {
                             Email = payload.Email
                         });
-                    token = _authentication.GenerateJWTToken(newUserResponse.Message);
+                    token = _authentication.GenerateJwtToken(newUserResponse.Message);
                     /*
                                         string refreshToken = _authentication.GenerateRefreshToken();
                                         await _authentication.SaveRefreshToken(newUser, refreshToken);
@@ -138,7 +150,7 @@ namespace BreezyDrive.AuthenticationServices.Application.Services
 
         public async Task<bool> RegisterGoogle(RegisterGoogleRequest registerRequest)
         {
-            var response = await _client.GetResponse<Task<bool>>(
+            var response = await _googleRegisterClient.GetResponse<Task<bool>>(
                 new RegisterGoogleRequestEvent
                 {
                     Email = registerRequest.Email,

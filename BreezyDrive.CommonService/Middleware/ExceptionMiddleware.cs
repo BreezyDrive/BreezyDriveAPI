@@ -6,6 +6,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BreezyDrive.CommonService.Domain.Exceptions;
+using MassTransit;
 
 namespace BreezyDrive.CommonService.Middleware
 {
@@ -28,6 +29,12 @@ namespace BreezyDrive.CommonService.Middleware
             }
             catch (Exception ex)
             {
+                if (TryExtractFaultException(ex, out Exception customException))
+                {
+                    await HandleExceptionAsync(context, customException);
+                    return;
+                }
+                
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -103,5 +110,71 @@ namespace BreezyDrive.CommonService.Middleware
 
             await context.Response.WriteAsync(jsonResponse);
         }
+
+        private bool TryExtractFaultException(Exception exception, out Exception customException)
+        {
+            customException = null;
+
+            if (exception is RequestFaultException requestFaultException)
+            {
+                _logger.LogError("RequestFaultException detected: {Exception}", exception);
+
+                var faultProperty = requestFaultException.GetType().GetProperty("Fault");
+                if (faultProperty != null)
+                {
+                    var fault = faultProperty.GetValue(requestFaultException);
+                    if (fault != null)
+                    {
+                        var exceptionsProperty = fault.GetType().GetProperty("Exceptions");
+                        if (exceptionsProperty != null)
+                        {
+                            var faultExceptions = exceptionsProperty.GetValue(fault) as System.Collections.IEnumerable;
+                            if (faultExceptions != null)
+                            {
+                                foreach (var faultEx in faultExceptions)
+                                {
+                                    string exceptionTypeName = faultEx.GetType().GetProperty("ExceptionType")
+                                        ?.GetValue(faultEx)?.ToString();
+                                    string message = faultEx.GetType().GetProperty("Message")?.GetValue(faultEx)
+                                        ?.ToString();
+
+                                    _logger.LogError("Extracted Exception: {ExceptionType} - {Message}",
+                                        exceptionTypeName, message);
+
+                                    // Kiểm tra nếu là exception của hệ thống
+                                    if (!string.IsNullOrEmpty(exceptionTypeName) &&
+                                        exceptionTypeName.StartsWith("BreezyDrive.CommonService.Domain.Exceptions"))
+                                    {
+                                        try
+                                        {
+                                            Type exceptionType = Type.GetType(exceptionTypeName);
+                                            if (exceptionType != null &&
+                                                typeof(Exception).IsAssignableFrom(exceptionType))
+                                            {
+                                                customException =
+                                                    (Exception)Activator.CreateInstance(exceptionType, message);
+                                                return true;
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            _logger.LogError("Error creating exception instance: {Error}", ex);
+                                        }
+                                    }
+
+                                    // Nếu không tìm thấy exception, quăng lỗi chung
+                                    customException = new Exception(message);
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+
     }
 }
