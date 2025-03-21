@@ -27,7 +27,7 @@ public static class DependencyInjection
                 }
             },
             
-            //ars-route
+            //Cars-route
             new RouteConfig
             {
                 RouteId = "cars-route",
