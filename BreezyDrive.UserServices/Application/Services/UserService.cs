@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Drawing;
 using Azure.Core;
 using Microsoft.AspNetCore.Identity;
+using MassTransit;
+using Library.EventContracts.Events.NotificationEvents.Enums;
+using Library.EventContracts.Events.NotificationEvents.Request;
 
 namespace BreezyDrive.UserServices.Application.Services
 {
@@ -17,11 +20,12 @@ namespace BreezyDrive.UserServices.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IPublishEndpoint _publishEndpoint;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<List<UserResponse>> GetAllUsers()
@@ -43,7 +47,19 @@ namespace BreezyDrive.UserServices.Application.Services
             {
                 throw new CustomExceptions.DataNotFoundException("Không tìm thấy người dùng nào.");
             }
+            var notificationEvent = new NotificationEvent
+            {
+                ReceiverId = Guid.Parse(user.Id.ToString()),
+                Description = "get successful",
+                Name = "successful",
+                NotificationType = NotificationType.Message,
+                CreateDate = DateTimeOffset.UtcNow,
+                IsSeen = false
+            };
 
+            Console.WriteLine($"📢 Đang publish NotificationEvent: {notificationEvent.Description}, Name: {notificationEvent.Name}, NotiType : {notificationEvent.NotificationType}, ReceiverId: {notificationEvent.ReceiverId}");
+
+            await _publishEndpoint.Publish(notificationEvent);
             var userResponse = _mapper.Map<UserResponse>(user);
             return userResponse;
         }
