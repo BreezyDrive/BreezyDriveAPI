@@ -56,6 +56,11 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
         return true;
     }
 
+    public bool IsCarExists(Guid carId)
+    {
+        return unitOfWork.Repository<Cars>().Exists(u => u.Id == carId);
+    }
+
     private async Task<Cars> GetCarByIdAsync(Guid carId)
     {
         var car = await unitOfWork.Repository<Cars>().GetByIdAsync(carId);

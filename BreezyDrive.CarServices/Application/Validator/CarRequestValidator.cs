@@ -6,13 +6,13 @@ using MassTransit;
 
 namespace BreezyDrive.CarServices.Application.Validator;
 
-public class CarCreateRequestValidator : AbstractValidator<CarRequest>
+public class CarRequestValidator : AbstractValidator<CarRequest>
 {
     
     private readonly IRequestClient<CheckUserExistRequest> _userClient;
 
     
-    public CarCreateRequestValidator(IRequestClient<CheckUserExistRequest> userClient)
+    public CarRequestValidator(IRequestClient<CheckUserExistRequest> userClient)
     {
         
         _userClient = userClient;
@@ -30,7 +30,7 @@ public class CarCreateRequestValidator : AbstractValidator<CarRequest>
 
         
         RuleFor(x => x.CarAvatar)
-            .Must(BeAValidUrl).WithMessage("Car avatar must be a valid URL.")
+            .Must(IsAValidUrl).WithMessage("Car avatar must be a valid URL.")
             .When(x => !string.IsNullOrEmpty(x.CarAvatar));
         
         RuleFor(x => x.TransmissionType)
@@ -51,7 +51,7 @@ public class CarCreateRequestValidator : AbstractValidator<CarRequest>
             .MaximumLength(200).WithMessage("Location must not exceed 200 characters.");
         
         RuleFor(x => x.DayOfRegistration)
-            .Must(BeAValidDate).WithMessage("Invalid registration date.");
+            .Must(IsValidDate).WithMessage("Invalid registration date.");
         
         
         // Nếu IsDropOf là false, thì FeePerKm phải bằng 0
@@ -80,12 +80,12 @@ public class CarCreateRequestValidator : AbstractValidator<CarRequest>
         return response.Result.Message.IsUserExists;
     }
     
-    private static bool BeAValidUrl(string? url)
+    private static bool IsAValidUrl(string? url)
     {
         return Uri.TryCreate(url, UriKind.Absolute, out _);
     }
 
-    private static bool BeAValidDate(DateOnly date)
+    private static bool IsValidDate(DateOnly date)
     {
         return date <= DateOnly.FromDateTime(DateTime.UtcNow);
     }
