@@ -14,4 +14,5 @@ public interface IFeatureService
     Task<FeatureResponse> UpdateFeature(Guid guid, FeatureRequest request); 
     
     Task<bool> DeleteFeature(Guid guid);
+    bool IsFeatureExists(Guid featureId);
 }

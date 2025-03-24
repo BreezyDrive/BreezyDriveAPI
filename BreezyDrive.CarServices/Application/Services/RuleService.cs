@@ -77,4 +77,9 @@ public class RuleService(IUnitOfWork unitOfWork, IMapper mapper) : IRuleService
 
         return true;
     }
+
+    public bool IsRuleExists(Guid ruleId)
+    {
+        return unitOfWork.Repository<Rules>().Exists(x => x.Id == ruleId);
+    }
 }

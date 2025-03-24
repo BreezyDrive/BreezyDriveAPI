@@ -11,6 +11,6 @@ public class CarModelRequest : IMapFrom<CarModels>
     [Required(ErrorMessage = "Model Name is required")]
     public string Name { get; set; }
     
-    [Required(ErrorMessage = "Model is required")]
+    [Required(ErrorMessage = "Release Year is required")]
     public int ReleaseYear { get; set; }
 }

@@ -78,4 +78,9 @@ public class FeatureService (IUnitOfWork unitOfWork, IMapper mapper) : IFeatureS
 
         return true;
     }
+
+    public bool IsFeatureExists(Guid featureId)
+    {
+        return unitOfWork.Repository<Features>().Exists(x => x.Id == featureId);
+    }
 }
