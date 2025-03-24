@@ -12,9 +12,9 @@ public interface ICarService
     
     Task<CarResponse> GetByModelName(string modelName);
     
-    Task<CarResponse> Create(CarRequest carRequest);
+    Task<CarResponse> CreateCar(CarRequest carRequest);
     
-    Task<CarResponse> Update(Guid guid, CarRequest carRequest);
+    Task<CarResponse> UpdateCar(Guid guid, CarRequest carRequest);
     
     Task<bool> DeleteCarByGuid(Guid guid);
 

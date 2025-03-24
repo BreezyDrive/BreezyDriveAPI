@@ -25,13 +25,13 @@ public class CarRatingController(ICarRatingService carRatingService) : BaseContr
     [HttpPost("AddCarRating")]
     public async Task<IActionResult> AddCarRating([FromBody] CarRatingRequest carRatingRequest)
     {
-        return CustomResult("Success", await carRatingService.Create(carRatingRequest));    
+        return CustomResult("Success", await carRatingService.CreateCarRating(carRatingRequest));    
     }
 
     [HttpPatch("UpdateCarRating/{carRatingId}")]
     public async Task<IActionResult> UpdateCarRating(Guid carRatingId ,[FromBody] CarRatingRequest carRatingRequest)
     {
-        return CustomResult("Success", await carRatingService.Update(carRatingId, carRatingRequest));
+        return CustomResult("Success", await carRatingService.UpdateCarRating(carRatingId, carRatingRequest));
     }
 
     [HttpDelete("DeleteCarRating/{carRatingId}")]

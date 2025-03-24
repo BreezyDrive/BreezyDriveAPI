@@ -32,14 +32,14 @@ public class CarController(ICarService carService, IRequestClient<CheckUserExist
     [HttpPost("AddCar")] 
     public async Task<IActionResult> CreateCar ([FromBody] CarRequest carRequest) {
         
-       return CustomResult("Success", await carService.Create(carRequest));
+       return CustomResult("Success", await carService.CreateCar(carRequest));
        
     }
 
     [HttpPatch("UpdateCar/{carId}")]
     public async Task<IActionResult> UpdateCar(Guid carId, [FromBody] CarRequest carRequest)
     {
-        return CustomResult("Success", await carService.Update(carId, carRequest));
+        return CustomResult("Success", await carService.UpdateCar(carId, carRequest));
     }
 
     [HttpDelete("DeleteCar")]
