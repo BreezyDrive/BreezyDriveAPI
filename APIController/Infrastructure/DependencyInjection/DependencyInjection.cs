@@ -49,7 +49,20 @@ public static class DependencyInjection
                 {
                     new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
                 }
+            },
+            //authentication-route
+            new RouteConfig
+            {
+                RouteId = "authentication-route",
+                ClusterId = "authentication-cluster",
+                Match = new RouteMatch { Path = "authentication-api/{**catch-all}" },
+                Transforms = new[]
+                {
+                    new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
+                }
             }
+            
+            
         };
 
         var clusters = new List<ClusterConfig>
@@ -77,7 +90,17 @@ public static class DependencyInjection
                 {
                     { "destination1", new DestinationConfig { Address = "http://localhost:8380" } }
                 }
-            }
+            },
+            
+            new ClusterConfig
+            {
+                ClusterId = "authentication-cluster",
+                Destinations = new Dictionary<string, DestinationConfig>
+                {
+                    { "destination1", new DestinationConfig { Address = "http://localhost:8480" } }
+                }
+            },
+            
         };
 
         services.AddReverseProxy()
