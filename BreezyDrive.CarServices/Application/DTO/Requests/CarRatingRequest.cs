@@ -10,8 +10,8 @@ public class CarRatingRequest : IMapFrom<CarRatings>
     
     public Guid CarId {get; set;}
     
-    [Range(0, 5, ErrorMessage = "Rating must be between 0 and 5")]
-    [Required(ErrorMessage = "Rating is required")]
+    [Range(0, 5, ErrorMessage = "Đánh giá chỉ từ 0 đến 5 ")]
+    [Required(ErrorMessage = "Vui lòng nhập số sao")]
     public float Star {get; set;}
     
     public string? Comment {get; set;}

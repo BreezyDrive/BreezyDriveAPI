@@ -14,13 +14,14 @@ public class CarFeatureRequestValidator : AbstractValidator<CarFeatureRequest>
         _carService = carService;
         _featureService = featureService;
         
-        RuleFor(x => x.CarId).NotEmpty()
-            .Must(g => g != Guid.Empty).WithMessage("CarId cannot be an empty Guid.")
-            .Must(CarExists).WithMessage("Car does not exist.");
+        RuleFor(x => x.CarId).NotEmpty().WithMessage("Vui lòng cung cấp CarId.")
+            .Must(g => g != Guid.Empty).WithMessage("CarId không được là Guid trống.")
+            .Must(CarExists).WithMessage("Xe không tồn tại.");
 
-        RuleFor(x => x.FeatureId).NotEmpty().WithMessage("FeatureId is required.")
-            .Must(g => g != Guid.Empty).WithMessage("FeatureId cannot be an empty Guid.")
-            .Must(FeatureExists).WithMessage("Feature does not exist.");
+        RuleFor(x => x.FeatureId)
+            .NotEmpty().WithMessage("FeatureId là bắt buộc.")
+            .Must(g => g != Guid.Empty).WithMessage("FeatureId không được là Guid trống.")
+            .Must(FeatureExists).WithMessage("Tính năng không tồn tại.");
 
     }
 

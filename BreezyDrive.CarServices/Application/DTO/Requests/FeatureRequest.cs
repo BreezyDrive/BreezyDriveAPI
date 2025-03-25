@@ -6,6 +6,6 @@ namespace BreezyDrive.CarServices.Application.DTO.Requests;
 
 public class FeatureRequest : IMapFrom<Features>
 {
-    [Required(ErrorMessage = "Feature name is required")]
+    [Required(ErrorMessage = "Vui lòng thêm tính năng xe")]
     public string Name { get; set; }
 }

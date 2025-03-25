@@ -6,6 +6,6 @@ namespace BreezyDrive.CarServices.Application.DTO.Requests;
 
 public class CarBrandRequest : IMapFrom<CarBrands>
 {
-    [Required(ErrorMessage = "Brand Name is required")]
+    [Required(ErrorMessage = "Vui lòng nhập hãng xe")]
     public string Name { get; set; }
 }

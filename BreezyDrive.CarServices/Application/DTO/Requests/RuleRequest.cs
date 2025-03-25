@@ -6,6 +6,6 @@ namespace BreezyDrive.CarServices.Application.DTO.Requests;
 
 public class RuleRequest : IMapFrom<Rules>
 {
-    [Required(ErrorMessage = "Name is required")]
+    [Required(ErrorMessage = "Vui lòng thêm tên luật")]
     public string Name { get; set; }
 }

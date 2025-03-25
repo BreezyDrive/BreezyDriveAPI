@@ -12,7 +12,7 @@ public class CarRequest : IMapFrom<Cars>
     
     public Guid CarModelId { get; set; }
 
-    [Required(ErrorMessage = "Car Image is required")]
+    [Required(ErrorMessage = "Vui lòng cung cấp hình ảnh")]
     public string CarAvatar { get; set; }
 
     public string? FrontImage { get; set; }
@@ -23,35 +23,35 @@ public class CarRequest : IMapFrom<Cars>
 
     public string? RightImage { get; set; }
 
-    [Required(ErrorMessage = "Car Type is required")]
+    [Required(ErrorMessage = "Vui lòng nhập xe số sàn hay số tự động")]
     public TransmissionTypeEnum TransmissionType { get; set; }
 
-    [Required(ErrorMessage = "Car Type is required")]
+    [Required(ErrorMessage = "Vui lòng nhập loại nhiên liệu")]
     public string FuelType { get; set; }
 
-    [Required(ErrorMessage = "Fuel Consumption is required")]
-    [Range(1, int.MaxValue, ErrorMessage = "Fuel Consumption must be greater than 0")]
+    [Required(ErrorMessage = "Vui lòng nhập mức tiêu thụ nhiên liệu.")]
+    [Range(1, int.MaxValue, ErrorMessage = "Mức tiêu thụ nhiên liệu phải lớn hơn 0.")]
     public int FuelConsumption { get; set; }
 
-    [Required(ErrorMessage = "Number of seats is required")]
+    [Required(ErrorMessage = "Vui lòng nhập số ghế.")]
     public int Seat { get; set; }
 
-    [Required(ErrorMessage = "Location is required")]
+    [Required(ErrorMessage = "Vui lòng nhập vị trí.")]
     public string Location { get; set; }
 
     public string? Description { get; set; }
 
-    [Required(ErrorMessage = "Day of registration is required")]
+    [Required(ErrorMessage = "Vui lòng nhập ngày đăng ký.")]
     public DateOnly DayOfRegistration { get; set; }
 
-    [Required(ErrorMessage = "Is Drop Of required")]
+    [Required(ErrorMessage = "Vui lòng xác định có giao xe tận nơi hay không")]
     public bool IsDropOf { get; set; }
     
     public int? FeePerKm { get; set; }
     
     public int? AvailableZone { get; set; }
     
-    [Required(ErrorMessage = "Price Per Day is required")]
+    [Required(ErrorMessage = "Vui lòng nhập giá thuê theo ngày.")]
     public double PricePerDay { get; set; }
     
 }

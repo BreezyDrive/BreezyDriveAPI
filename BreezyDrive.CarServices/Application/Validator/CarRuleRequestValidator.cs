@@ -14,13 +14,15 @@ public class CarRuleRequestValidator : AbstractValidator<CarRuleRequest>
         _carService = carService;
         _ruleService = ruleService;
         
-        RuleFor(x => x.CarId).NotEmpty().WithMessage("CarId cannot be an empty Guid.")
-            .Must(g => g != Guid.Empty).WithMessage("CarId cannot be an empty Guid.")
-            .Must(CarExists).WithMessage("Car does not exist.");
-        
-        RuleFor(x => x.RuleId).NotEmpty().WithMessage("RuleId cannot be an empty Guid.")
-            .Must(g => g != Guid.Empty).WithMessage("RuleId cannot be an empty Guid.")
-            .Must(RuleExists).WithMessage("Car does not exist.");
+        RuleFor(x => x.CarId)
+            .NotEmpty().WithMessage("CarId không được để trống.")
+            .Must(g => g != Guid.Empty).WithMessage("CarId không được là Guid rỗng.")
+            .Must(CarExists).WithMessage("Xe không tồn tại.");
+
+        RuleFor(x => x.RuleId)
+            .NotEmpty().WithMessage("RuleId không được để trống.")
+            .Must(g => g != Guid.Empty).WithMessage("RuleId không được là Guid rỗng.")
+            .Must(RuleExists).WithMessage("Quy tắc không tồn tại.");
             
         
     }

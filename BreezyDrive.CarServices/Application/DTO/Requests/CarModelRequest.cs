@@ -8,9 +8,9 @@ public class CarModelRequest : IMapFrom<CarModels>
 {
     public Guid BrandId { get; set; }
     
-    [Required(ErrorMessage = "Model Name is required")]
+    [Required(ErrorMessage = "Vui lòng nhập Model xe")]
     public string Name { get; set; }
     
-    [Required(ErrorMessage = "Release Year is required")]
+    [Required(ErrorMessage = "Vui lòng nhập năm phát hành của xe")]
     public int ReleaseYear { get; set; }
 }

@@ -19,59 +19,54 @@ public class CarRequestValidator : AbstractValidator<CarRequest>
 
         
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required.")
-            .Must(g => g != Guid.Empty).WithMessage("UserId cannot be an empty Guid.")
-            .Must(UserExists).WithMessage("UserId does not exist.");
-        
-        
-        RuleFor(x => x.CarModelId)
-            .NotEmpty().WithMessage("CarModelId is required.")
-            .Must(g => g != Guid.Empty).WithMessage("CarModelId cannot be an empty Guid.");
+            .NotEmpty().WithMessage("Vui lòng cung cấp UserId.")
+            .Must(g => g != Guid.Empty).WithMessage("UserId không được là Guid trống.")
+            .Must(UserExists).WithMessage("UserId không tồn tại.");
 
-        
+        RuleFor(x => x.CarModelId)
+            .NotEmpty().WithMessage("Vui lòng cung cấp CarModelId.")
+            .Must(g => g != Guid.Empty).WithMessage("CarModelId không được là Guid trống.");
+
         RuleFor(x => x.CarAvatar)
-            .Must(IsAValidUrl).WithMessage("Car avatar must be a valid URL.")
+            .Must(IsAValidUrl).WithMessage("Ảnh đại diện xe phải là một URL hợp lệ.")
             .When(x => !string.IsNullOrEmpty(x.CarAvatar));
-        
+
         RuleFor(x => x.TransmissionType)
-            .IsInEnum().WithMessage("Invalid TransmissionType.");
-        
+            .IsInEnum().WithMessage("Loại truyền động không hợp lệ.");
+
         RuleFor(x => x.FuelType)
-            .NotEmpty().WithMessage("Fuel type is required.")
-            .MaximumLength(50).WithMessage("Fuel type must not exceed 50 characters.");
-        
+            .MaximumLength(50).WithMessage("Loại nhiên liệu không được vượt quá 50 ký tự.");
+
         RuleFor(x => x.FuelConsumption)
-            .GreaterThan(0).WithMessage("Fuel consumption must be greater than 0.");
-        
+            .GreaterThan(0).WithMessage("Mức tiêu thụ nhiên liệu phải lớn hơn 0.");
+
         RuleFor(x => x.Seat)
-            .GreaterThan(0).WithMessage("Seat count must be greater than 0.")
-            .LessThanOrEqualTo(10).WithMessage("Seat count must not exceed 10.");
-        
+            .GreaterThan(0).WithMessage("Số ghế phải lớn hơn 0.")
+            .LessThanOrEqualTo(10).WithMessage("Số ghế không được vượt quá 10.");
+
         RuleFor(x => x.Location)
-            .MaximumLength(200).WithMessage("Location must not exceed 200 characters.");
-        
+            .MaximumLength(200).WithMessage("Địa điểm không được vượt quá 200 ký tự.");
+
         RuleFor(x => x.DayOfRegistration)
-            .Must(IsValidDate).WithMessage("Invalid registration date.");
-        
-        
-        // Nếu IsDropOf là false, thì FeePerKm phải bằng 0
+            .Must(IsValidDate).WithMessage("Ngày đăng ký không hợp lệ.");
+
+// Nếu IsDropOf là false, thì FeePerKm và AvailableZone phải bằng 0
         When(x => !x.IsDropOf, () =>
         {
             RuleFor(x => x.FeePerKm)
-                .Equal(0).WithMessage("Fee per Km must be 0 when IsDropOf is false.");
+                .Equal(0).WithMessage("Phí mỗi km phải bằng 0 khi IsDropOf là false.");
             RuleFor(x => x.AvailableZone)
-                .Equal(0).WithMessage("Available Zone must be 0 when IsDropOf is false.");
+                .Equal(0).WithMessage("Khu vực có sẵn phải bằng 0 khi IsDropOf là false.");
         });
-        
-        
+
         RuleFor(x => x.FeePerKm)
-            .GreaterThanOrEqualTo(0).WithMessage("Fee per km must be a positive value.");
-        
+            .GreaterThanOrEqualTo(0).WithMessage("Phí mỗi km phải là giá trị không âm.");
+
         RuleFor(x => x.AvailableZone)
-            .GreaterThanOrEqualTo(0).WithMessage("Available zone must be a positive value.");
-        
+            .GreaterThanOrEqualTo(0).WithMessage("Khu vực có sẵn phải là giá trị không âm.");
+
         RuleFor(x => x.PricePerDay)
-            .GreaterThan(0).WithMessage("Price per day must be greater than 0.");
+            .GreaterThan(0).WithMessage("Giá mỗi ngày phải lớn hơn 0.");
     }
     
     private bool UserExists(Guid userId)

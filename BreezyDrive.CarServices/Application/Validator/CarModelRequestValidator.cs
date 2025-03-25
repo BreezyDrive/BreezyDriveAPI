@@ -12,9 +12,11 @@ public class CarModelRequestValidator : AbstractValidator<CarModelRequest>
     public CarModelRequestValidator(ICarBrandService carBrandService)
     {
         _carBrandService = carBrandService;
-        RuleFor(x => x.BrandId).NotEmpty().WithMessage("BrandId is required.")
-            .Must(g => g != Guid.Empty).WithMessage("BrandId cannot be an empty Guid.")
-            .Must(BrandExists).WithMessage("Brand does not exist.");
+        
+        RuleFor(x => x.BrandId)
+            .NotEmpty().WithMessage("Vui lòng cung cấp BrandId.")
+            .Must(g => g != Guid.Empty).WithMessage("BrandId không được là Guid trống.")
+            .Must(BrandExists).WithMessage("Thương hiệu không tồn tại.");
 
     }
 

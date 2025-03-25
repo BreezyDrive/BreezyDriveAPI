@@ -17,14 +17,16 @@ public class CarRatingRequestValidator : AbstractValidator<CarRatingRequest>
     {
         _userClient = userClient;
         _carService = carService;
+        
+        RuleFor(x => x.UserId)
+            .NotEmpty().WithMessage("Vui lòng cung cấp UserId.")
+            .Must(g => g != Guid.Empty).WithMessage("UserId không được là Guid trống.")
+            .Must(UserExists).WithMessage("Người dùng không tồn tại.");
 
-        RuleFor(x => x.UserId).NotEmpty().WithMessage("UserId is required.")
-            .Must(g => g != Guid.Empty).WithMessage("UserId cannot be an empty Guid.")
-            .Must(UserExists).WithMessage("User does not exist.");
-
-        RuleFor(x => x.CarId).NotEmpty().WithMessage("CarId is required.")
-            .Must(g => g != Guid.Empty).WithMessage("CarId cannot be an empty Guid.")
-            .Must(CarExists).WithMessage("Car does not exist.");
+        RuleFor(x => x.CarId)
+            .NotEmpty().WithMessage("Vui lòng cung cấp CarId.")
+            .Must(g => g != Guid.Empty).WithMessage("CarId không được là Guid trống.")
+            .Must(CarExists).WithMessage("Xe không tồn tại.");
 
     }
     
