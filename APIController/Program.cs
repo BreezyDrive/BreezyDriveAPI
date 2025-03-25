@@ -1,4 +1,4 @@
-using APIGateway.Infrastructure.DependencyInjection;
+﻿using APIGateway.Infrastructure.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
