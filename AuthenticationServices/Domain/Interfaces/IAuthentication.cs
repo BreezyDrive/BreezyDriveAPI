@@ -5,6 +5,6 @@ namespace BreezyDrive.AuthenticationServices.Domain.Interfaces
     public interface IAuthentication
     {
         string GenerateJwtToken(GetUserResponseEvent users);
-        long GetUserIdFromHttpContext(HttpContext httpContext);
+        Guid GetUserIdFromHttpContext(HttpContext httpContext);
     }
 }

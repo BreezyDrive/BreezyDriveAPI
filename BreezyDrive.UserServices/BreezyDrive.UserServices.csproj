@@ -8,11 +8,34 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="API\Filters\**" />
+      <Compile Remove="API\Middlewares\**" />
+      <Compile Remove="Application\Exceptions\**" />
+      <Compile Remove="Infrastructure\Email\**" />
+      <Compile Remove="Infrastructure\Repositories\**" />
+      <Content Remove="API\Filters\**" />
+      <Content Remove="API\Middlewares\**" />
+      <Content Remove="Application\Exceptions\**" />
+      <Content Remove="Infrastructure\Email\**" />
+      <Content Remove="Infrastructure\Repositories\**" />
+      <EmbeddedResource Remove="API\Filters\**" />
+      <EmbeddedResource Remove="API\Middlewares\**" />
+      <EmbeddedResource Remove="Application\Exceptions\**" />
+      <EmbeddedResource Remove="Infrastructure\Email\**" />
+      <EmbeddedResource Remove="Infrastructure\Repositories\**" />
+      <None Remove="API\Filters\**" />
+      <None Remove="API\Middlewares\**" />
+      <None Remove="Application\Exceptions\**" />
+      <None Remove="Infrastructure\Email\**" />
+      <None Remove="Infrastructure\Repositories\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="CoreApiResponse" Version="1.0.1" />
         <PackageReference Include="Google.Apis.Auth" Version="1.69.0" />
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0-develop.2236" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.14" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
@@ -35,19 +58,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AuthenticationServices\BreezyDrive.AuthenticationServices.csproj" />
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
       <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="API\Middlewares\" />
-      <Folder Include="API\Filters\" />
-      <Folder Include="Application\Exceptions\" />
       <Folder Include="Domain\Enums\" />
       <Folder Include="Domain\Interfaces\" />
-      <Folder Include="Infrastructure\Email\" />
       <Folder Include="Infrastructure\Identity\" />
-      <Folder Include="Infrastructure\Repositories\" />
     </ItemGroup>
 
 </Project>

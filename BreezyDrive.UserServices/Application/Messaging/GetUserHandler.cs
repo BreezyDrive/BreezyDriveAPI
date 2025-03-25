@@ -9,12 +9,10 @@ namespace BreezyDrive.UserServices.Application.Messaging
     public class GetUserHandler : IMessageHandler<GetUserRequestEvent, GetUserResponseEvent>
     {
         private readonly IUserService _userService;
-        private readonly ILogger<GetUserHandler> _logger;
 
-        public GetUserHandler(IUserService userService, ILogger<GetUserHandler> logger)
+        public GetUserHandler(IUserService userService)
         {
             _userService = userService;
-            _logger = logger;
         }
 
         public async Task<GetUserResponseEvent> HandleMessageAsync(GetUserRequestEvent message)
@@ -34,8 +32,6 @@ namespace BreezyDrive.UserServices.Application.Messaging
                 Avatar = checkAccount.Avatar
             };
         }
-
-            
     }
 }
 

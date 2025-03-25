@@ -13,6 +13,7 @@ using MassTransit;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using BreezyDrive.CommonService.Utils;
+using Library.EventContracts.Events.CommonResponse;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -123,7 +124,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
-            services.AddScoped<IUserDriveLisenceService, UserDriveLisenceService>();
+            services.AddScoped<IUserDriveLicenseService, UserDriveLicenseService>();
         }
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)

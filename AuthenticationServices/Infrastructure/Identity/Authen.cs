@@ -43,7 +43,7 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.Identity
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public long GetUserIdFromHttpContext(HttpContext httpContext)
+        public Guid GetUserIdFromHttpContext(HttpContext httpContext)
         {
             if (!httpContext.Request.Headers.ContainsKey("Authorization"))
             {
@@ -75,12 +75,18 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.Identity
                     throw new CustomExceptions.InternalServerErrorException("User ID claim not found in token.");
                 }
 
-                return long.Parse(idClaim.Value);
+                if (!Guid.TryParse(idClaim.Value, out Guid userId))
+                {
+                    throw new CustomExceptions.InternalServerErrorException("Invalid GUID format in User ID claim.");
+                }
+
+                return userId;
             }
             catch (Exception ex)
             {
                 throw new CustomExceptions.InternalServerErrorException($"Error parsing token: {ex.Message}");
             }
         }
+
     }
 }

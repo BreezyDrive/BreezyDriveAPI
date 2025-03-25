@@ -13,7 +13,7 @@ namespace BreezyDrive.UserServices.Infrastructure.Persistance
         public DbSet<Users> Users { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<Favorites> Favorites { get; set; }
-        public DbSet<UserDriveLisences> UserDriveLisences { get; set; }
+        public DbSet<UserDriveLicenses> UserDriveLicenses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
