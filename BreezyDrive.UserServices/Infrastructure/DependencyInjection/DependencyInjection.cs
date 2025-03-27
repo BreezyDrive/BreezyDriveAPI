@@ -91,7 +91,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                     Scheme = "Bearer"
                 });
 
-                /*option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -103,12 +103,11 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                             },
                             Scheme = "oauth2",
                             Name = "Bearer",
-                            In = ParameterLocation.Header
+                            In = ParameterLocation.Header,
                         },
                         new List<string>()
                     }
-                });*/
-                option.OperationFilter<SecurityRequirementsOperationFilter>();
+                });
             });
 
             return services;

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace BreezyDrive.CommonService.Domain.Interfaces
 {
     public interface ITokenService
     {
-        Task<Guid> GetUserIdAsync();
+        string GetTokenFromHttpContext(IHttpContextAccessor httpContextAccessor);
+
     }
 }
