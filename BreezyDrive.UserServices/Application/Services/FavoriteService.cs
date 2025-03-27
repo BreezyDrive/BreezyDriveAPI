@@ -15,36 +15,34 @@ namespace BreezyDrive.UserServices.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IAuthentication _authentication;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IRequestClient<CheckCarExistRequestEvent> _carExistClient;
+        private readonly ITokenService _tokenService;
 
-        public FavoriteService(IUnitOfWork unitOfWork, IMapper mapper, IAuthentication authentication, IHttpContextAccessor httpContextAccessor,
-                                IRequestClient<CheckCarExistRequestEvent> carExistClient)
+        public FavoriteService(IUnitOfWork unitOfWork, IMapper mapper, IRequestClient<CheckCarExistRequestEvent> carExistClient,
+                                ITokenService tokenService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _authentication = authentication;
-            _httpContextAccessor = httpContextAccessor;
             _carExistClient = carExistClient;
+            _tokenService = tokenService;
         }
 
         public async Task<List<FavoriteResponse>> GetAllCarFavorite()
         {
-            var userId = _authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            var userId = await _tokenService.GetUserIdAsync();
             var carFavorite = _unitOfWork.Repository<Favorites>().GetAll().Where(x => x.UserId == userId);
+
             if (!carFavorite.Any())
             {
                 throw new CustomExceptions.DataNotFoundException("Không tìm thấy xe yêu thích của người dùng.");
             }
 
-            var carFavoriteResponse = _mapper.Map<List<FavoriteResponse>>(carFavorite);
-            return carFavoriteResponse;
+            return _mapper.Map<List<FavoriteResponse>>(carFavorite);
         }
 
         public async Task<bool> AddFavorite(Guid carId)
         {
-            var userId = _authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            var userId = await _tokenService.GetUserIdAsync();
             var response = await _carExistClient.GetResponse<EventSuccessResponse>(
                 new CheckCarExistRequestEvent
                 {
@@ -70,7 +68,7 @@ namespace BreezyDrive.UserServices.Application.Services
 
         public async Task<bool> RemoveFavorite(Guid carId)
         {
-            var userId = _authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
+            var userId = await _tokenService.GetUserIdAsync();
             var favorite = _unitOfWork.Repository<Favorites>().GetAll().FirstOrDefault(x => x.UserId == userId && x.CarId == carId);
             if (favorite == null)
             {

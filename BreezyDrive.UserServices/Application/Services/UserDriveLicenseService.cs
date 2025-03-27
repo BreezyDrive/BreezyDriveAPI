@@ -14,17 +14,12 @@ namespace BreezyDrive.UserServices.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IAuthentication _authentication;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IFirebaseConfiguration _firebaseConfiguration;
 
-        public UserDriveLicenseService(IUnitOfWork unitOfWork, IMapper mapper, IAuthentication authentication, IHttpContextAccessor httpContextAccessor,
-                                        IFirebaseConfiguration firebaseConfiguration)
+        public UserDriveLicenseService(IUnitOfWork unitOfWork, IMapper mapper, IFirebaseConfiguration firebaseConfiguration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _authentication = authentication;
-            _httpContextAccessor = httpContextAccessor;
             _firebaseConfiguration = firebaseConfiguration;
         }
 
@@ -52,9 +47,8 @@ namespace BreezyDrive.UserServices.Application.Services
 
         public async Task<bool> RegisterLicense(RegisterLicenseRequest registerLicenseRequest)
         {
-            var userId = _authentication.GetUserIdFromHttpContext(_httpContextAccessor.HttpContext);
-
             var userDriveLisence = _mapper.Map<UserDriveLicenses>(registerLicenseRequest);
+            userDriveLisence.UserId = registerLicenseRequest.UserId;
             userDriveLisence.Front = await _firebaseConfiguration.UploadImage(registerLicenseRequest.Front);
             _unitOfWork.Repository<UserDriveLicenses>().Insert(userDriveLisence);
             await _unitOfWork.SaveAsync();

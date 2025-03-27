@@ -1,5 +1,6 @@
 ﻿using BreezyDrive.UserServices.Application.Interfaces;
 using CoreApiResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,12 +24,14 @@ namespace BreezyDrive.UserServices.API.Controllers
         }
 
         [HttpPost("AddFavorite")]
+        [Authorize]
         public async Task<IActionResult> AddFavorite(Guid carId)
         {
             return CustomResult("Thêm xe yêu thích thành công.", await _favoriteService.AddFavorite(carId));
         }
 
         [HttpDelete("RemoveFavorite")]
+        [Authorize]
         public async Task<IActionResult> RemoveFavorite(Guid carId)
         {
             return CustomResult("Xóa xe yêu thích thành công.", await _favoriteService.RemoveFavorite(carId));

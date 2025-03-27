@@ -28,6 +28,7 @@ namespace BreezyDrive.CommonService.Infrastuctures.DependencyInjection
         private static IServiceCollection AddService(this IServiceCollection services)
         {
             services.AddScoped<IFirebaseConfiguration, FirebaseConfiguration>();
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }

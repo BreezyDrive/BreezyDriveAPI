@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Authentication;
 using Swashbuckle.AspNetCore.Filters;
 using AuthenticationService = BreezyDrive.AuthenticationServices.Application.Services.AuthenticationService;
 using IAuthenticationService = BreezyDrive.AuthenticationServices.Application.Interfaces.IAuthenticationService;
+using BreezyDrive.AuthenticationServices.Application.Messaging;
+using Library.EventContracts.Events.UserEvents.Request;
+using Library.EventContracts.Events.UserEvents.Response;
+using BreezyDrive.CommonService.Infrastuctures.Messaging;
 
 namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
 {
@@ -152,9 +156,14 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddGenericConsumer<GetUserIdRequestEvent, GetUserIdResponseEvent, GetUserIdHandler>();
+
+
             services.AddMassTransit(configure =>
             {
                 configure.SetKebabCaseEndpointNameFormatter();
+
+                configure.AddConsumer<GenericConsumer<GetUserIdRequestEvent, GetUserIdResponseEvent>>();
 
                 configure.UsingRabbitMq((context, cfg) =>
                 {
@@ -182,6 +191,20 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
             });
             return services;
 
+        }
+
+        private static IServiceCollection AddGenericConsumer<TMessage, TResponse, THandler>(this IServiceCollection services)
+            where TMessage : class
+            where TResponse : class
+            where THandler : class, IMessageHandler<TMessage, TResponse>
+        {
+            // Đăng ký handler cho message
+            services.AddScoped<IMessageHandler<TMessage, TResponse>, THandler>();
+
+            // Đăng ký GenericConsumer
+            services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
+
+            return services;
         }
 
         public static void AddServices(this IServiceCollection services)
