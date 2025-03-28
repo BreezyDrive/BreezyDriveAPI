@@ -12,15 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "API Gateway",
-        Version = "v1",
-        Description = "API Gateway for Microservices"
-    });
-});
 
 //Add reverse proxy
 // builder.Services.AddReverseProxy()

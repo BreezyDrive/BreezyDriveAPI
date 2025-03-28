@@ -1,4 +1,5 @@
-﻿using Yarp.ReverseProxy.Configuration;
+﻿using Microsoft.OpenApi.Models;
+using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Swagger;
 using Yarp.ReverseProxy.Swagger.Extensions;
 
@@ -9,7 +10,13 @@ public static class DependencyInjection
     public static IServiceCollection AddApiGatewayServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddReverseProxy(configuration);
-
+        services.AddSwaggerDocumentation();  
+        return services;
+    }
+    
+    private static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
+    {
+        services.AddSwaggerGen();
         return services;
     }
 
