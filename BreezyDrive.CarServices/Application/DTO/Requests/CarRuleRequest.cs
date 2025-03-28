@@ -9,7 +9,4 @@ public class CarRuleRequest : IMapFrom<CarRules>
 
     public Guid RuleId { get; set; }
     
-    public virtual required Cars Car { get; set; }
-    
-    public virtual required Rules Rule { get; set; }
 }

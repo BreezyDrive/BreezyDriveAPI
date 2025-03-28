@@ -10,9 +10,9 @@ public interface ICarRatingService
     
     Task<CarRatingsResponse> GetByGuid(Guid guid);
     
-    Task<CarRatingsResponse> Create(CarRatingRequest request);
+    Task<CarRatingsResponse> CreateCarRating(CarRatingRequest request);
     
-    Task<CarRatingsResponse> Update(Guid guid, CarRatingRequest request); 
+    Task<CarRatingsResponse> UpdateCarRating(Guid guid, CarRatingRequest request); 
     
     Task<bool> Delete(Guid guid);
     

@@ -5,6 +5,8 @@ using BreezyDrive.CarServices.Infrastructure.Persistence;
 using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -23,7 +25,8 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             services.AddSwaggerDocumentation();  // Swagger
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddMasstransit(configuration); //RabbitMQ
-
+            // Đăng ký FluentValidation
+            services.AddValidator(configuration);
             return services;
         }
 
@@ -166,6 +169,13 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             });
             return services;
 
+        }
+        
+        private static IServiceCollection AddValidator(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+            return services;
         }
     }
 }

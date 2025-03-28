@@ -42,7 +42,7 @@ namespace BreezyDrive.CarServices.Domain.Entities
 
         public int AvailableZone { get; set; }
 
-        public int NumberOfReservation { get; set; }
+        public int NumberOfReservation { get; set; } = 0;
 
         public double PricePerDay { get; set; }
 
