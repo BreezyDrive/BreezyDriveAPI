@@ -11,5 +11,8 @@ namespace BreezyDrive.CommonService.Domain.Interfaces
     {
         string GetTokenFromHttpContext(IHttpContextAccessor httpContextAccessor);
 
+        Task<Guid> GetUserIdFromHttpContext(IHttpContextAccessor httpContextAccessor);
+
+
     }
 }

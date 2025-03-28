@@ -40,7 +40,7 @@ namespace BreezyDrive.UserServices.Application.Services
         public async Task<List<FavoriteResponse>> GetAllCarFavorite()
         {
 
-            var userId = await GetUserIdFromHttpContext(_httpContextAccessor);
+            var userId = await _tokenService.GetUserIdFromHttpContext(_httpContextAccessor);
             
             var carFavorite = _unitOfWork.Repository<Favorites>().GetAll().Where(x => x.UserId == userId);
 
@@ -54,7 +54,7 @@ namespace BreezyDrive.UserServices.Application.Services
 
         public async Task<bool> AddFavorite(Guid carId)
         {
-            var userId = await GetUserIdFromHttpContext(_httpContextAccessor);
+            var userId = await _tokenService.GetUserIdFromHttpContext(_httpContextAccessor);
 
 
             var response = await _carExistClient.GetResponse<EventSuccessResponse>(
@@ -82,7 +82,7 @@ namespace BreezyDrive.UserServices.Application.Services
 
         public async Task<bool> RemoveFavorite(Guid carId)
         {
-            var userId = await GetUserIdFromHttpContext(_httpContextAccessor);
+            var userId = await _tokenService.GetUserIdFromHttpContext(_httpContextAccessor);
             
             var favorite = _unitOfWork.Repository<Favorites>().GetAll().FirstOrDefault(x => x.UserId == userId && x.CarId == carId);
             if (favorite == null)
@@ -96,19 +96,6 @@ namespace BreezyDrive.UserServices.Application.Services
             return true;
         }
         
-        private async Task<Guid> GetUserIdFromHttpContext(IHttpContextAccessor httpContextAccessor)
-        {
-            var token = _tokenService.GetTokenFromHttpContext(httpContextAccessor);
-
-            var response = await _userIdRequestClient.GetResponse<GetUserIdResponseEvent>(
-                new GetUserIdRequestEvent
-                {
-                    JwtToken = token
-                });
-            
-            return response.Message.UserId;
-            
-        }
         
     }
 }
