@@ -4,6 +4,7 @@ using BreezyDrive.AuthenticationServices.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using Google.Apis.Auth;
+using Library.EventContracts.Events.CommonResponse;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using MassTransit;

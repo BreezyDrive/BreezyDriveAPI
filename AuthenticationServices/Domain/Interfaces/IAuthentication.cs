@@ -1,10 +1,11 @@
-﻿using Library.EventContracts.Events.UserEvents.Response;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.AuthenticationServices.Domain.Interfaces
 {
     public interface IAuthentication
     {
         string GenerateJwtToken(GetUserResponseEvent users);
-        long GetUserIdFromHttpContext(HttpContext httpContext);
+        Guid GetUserIdFromToken(string jwtToken);
     }
 }

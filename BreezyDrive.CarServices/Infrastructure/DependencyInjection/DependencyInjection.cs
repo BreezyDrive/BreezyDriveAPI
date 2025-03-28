@@ -1,10 +1,16 @@
 ﻿using System.Text.Json.Serialization;
 using BreezyDrive.CarServices.Application.Interfaces;
+using BreezyDrive.CarServices.Application.Messaging;
 using BreezyDrive.CarServices.Application.Services;
 using BreezyDrive.CarServices.Infrastructure.Persistence;
 using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
+using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
+using Library.EventContracts.Events.CarEvent.Request;
+using Library.EventContracts.Events.CommonResponse;
+using Library.EventContracts.Events.UserEvents.Request;
+using Library.EventContracts.Events.UserEvents.Response;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MassTransit;
@@ -139,9 +145,16 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
+            //thêm dòng này cho từng event
+            services.AddGenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse, CheckCarExistHandler>();
+
             services.AddMassTransit(configure =>
             {
                 configure.SetKebabCaseEndpointNameFormatter();
+
+                //thêm consumer vào đây
+                configure.AddConsumer<GenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse>>();
+
 
                 configure.UsingRabbitMq((context, cfg) =>
                 {
@@ -149,7 +162,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
                     var host = rabbitMqConfig["Host"];
                     var username = rabbitMqConfig["Username"];
                     var password = rabbitMqConfig["Password"];
-                    
+
                     // Kiểm tra xem các giá trị có null hoặc rỗng không
                     if (string.IsNullOrWhiteSpace(host))
                         throw new Exception("RabbitMQ Host is not configured.");
@@ -157,7 +170,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
                         throw new Exception("RabbitMQ Username is not configured.");
                     if (string.IsNullOrWhiteSpace(password))
                         throw new Exception("RabbitMQ Password is not configured.");
-                    
+
                     cfg.Host(new Uri(host), h =>
                     {
                         h.Username(username);
@@ -168,7 +181,20 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
                 });
             });
             return services;
+        }
 
+        private static IServiceCollection AddGenericConsumer<TMessage, TResponse, THandler>(this IServiceCollection services)
+            where TMessage : class
+            where TResponse : class
+            where THandler : class, IMessageHandler<TMessage, TResponse>
+        {
+            // Đăng ký handler cho message
+            services.AddScoped<IMessageHandler<TMessage, TResponse>, THandler>();
+
+            // Đăng ký GenericConsumer
+            services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
+
+            return services;
         }
         
         private static IServiceCollection AddValidator(this IServiceCollection services, IConfiguration configuration)

@@ -2,20 +2,18 @@
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.UserServices.Application.DTOs.Request;
 using BreezyDrive.UserServices.Application.Interfaces;
+using Library.EventContracts.Events.CommonResponse;
 using Library.EventContracts.Events.UserEvents.Request;
-using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.UserServices.Application.Messaging
 {
     public class CreateUserHandler : IMessageHandler<RegisterRequestEvent, EventSuccessResponse>
     {
         private readonly IUserService _userService;
-        private readonly ILogger<CreateUserHandler> _logger;
 
-        public CreateUserHandler(IUserService userService, ILogger<CreateUserHandler> logger)
+        public CreateUserHandler(IUserService userService)
         {
             _userService = userService;
-            _logger = logger;
         }
 
         public async Task<EventSuccessResponse> HandleMessageAsync(RegisterRequestEvent message)

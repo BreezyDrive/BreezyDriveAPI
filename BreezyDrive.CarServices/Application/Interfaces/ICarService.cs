@@ -20,5 +20,5 @@ public interface ICarService
     
     bool IsCarExists(Guid carId);
 
-
+    Task<bool> CheckCarExist(Guid id);
 }

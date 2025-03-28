@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using Google.Apis.Auth;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.UserServices.Application.DTOs.Request;
 using BreezyDrive.UserServices.Application.DTOs.Response;
 using BreezyDrive.UserServices.Application.Interfaces;
 using BreezyDrive.UserServices.Domain.Entities;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Drawing;
-using Azure.Core;
-using Microsoft.AspNetCore.Identity;
 using MassTransit;
 using Library.EventContracts.Events.NotificationEvents.Enums;
 using Library.EventContracts.Events.NotificationEvents.Request;
@@ -21,6 +16,7 @@ namespace BreezyDrive.UserServices.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IPublishEndpoint _publishEndpoint;
+
         public UserService(IUnitOfWork unitOfWork, IMapper mapper, IPublishEndpoint publishEndpoint)
         {
             _unitOfWork = unitOfWork;
