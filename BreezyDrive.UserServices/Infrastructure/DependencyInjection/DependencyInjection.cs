@@ -41,15 +41,15 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddHttpContextAccessor();
 
             // Thêm cấu hình Authentication
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = configuration["Jwt:Authority"]; // URL của Identity Server hoặc Auth Provider
-                    options.Audience = configuration["Jwt:Audience"]; // Tên Audience của API
-                    options.RequireHttpsMetadata = false;
-                });
-
-            services.AddAuthorization(); // Thêm Authorization
+            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //     .AddJwtBearer(options =>
+            //     {
+            //         options.Authority = configuration["Jwt:Authority"]; // URL của Identity Server hoặc Auth Provider
+            //         options.Audience = configuration["Jwt:Audience"]; // Tên Audience của API
+            //         options.RequireHttpsMetadata = false;
+            //     });
+            //
+            // services.AddAuthorization(); // Thêm Authorization
 
             services.AddCors(options =>
             {
