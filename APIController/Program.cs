@@ -1,5 +1,6 @@
 ﻿using APIGateway.Infrastructure;
 using APIGateway.Infrastructure.DependencyInjection;
+using APIGateway.Infrastructure.Plugins;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
