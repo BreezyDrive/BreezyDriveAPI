@@ -14,4 +14,5 @@ public interface IRuleService
     Task<RuleResponse> UpdateRule(Guid guid, RuleRequest request); 
     
     Task<bool> DeleteRule(Guid guid);
+    bool IsRuleExists(Guid ruleId);
 }

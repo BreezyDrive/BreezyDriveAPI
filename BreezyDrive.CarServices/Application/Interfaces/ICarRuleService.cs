@@ -9,9 +9,9 @@ public interface ICarRuleService
     
     Task<CarRuleResponse> GetByGuid(Guid guid);
     
-    Task<CarRuleResponse> Create(CarRuleRequest request);
+    Task<CarRuleResponse> CreateCarRule(CarRuleRequest request);
     
-    Task<CarRuleResponse> Update(Guid guid, CarRuleRequest request);
+    Task<CarRuleResponse> UpdateCarRule(Guid guid, CarRuleRequest request);
     
     Task<bool> Delete(Guid guid);
 }

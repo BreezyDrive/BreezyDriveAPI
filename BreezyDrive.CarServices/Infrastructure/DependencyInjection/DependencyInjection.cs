@@ -11,6 +11,8 @@ using Library.EventContracts.Events.CarEvent.Request;
 using Library.EventContracts.Events.CommonResponse;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -29,7 +31,8 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             services.AddSwaggerDocumentation();  // Swagger
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddMasstransit(configuration); //RabbitMQ
-
+            // Đăng ký FluentValidation
+            services.AddValidator(configuration);
             return services;
         }
 
@@ -191,6 +194,13 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             // Đăng ký GenericConsumer
             services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
 
+            return services;
+        }
+        
+        private static IServiceCollection AddValidator(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
             return services;
         }
     }

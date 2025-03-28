@@ -31,7 +31,7 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
         throw new NotImplementedException();
     }
 
-    public async Task<CarResponse> Create(CarRequest carRequest)
+    public async Task<CarResponse> CreateCar(CarRequest carRequest)
     {
         var car = mapper.Map<Cars>(carRequest);
         await unitOfWork.Repository<Cars>().InsertAsync(car);
@@ -39,7 +39,7 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
         return mapper.Map<CarResponse>(car);
     }
 
-    public async Task<CarResponse> Update(Guid guid, CarRequest carRequest)
+    public async Task<CarResponse> UpdateCar(Guid guid, CarRequest carRequest)
     {
         var car = await this.GetCarByIdAsync(guid);
         mapper.Map(carRequest, car);
@@ -54,6 +54,11 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
         await unitOfWork.Repository<Cars>().DeleteAsync(guid);
         await unitOfWork.SaveAsync();
         return true;
+    }
+
+    public bool IsCarExists(Guid carId)
+    {
+        return unitOfWork.Repository<Cars>().Exists(u => u.Id == carId);
     }
 
     private async Task<Cars> GetCarByIdAsync(Guid carId)

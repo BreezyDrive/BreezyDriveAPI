@@ -24,13 +24,13 @@ public class CarRegistrationController (ICarRegistrationService carRegistrationS
    [HttpPost("AddCarRegistration")]
    public async Task<IActionResult> AddCarRegistration(CarRegistrationRequest carRegistrationRequest)
    {
-      return CustomResult("Success", await carRegistrationService.Create(carRegistrationRequest));
+      return CustomResult("Success", await carRegistrationService.CreateCarRegistration(carRegistrationRequest));
    }
 
    [HttpPatch("UpdateCarRegistration/{carRegistrationId}")]
    public async Task<IActionResult> UpdateCarRegistration(Guid carRegistrationId ,CarRegistrationRequest carRegistrationRequest)
    {
-      return CustomResult( "Success", await carRegistrationService.Update(carRegistrationId, carRegistrationRequest));
+      return CustomResult( "Success", await carRegistrationService.UpdateCarRegistration(carRegistrationId, carRegistrationRequest));
       
    }
 

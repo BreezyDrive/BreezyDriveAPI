@@ -8,8 +8,8 @@ public interface ICarRegistrationService
 {
     Task<IEnumerable<CarRegistrationResponse>> GetAllAsync();
     Task<CarRegistrationResponse> GetByGuid(Guid guid);
-    Task<CarRegistrationResponse> Create(CarRegistrationRequest request);
-    Task<CarRegistrationResponse> Update(Guid guid, CarRegistrationRequest request);
+    Task<CarRegistrationResponse> CreateCarRegistration(CarRegistrationRequest request);
+    Task<CarRegistrationResponse> UpdateCarRegistration(Guid guid, CarRegistrationRequest request);
     Task<bool> Delete(Guid guid);
     
 }

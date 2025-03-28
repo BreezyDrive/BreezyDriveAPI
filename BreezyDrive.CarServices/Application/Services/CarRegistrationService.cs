@@ -27,7 +27,7 @@ public class CarRegistrationService (IUnitOfWork unitOfWork, IMapper mapper) : I
         return mapper.Map<CarRegistrationResponse>(await GetCarRegistrationsByIdAsync(guid));
     }
 
-    public async Task<CarRegistrationResponse> Create(CarRegistrationRequest request)
+    public async Task<CarRegistrationResponse> CreateCarRegistration(CarRegistrationRequest request)
     {
         var carRegistration = mapper.Map<CarRegistrations>(request);
         await unitOfWork.Repository<CarRegistrations>().InsertAsync(carRegistration);
@@ -35,7 +35,7 @@ public class CarRegistrationService (IUnitOfWork unitOfWork, IMapper mapper) : I
         return mapper.Map<CarRegistrationResponse>(carRegistration);
     }
 
-    public async Task<CarRegistrationResponse> Update(Guid guid, CarRegistrationRequest request)
+    public async Task<CarRegistrationResponse> UpdateCarRegistration(Guid guid, CarRegistrationRequest request)
     {
         var carRegistation = await this.GetCarRegistrationsByIdAsync(guid);
         mapper.Map(request, carRegistation);
