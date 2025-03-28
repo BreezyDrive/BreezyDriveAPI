@@ -1,4 +1,6 @@
 ﻿using Yarp.ReverseProxy.Configuration;
+using Yarp.ReverseProxy.Swagger;
+using Yarp.ReverseProxy.Swagger.Extensions;
 
 namespace APIGateway.Infrastructure.DependencyInjection;
 
@@ -13,18 +15,29 @@ public static class DependencyInjection
 
     private static IServiceCollection AddReverseProxy(this IServiceCollection services, IConfiguration configuration)
     {
-        var routes = new List<RouteConfig>
+        services.AddReverseProxy()
+            .LoadFromMemory(GetRoutes(), GetClusters()).AddSwagger(GetSwaggerConfig());
+
+
+        return services;
+    
+    }
+    
+    
+    private static RouteConfig[] GetRoutes()
+    {
+        return new[]
         {
             //users-route
             new RouteConfig
             {
-                RouteId = "users-route",
-                ClusterId = "users-cluster",
-                Match = new RouteMatch { Path = "users-api/{**catch-all}" },
-                Transforms = new[]
-                {
-                    new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
-                }
+            RouteId = "users-route",
+            ClusterId = "users-cluster",
+            Match = new RouteMatch { Path = "users-api/{**catch-all}" },
+            Transforms = new[]
+            {
+                new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
+            }
             },
             
             //Cars-route
@@ -61,19 +74,21 @@ public static class DependencyInjection
                     new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
                 }
             }
-            
-            
         };
+    }
 
-        var clusters = new List<ClusterConfig>
+    private static ClusterConfig[] GetClusters()
+    {
+        return new[]
         {
-            new ClusterConfig
+           new ClusterConfig
             {
                 ClusterId = "users-cluster",
                 Destinations = new Dictionary<string, DestinationConfig>
                 {
                     { "destination1", new DestinationConfig { Address = "http://localhost:8180" } }
-                }
+                }, 
+
             },
             new ClusterConfig
             {
@@ -81,7 +96,8 @@ public static class DependencyInjection
                 Destinations = new Dictionary<string, DestinationConfig>
                 {
                     { "destination1", new DestinationConfig { Address = "http://localhost:8280" } }
-                }
+                },
+
             },
             new ClusterConfig
             {
@@ -89,7 +105,8 @@ public static class DependencyInjection
                 Destinations = new Dictionary<string, DestinationConfig>
                 {
                     { "destination1", new DestinationConfig { Address = "http://localhost:8380" } }
-                }
+                },
+
             },
             
             new ClusterConfig
@@ -98,17 +115,115 @@ public static class DependencyInjection
                 Destinations = new Dictionary<string, DestinationConfig>
                 {
                     { "destination1", new DestinationConfig { Address = "http://localhost:8480" } }
+                },
+
+            },
+        };
+    }
+
+    
+    private static ReverseProxyDocumentFilterConfig GetSwaggerConfig()
+{
+    return new ReverseProxyDocumentFilterConfig
+    {
+        Routes = GetRoutes().ToDictionary(_ => _.RouteId, _ => _),
+        Clusters = new Dictionary<string, ReverseProxyDocumentFilterConfig.Cluster>
+        {
+            {
+                "users-cluster", new ReverseProxyDocumentFilterConfig.Cluster
+                {
+                    Destinations = new Dictionary<string, ReverseProxyDocumentFilterConfig.Cluster.Destination>
+                    {
+                        {
+                            "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
+                            {
+                                Address = "http://localhost:8180",
+                                Swaggers = new[]
+                                {
+                                    new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
+                                    {
+                                        PrefixPath = "/users-api",
+                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             },
-            
-        };
+            {
+                "cars-cluster", new ReverseProxyDocumentFilterConfig.Cluster
+                {
+                    Destinations = new Dictionary<string, ReverseProxyDocumentFilterConfig.Cluster.Destination>
+                    {
+                        {
+                            "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
+                            {
+                                Address = "http://localhost:8280",
+                                Swaggers = new[]
+                                {
+                                    new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
+                                    {
+                                        PrefixPath = "/cars-api",
+                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "conversations-cluster", new ReverseProxyDocumentFilterConfig.Cluster
+                {
+                    Destinations = new Dictionary<string, ReverseProxyDocumentFilterConfig.Cluster.Destination>
+                    {
+                        {
+                            "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
+                            {
+                                Address = "http://localhost:8380",
+                                Swaggers = new[]
+                                {
+                                    new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
+                                    {
+                                        PrefixPath = "/conversations-api",
+                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "authentication-cluster", new ReverseProxyDocumentFilterConfig.Cluster
+                {
+                    Destinations = new Dictionary<string, ReverseProxyDocumentFilterConfig.Cluster.Destination>
+                    {
+                        {
+                            "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
+                            {
+                                Address = "http://localhost:8480",
+                                Swaggers = new[]
+                                {
+                                    new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
+                                    {
+                                        PrefixPath = "/authentication-api",
+                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+}
 
-        services.AddReverseProxy()
-                .LoadFromMemory(routes, clusters);
-
-        return services;
     
-    }
+    
+    
 
     
 }

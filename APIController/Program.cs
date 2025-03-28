@@ -1,11 +1,17 @@
-﻿using APIGateway.Infrastructure.DependencyInjection;
+﻿using APIGateway.Infrastructure;
+using APIGateway.Infrastructure.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Yarp.ReverseProxy.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -30,27 +36,27 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        // Endpoint Swagger của API Gateway
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Gateway");
-        
-        // Hiển thị Swagger từ CarService
-        //c.SwaggerEndpoint("http://localhost:8280/swagger/v1/swagger.json", "Car Service API");
-
-        c.RoutePrefix = "swagger";  // Truy cập tại http://localhost:5000/swagger
-    });}
+        var config = app.Services.GetRequiredService<IOptionsMonitor<ReverseProxyDocumentFilterConfig>>().CurrentValue;
+        foreach (var cluster in config.Clusters)
+        {
+            c.SwaggerEndpoint($"/swagger/{cluster.Key}/swagger.json", cluster.Key);
+        }
+    });
+    
+}
 else
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        // Endpoint Swagger của API Gateway
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Gateway");
-
-        // Hiển thị Swagger từ CarService
-        //c.SwaggerEndpoint("http://localhost:8280/swagger/v1/swagger.json", "Car Service API");
-
-        c.RoutePrefix = "swagger";  // Truy cập tại http://localhost:5000/swagger
-    });}
+        var config = app.Services.GetRequiredService<IOptionsMonitor<ReverseProxyDocumentFilterConfig>>().CurrentValue;
+        foreach (var cluster in config.Clusters)
+        {
+            c.SwaggerEndpoint($"/swagger/{cluster.Key}/swagger.json", cluster.Key);
+        }
+    });
+    
+}
 
 
 app.UseHttpsRedirection();
