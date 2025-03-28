@@ -33,18 +33,18 @@ public static class DependencyInjection
     
     private static RouteConfig[] GetRoutes()
     {
-        return new[]
-        {
+        return
+        [
             //users-route
             new RouteConfig
             {
             RouteId = "users-route",
             ClusterId = "users-cluster",
             Match = new RouteMatch { Path = "users-api/{**catch-all}" },
-            Transforms = new[]
-            {
+            Transforms =
+            [
                 new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
-            }
+            ]
             },
             
             //Cars-route
@@ -53,10 +53,10 @@ public static class DependencyInjection
                 RouteId = "cars-route",
                 ClusterId = "cars-cluster",
                 Match = new RouteMatch { Path = "cars-api/{**catch-all}" },
-                Transforms = new[]
-                {
+                Transforms =
+                [
                     new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
-                }
+                ]
             },
             
             //conversations-route
@@ -65,10 +65,10 @@ public static class DependencyInjection
                 RouteId = "conversations-route",
                 ClusterId = "conversations-cluster",
                 Match = new RouteMatch { Path = "conversations-api/{**catch-all}" },
-                Transforms = new[]
-                {
+                Transforms =
+                [
                     new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
-                }
+                ]
             },
             //authentication-route
             new RouteConfig
@@ -76,19 +76,19 @@ public static class DependencyInjection
                 RouteId = "authentication-route",
                 ClusterId = "authentication-cluster",
                 Match = new RouteMatch { Path = "authentication-api/{**catch-all}" },
-                Transforms = new[]
-                {
+                Transforms =
+                [
                     new Dictionary<string, string> { ["PathPattern"] = "{**catch-all}" }
-                }
+                ]
             }
-        };
+        ];
     }
 
     private static ClusterConfig[] GetClusters()
     {
-        return new[]
-        {
-           new ClusterConfig
+        return
+        [
+            new ClusterConfig
             {
                 ClusterId = "users-cluster",
                 Destinations = new Dictionary<string, DestinationConfig>
@@ -124,8 +124,8 @@ public static class DependencyInjection
                     { "destination1", new DestinationConfig { Address = "http://localhost:8480" } }
                 },
 
-            },
-        };
+            }
+        ];
     }
 
     
@@ -133,7 +133,7 @@ public static class DependencyInjection
 {
     return new ReverseProxyDocumentFilterConfig
     {
-        Routes = GetRoutes().ToDictionary(_ => _.RouteId, _ => _),
+        Routes = GetRoutes().ToDictionary(c => c.RouteId, c => c),
         Clusters = new Dictionary<string, ReverseProxyDocumentFilterConfig.Cluster>
         {
             {
@@ -145,14 +145,14 @@ public static class DependencyInjection
                             "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
                             {
                                 Address = "http://localhost:8180",
-                                Swaggers = new[]
-                                {
+                                Swaggers =
+                                [
                                     new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
                                     {
                                         PrefixPath = "/users-api",
-                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                        Paths = ["/swagger/v1/swagger.json"]
                                     }
-                                }
+                                ]
                             }
                         }
                     }
@@ -167,14 +167,14 @@ public static class DependencyInjection
                             "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
                             {
                                 Address = "http://localhost:8280",
-                                Swaggers = new[]
-                                {
+                                Swaggers =
+                                [
                                     new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
                                     {
                                         PrefixPath = "/cars-api",
-                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                        Paths = ["/swagger/v1/swagger.json"]
                                     }
-                                }
+                                ]
                             }
                         }
                     }
@@ -189,14 +189,14 @@ public static class DependencyInjection
                             "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
                             {
                                 Address = "http://localhost:8380",
-                                Swaggers = new[]
-                                {
+                                Swaggers =
+                                [
                                     new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
                                     {
                                         PrefixPath = "/conversations-api",
-                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                        Paths = ["/swagger/v1/swagger.json"]
                                     }
-                                }
+                                ]
                             }
                         }
                     }
@@ -211,14 +211,14 @@ public static class DependencyInjection
                             "destination1", new ReverseProxyDocumentFilterConfig.Cluster.Destination
                             {
                                 Address = "http://localhost:8480",
-                                Swaggers = new[]
-                                {
+                                Swaggers =
+                                [
                                     new ReverseProxyDocumentFilterConfig.Cluster.Destination.Swagger
                                     {
                                         PrefixPath = "/authentication-api",
-                                        Paths = new[] { "/swagger/v1/swagger.json" }
+                                        Paths = ["/swagger/v1/swagger.json"]
                                     }
-                                }
+                                ]
                             }
                         }
                     }
