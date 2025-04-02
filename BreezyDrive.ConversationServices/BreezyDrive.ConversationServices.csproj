@@ -9,6 +9,7 @@
 
     <ItemGroup>
 		<PackageReference Include="CoreApiResponse" Version="1.0.1" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
@@ -20,6 +21,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="MongoDB.Driver" Version="3.2.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.3.1" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
@@ -36,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="API\Middlewares\" />
+      <Folder Include="Application\Hubs\" />
       <Folder Include="Domain\Enums\" />
     </ItemGroup>
 
