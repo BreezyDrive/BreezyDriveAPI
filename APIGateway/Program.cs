@@ -54,7 +54,7 @@ else
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
-
+app.UseCors("CorsPolicy");
 //add reverse proxy
 app.MapReverseProxy();
 app.Run();
