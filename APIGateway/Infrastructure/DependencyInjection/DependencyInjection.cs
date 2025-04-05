@@ -10,7 +10,29 @@ public static class DependencyInjection
     public static IServiceCollection AddApiGatewayServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddReverseProxy(configuration);
-        services.AddSwaggerDocumentation();  
+        services.AddSwaggerDocumentation();
+        services.AddCoreServices();
+        return services;
+    }
+    
+    private static IServiceCollection AddCoreServices(this IServiceCollection services)
+    {
+        //services.AddControllers();
+        //services.AddHttpContextAccessor();
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    /*.AllowCredentials()*/
+                    .SetIsOriginAllowed(_ => true);
+            });
+        });
+
         return services;
     }
     
