@@ -13,7 +13,7 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
 {
     public async Task<IEnumerable<CarResponse>> GetAllCarsAsync()
     {
-        var cars = await unitOfWork.Repository<Cars>().GetAllAsync();
+        var cars =  unitOfWork.Repository<Cars>().Get( includeProperties: "CarModel");
         if (cars.IsNullOrEmpty())
         {
             throw new CustomExceptions.DataNotFoundException("No cars found");
