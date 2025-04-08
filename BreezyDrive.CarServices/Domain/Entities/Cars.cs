@@ -9,8 +9,6 @@ namespace BreezyDrive.CarServices.Domain.Entities
     public class Cars : BaseEntities
     {
         
-        public Guid Id { get; set; }
-
         public Guid UserId { get; set; }
 
         public Guid CarModelId { get; set; }
