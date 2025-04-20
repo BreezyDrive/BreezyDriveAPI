@@ -5,7 +5,7 @@ namespace BreezyDrive.CarServices.Application.DTO.Responses;
 
 public class CarRatingsResponse : IMapFrom<CarRatings>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }    
     
     public Guid UserId { get; set; }
     

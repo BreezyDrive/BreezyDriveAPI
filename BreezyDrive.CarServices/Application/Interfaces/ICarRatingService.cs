@@ -10,6 +10,9 @@ public interface ICarRatingService
     
     Task<CarRatingsResponse> GetByGuid(Guid guid);
     
+    Task<IEnumerable<CarRatingsResponse>> GetAllCarRatingsByCarGuidAsync(Guid carId);
+
+    
     Task<CarRatingsResponse> CreateCarRating(CarRatingRequest request);
     
     Task<CarRatingsResponse> UpdateCarRating(Guid guid, CarRatingRequest request); 

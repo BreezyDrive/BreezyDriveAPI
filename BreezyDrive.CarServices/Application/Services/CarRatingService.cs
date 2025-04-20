@@ -29,6 +29,12 @@ public class CarRatingService (IUnitOfWork unitOfWork, IMapper mapper) : ICarRat
         return mapper.Map<CarRatingsResponse>(carRating);
     }
 
+    public async Task<IEnumerable<CarRatingsResponse>> GetAllCarRatingsByCarGuidAsync(Guid carId)
+    {
+        var carRatings = await unitOfWork.Repository<CarRatings>().GetAsync(r => r.CarId == carId);
+        return mapper.Map<IEnumerable<CarRatingsResponse>>(carRatings);
+    }
+
     public async Task<CarRatingsResponse> CreateCarRating(CarRatingRequest request)
     {
         var carRating = mapper.Map<CarRatings>(request);
