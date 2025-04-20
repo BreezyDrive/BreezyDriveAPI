@@ -13,7 +13,7 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
 {
     public async Task<IEnumerable<CarResponse>> GetAllCarsAsync()
     {
-        var cars =  unitOfWork.Repository<Cars>().Get( includeProperties: "CarModel");
+        var cars =  unitOfWork.Repository<Cars>().Get( includeProperties: "CarModel.CarBrand");
         if (cars.IsNullOrEmpty())
         {
             throw new CustomExceptions.DataNotFoundException("No cars found");
@@ -63,7 +63,8 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
 
     private async Task<Cars> GetCarByIdAsync(Guid carId)
     {
-        var car = await unitOfWork.Repository<Cars>().GetByIdAsync(carId);
+        var car = await unitOfWork.Repository<Cars>().GetFirstOrDefaultAsync(cars => cars.Id == carId, includeProperties: "CarModel.CarBrand");
+        
         if (car == null)
         {
             throw new CustomExceptions.DataNotFoundException("Car not found");
@@ -73,6 +74,6 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
 
     public async Task<bool> CheckCarExist(Guid id)
     {
-        return unitOfWork.Repository<Cars>().Exists(c => c.Id == id);
+        return await unitOfWork.Repository<Cars>().ExistsAsync(c => c.Id == id);
     }
 }
