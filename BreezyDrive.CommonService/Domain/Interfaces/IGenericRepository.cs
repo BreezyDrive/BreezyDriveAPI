@@ -43,6 +43,8 @@ namespace BreezyDrive.CommonService.Domain.Interfaces
         Task InsertAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(object id);
+        Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
+
         Task CommitAsync();
 
         // Pagination support
