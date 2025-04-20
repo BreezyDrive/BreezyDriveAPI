@@ -16,10 +16,16 @@ public class CarRatingController(ICarRatingService carRatingService) : BaseContr
         return CustomResult("Success", await carRatingService.GetAllAsync());
     }
 
-    [HttpGet("GetRatingByCarId/{carRatingId}")]
-    public async Task<IActionResult> GetCarRatingByCarId(Guid carRatingId)
+    [HttpGet("GetRatingById/{carRatingId}")]
+    public async Task<IActionResult> GetCarRatingById(Guid carRatingId)
     {
         return CustomResult("Success", await carRatingService.GetByGuid(carRatingId));
+    }
+    
+    [HttpGet("GetAllCarRatingByCarId/{carId}")]
+    public async Task<IActionResult> GetAllCarRatingByCarId(Guid carId)
+    {
+        return CustomResult("Success", await carRatingService.GetAllCarRatingsByCarGuidAsync(carId));
     }
 
     [HttpPost("AddCarRating")]
