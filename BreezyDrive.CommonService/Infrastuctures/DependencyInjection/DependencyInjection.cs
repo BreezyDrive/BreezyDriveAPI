@@ -1,7 +1,4 @@
-﻿using BreezyDrive.CommonService.Application.Mapper;
-using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastuctures.Data;
-using BreezyDrive.CommonService.Infrastuctures.Repositories;
+﻿using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +13,7 @@ namespace BreezyDrive.CommonService.Infrastuctures.DependencyInjection
         public static IServiceCollection CommonServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthenticationServices(configuration);
-
+            services.AddService();
             return services;
         }
 
@@ -24,6 +21,14 @@ namespace BreezyDrive.CommonService.Infrastuctures.DependencyInjection
         {
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IHashing, Hash>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddService(this IServiceCollection services)
+        {
+            services.AddScoped<IFirebaseConfiguration, FirebaseConfiguration>();
+            services.AddScoped<ITokenService, TokenService>();
 
             return services;
         }

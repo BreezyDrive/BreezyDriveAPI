@@ -75,4 +75,9 @@ public class CarBrandService (IUnitOfWork unitOfWork, IMapper mapper) : ICarBran
         await unitOfWork.Repository<CarBrands>().DeleteAsync(guid);
         return true;
     }
+
+    public bool IsBrandExists(Guid brandId)
+    {
+        return unitOfWork.Repository<CarBrands>().Exists(x => x.Id == brandId);
+    }
 }

@@ -24,13 +24,13 @@ public class CarRuleController (ICarRuleService carRuleService) : BaseController
     [HttpPost("AddCarRule")]
     public async Task<IActionResult> AddCarRule(CarRuleRequest carRuleRequest)
     {
-        return CustomResult("Success", await carRuleService.Create(carRuleRequest));
+        return CustomResult("Success", await carRuleService.CreateCarRule(carRuleRequest));
     }
 
     [HttpPatch("UpdateCarRule/{carRuleId}")]
     public async Task<IActionResult> UpdateCarRule(Guid carRuleId ,CarRuleRequest carRuleRequest)
     {
-        return CustomResult( "Success", await carRuleService.Update(carRuleId, carRuleRequest));
+        return CustomResult( "Success", await carRuleService.UpdateCarRule(carRuleId, carRuleRequest));
       
     }
 

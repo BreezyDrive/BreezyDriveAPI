@@ -208,6 +208,11 @@ namespace BreezyDrive.CommonService.Infrastuctures.Repositories
             }
         }
 
+        public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return dbSet.AnyAsync(predicate);
+        }
+
         public async Task CommitAsync()
         {
             await context.SaveChangesAsync();

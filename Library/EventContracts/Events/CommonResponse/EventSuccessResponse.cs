@@ -1,4 +1,4 @@
-﻿namespace Library.EventContracts.Events.UserEvents.Response;
+﻿namespace Library.EventContracts.Events.CommonResponse;
 
 public class EventSuccessResponse
 {

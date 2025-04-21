@@ -13,6 +13,10 @@ using MassTransit;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using BreezyDrive.CommonService.Utils;
+using Library.EventContracts.Events.CommonResponse;
+using BreezyDrive.AuthenticationServices.Domain.Interfaces;
+using BreezyDrive.AuthenticationServices.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
 {
@@ -20,7 +24,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCoreServices();         // CORS, Controllers, HttpContext
+            services.AddCoreServices(configuration);         // CORS, Controllers, HttpContext
             services.AddInfrastructure(configuration);  // Database, Repository, External APIs
             services.AddRepositories();         // UnitOfWork, Repository
             services.AddServices();             // Map Interface với Service
@@ -31,10 +35,21 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             return services;
         }
 
-        private static IServiceCollection AddCoreServices(this IServiceCollection services)
+        private static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
             services.AddHttpContextAccessor();
+
+            // Thêm cấu hình Authentication
+            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //     .AddJwtBearer(options =>
+            //     {
+            //         options.Authority = configuration["Jwt:Authority"]; // URL của Identity Server hoặc Auth Provider
+            //         options.Audience = configuration["Jwt:Audience"]; // Tên Audience của API
+            //         options.RequireHttpsMetadata = false;
+            //     });
+            //
+            // services.AddAuthorization(); // Thêm Authorization
 
             services.AddCors(options =>
             {
@@ -76,7 +91,7 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                     Scheme = "Bearer"
                 });
 
-                /*option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
@@ -88,12 +103,11 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
                             },
                             Scheme = "oauth2",
                             Name = "Bearer",
-                            In = ParameterLocation.Header
+                            In = ParameterLocation.Header,
                         },
                         new List<string>()
                     }
-                });*/
-                option.OperationFilter<SecurityRequirementsOperationFilter>();
+                });
             });
 
             return services;
@@ -123,7 +137,10 @@ namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
-            services.AddScoped<IUserDriveLisenceService, UserDriveLisenceService>();
+            services.AddScoped<IUserDriveLicenseService, UserDriveLicenseService>();
+
+            services.AddScoped<ITokenService, TokenService>(); // Cần kiểm tra TokenService đã tồn tại chưa
+            services.AddScoped<IFirebaseConfiguration, FirebaseConfiguration>();
         }
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)

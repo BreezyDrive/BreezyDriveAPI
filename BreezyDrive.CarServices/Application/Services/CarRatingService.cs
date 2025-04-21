@@ -29,7 +29,13 @@ public class CarRatingService (IUnitOfWork unitOfWork, IMapper mapper) : ICarRat
         return mapper.Map<CarRatingsResponse>(carRating);
     }
 
-    public async Task<CarRatingsResponse> Create(CarRatingRequest request)
+    public async Task<IEnumerable<CarRatingsResponse>> GetAllCarRatingsByCarGuidAsync(Guid carId)
+    {
+        var carRatings = await unitOfWork.Repository<CarRatings>().GetAsync(r => r.CarId == carId);
+        return mapper.Map<IEnumerable<CarRatingsResponse>>(carRatings);
+    }
+
+    public async Task<CarRatingsResponse> CreateCarRating(CarRatingRequest request)
     {
         var carRating = mapper.Map<CarRatings>(request);
         await unitOfWork.Repository<CarRatings>().InsertAsync(carRating);
@@ -40,7 +46,7 @@ public class CarRatingService (IUnitOfWork unitOfWork, IMapper mapper) : ICarRat
 
     }
 
-    public async Task<CarRatingsResponse> Update(Guid guid, CarRatingRequest request)
+    public async Task<CarRatingsResponse> UpdateCarRating(Guid guid, CarRatingRequest request)
     {
         var carRating = await GetCarRatingById(guid);
 

@@ -14,4 +14,5 @@ public interface ICarBrandService
     Task<CarBrandResponse> UpdateCarBrand(Guid guid, CarBrandRequest request); 
     
     Task<bool> DeleteCarBrand(Guid guid);
+    bool IsBrandExists(Guid brandId);
 }

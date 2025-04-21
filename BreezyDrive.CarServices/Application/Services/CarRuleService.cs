@@ -26,7 +26,7 @@ public class CarRuleService (IUnitOfWork unitOfWork, IMapper mapper) : ICarRuleS
         return mapper.Map<CarRuleResponse>(await this.GetCarRuleById(guid));
     }
 
-    public async Task<CarRuleResponse> Create(CarRuleRequest request)
+    public async Task<CarRuleResponse> CreateCarRule(CarRuleRequest request)
     {
         var carRule = mapper.Map<CarRules>(request);
         await unitOfWork.Repository<CarRules>().InsertAsync(carRule);
@@ -35,7 +35,7 @@ public class CarRuleService (IUnitOfWork unitOfWork, IMapper mapper) : ICarRuleS
         
     }
 
-    public async Task<CarRuleResponse> Update(Guid guid, CarRuleRequest request)
+    public async Task<CarRuleResponse> UpdateCarRule(Guid guid, CarRuleRequest request)
     {
         var carRule = await this.GetCarRuleById(guid);
         mapper.Map(request, carRule);

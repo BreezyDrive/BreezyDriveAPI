@@ -43,44 +43,19 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.Identity
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public long GetUserIdFromHttpContext(HttpContext httpContext)
+        public Guid GetUserIdFromToken(string jwtToken)
         {
-            if (!httpContext.Request.Headers.ContainsKey("Authorization"))
-            {
-                throw new CustomExceptions.InternalServerErrorException("Authorization header is missing.");
-            }
-
-            string authorizationHeader = httpContext.Request.Headers["Authorization"];
-
-            if (string.IsNullOrWhiteSpace(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
-            {
-                throw new CustomExceptions.InternalServerErrorException("Invalid Authorization header format.");
-            }
-
-            string jwtToken = authorizationHeader["Bearer ".Length..];
-
             var tokenHandler = new JwtSecurityTokenHandler();
-            if (!tokenHandler.CanReadToken(jwtToken))
+            var token = tokenHandler.ReadJwtToken(jwtToken);
+            var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == "id");
+
+            if (idClaim == null || string.IsNullOrWhiteSpace(idClaim.Value))
             {
-                throw new CustomExceptions.InternalServerErrorException("Invalid JWT token format.");
+                throw new Exception("User ID claim not found in token.");
             }
 
-            try
-            {
-                var token = tokenHandler.ReadJwtToken(jwtToken);
-                var idClaim = token.Claims.FirstOrDefault(claim => claim.Type == "id");
-
-                if (idClaim == null || string.IsNullOrWhiteSpace(idClaim.Value))
-                {
-                    throw new CustomExceptions.InternalServerErrorException("User ID claim not found in token.");
-                }
-
-                return long.Parse(idClaim.Value);
-            }
-            catch (Exception ex)
-            {
-                throw new CustomExceptions.InternalServerErrorException($"Error parsing token: {ex.Message}");
-            }
+            return Guid.Parse(idClaim.Value);
         }
+
     }
 }

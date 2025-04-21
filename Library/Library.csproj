@@ -10,4 +10,8 @@
       <PackageReference Include="MassTransit.Abstractions" Version="8.4.0-develop.2236" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="EventContracts\Events\CarEvent\Response\" />
+    </ItemGroup>
+
 </Project>
