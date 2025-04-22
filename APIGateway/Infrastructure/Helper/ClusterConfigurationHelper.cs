@@ -6,13 +6,13 @@ namespace APIGateway.Infrastructure.Helper;
 public static class ClusterConfigurationHelper
 {
     //config YARP cluster, route and swagger
-    private static readonly List<(string ServiceName, string Address, bool IsRequireAuthentication)> ClusterConfigs = new()
-    {
+    private static readonly List<(string ServiceName, string Address, bool IsRequireAuthentication)> ClusterConfigs =
+    [
         ("users", "http://localhost:8180", false),
         ("cars", "http://localhost:8280", false),
         ("conversations", "http://localhost:8380", false),
         ("authentication", "http://localhost:8480", false)
-    };
+    ];
 
     public static RouteConfig[] GetRoutes()
     {
