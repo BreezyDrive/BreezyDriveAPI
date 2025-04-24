@@ -12,6 +12,7 @@ namespace BreezyDrive.ConversationServices.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ;
 
         public ConversationService(IUnitOfWork unitOfWork, IMapper mapper)
         {

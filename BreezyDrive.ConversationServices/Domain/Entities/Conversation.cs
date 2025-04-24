@@ -1,4 +1,6 @@
 ﻿using BreezyDrive.CommonService.Domain.Entities;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,6 +9,8 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
     [Table("Conversation")]
     public class Conversation : BaseEntities
     {
+        public Guid Id { get; set; }
+
         public Guid UserId1 { get; set; }
 
         public Guid UserId2 { get; set; }
@@ -16,5 +20,7 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
         public bool IsOpen { get; set; }
 
         public Guid? CloseAccountId { get; set; }
+
+        public List<ConversationMessage> Messages { get; set; } = new List<ConversationMessage>();
     }
 }

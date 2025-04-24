@@ -35,10 +35,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
+      <ProjectReference Include="..\BreezyDrive.UserServices\BreezyDrive.UserServices.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Hubs\" />
       <Folder Include="Domain\Enums\" />
     </ItemGroup>
 

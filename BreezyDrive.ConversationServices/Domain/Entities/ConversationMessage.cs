@@ -7,6 +7,8 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
     [Table("ConversationMessage")]
     public class ConversationMessage : BaseEntities
     {
+        public Guid Id { get; set; }
+
         public Guid ConverationId { get; set; }
 
         public Guid SenderId { get; set; }
@@ -17,7 +19,9 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
 
         public bool IsSeen { get; set; }
 
-        public Guid ReplyToMessageId { get; set; }
+        public Guid? ReplyToMessageId { get; set; }
+
+        public List<MessageFile> Files { get; set; } = new List<MessageFile>();
 
     }
 }
