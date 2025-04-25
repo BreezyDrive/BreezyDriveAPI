@@ -5,13 +5,9 @@ using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Application.Messaging;
 using BreezyDrive.ConversationServices.Application.Services;
-using BreezyDrive.ConversationServices.Infrastructure.Persistance;
-using BreezyDrive.ConversationServices.Infrastructure.Repositories;
 using BreezyDrive.NotificationServices.Application.Interfaces;
 using BreezyDrive.NotificationServices.Application.Messaging;
 using BreezyDrive.NotificationServices.Application.Services;
-using BreezyDrive.NotificationServices.Infrastructure.Persistance;
-using BreezyDrive.NotificationServices.Infrastructure.Repositories;
 using BreezyDrive.UserServices.Application.Interfaces;
 using BreezyDrive.UserServices.Application.Services;
 using BreezyDrive.UserServices.Infrastructure.Persistance;
@@ -22,6 +18,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using MongoDB.Driver;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
@@ -115,12 +112,6 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 
         public static void AddRepositories(this IServiceCollection services)
         {
-            // MongoDB UnitOfWork for Conversation service
-            services.AddScoped<IMongoUnitiOfWork, MongoUnitOfWork1>();
-
-            // MongoDB UnitOfWork for Notification service
-            services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
-            
             // MySQL UnitOfWork for User service
             services.AddScoped<IUnitOfWork, UnitOfWork<UserDbContext>>();
         }
@@ -137,12 +128,18 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             // MongoDB Database for Conversation service
-            services.AddSingleton<ConversationDbContext>(provider =>
-                new ConversationDbContext(provider.GetRequiredService<IConfiguration>()));
+            services.AddSingleton<IMongoDatabase>(provider =>
+            {
+                var mongoSettings = configuration.GetSection("MongoDB");
+                var connectionString = mongoSettings["ConnectionString"];
+                var databaseName = mongoSettings["DatabaseName"];
 
-            // MongoDB Database for Notification service
-            services.AddSingleton<NotificationDBContext>(provider =>
-                new NotificationDBContext(provider.GetRequiredService<IConfiguration>()));
+                var mongoClient = new MongoClient(connectionString);
+                return mongoClient.GetDatabase(databaseName);
+            });
+
+            services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+            services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
 
             // MySQL Database for User service
             services.AddDbContext<UserDbContext>(options =>
