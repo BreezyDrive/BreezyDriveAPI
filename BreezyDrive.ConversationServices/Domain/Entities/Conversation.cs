@@ -9,8 +9,6 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
     [Table("Conversation")]
     public class Conversation : BaseEntities
     {
-        public Guid Id { get; set; }
-
         public Guid UserId1 { get; set; }
 
         public Guid UserId2 { get; set; }

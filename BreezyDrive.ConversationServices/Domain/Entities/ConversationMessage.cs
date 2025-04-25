@@ -7,8 +7,6 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
     [Table("ConversationMessage")]
     public class ConversationMessage : BaseEntities
     {
-        public Guid Id { get; set; }
-
         public Guid ConverationId { get; set; }
 
         public Guid SenderId { get; set; }
