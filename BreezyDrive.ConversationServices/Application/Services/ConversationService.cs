@@ -10,55 +10,105 @@ namespace BreezyDrive.ConversationServices.Application.Services
 {
     public class ConversationService : IConversationService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMongoUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        //private readonly 
 
-        public ConversationService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ConversationService(IMongoUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public async Task<List<ConversationResponse>> GetAllConversations()
+        public Task<ConversationResponse> CreateConversation(ConversationRequest request)
         {
-            var conversation = await _unitOfWork.Repository<Conversation>().GetAsync();
-            if (!conversation.Any())
-            {
-                throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
-            }
-            var conversationResponse = _mapper.Map<List<ConversationResponse>>(conversation);
-            return conversationResponse;
+            throw new NotImplementedException();
         }
 
-        public async Task<ConversationResponse> GetConversationByID(Guid id)
+        public Task<ConversationResponse> DeleteConversation(Guid id, ConversationRequest request)
         {
-            var conversation = await _unitOfWork.Repository<Conversation>().GetByIdAsync(id);
-            if (conversation == null)
-            {
-                throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệus");
-            }
-
-            var conversationResponse = _mapper.Map<ConversationResponse>(conversation);
-
-            return conversationResponse;
+            throw new NotImplementedException();
         }
 
-        public async Task<ConversationResponse> CreateConversation(ConversationRequest request)
+        public Task<List<ConversationResponse>> GetAllConversations()
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<ConversationResponse> UpdateConversationById(Guid id, ConversationRequest request)
+        public Task<ConversationResponse> GetConversationByID(Guid id)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        public async Task<ConversationResponse> DeleteConversation(Guid id, ConversationRequest request)
+        public Task<ConversationResponse> UpdateConversationById(Guid id, ConversationRequest request)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        
+        //public async Task<List<ConversationResponse>> GetAllConversations()
+        //{
+        //    var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
+        //    var conversations = await conversationRepository.GetAllAsync();
+
+        //    if (!conversations.Any())
+        //    {
+        //        throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
+        //    }
+
+        //    return _mapper.Map<List<ConversationResponse>>(conversations);
+        //}
+
+        //public async Task<ConversationResponse> GetConversationByID(Guid id)
+        //{
+        //    var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
+        //    var conversation = await conversationRepository.GetByIdAsync(id);
+
+        //    if (conversation == null)
+        //    {
+        //        throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
+        //    }
+
+        //    return _mapper.Map<ConversationResponse>(conversation);
+        //}
+
+        //public async Task<ConversationResponse> CreateConversation(ConversationRequest request)
+        //{
+        //    var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
+        //    var conversation = _mapper.Map<Conversation>(request);
+
+        //    await conversationRepository.InsertAsync(conversation);
+
+        //    return _mapper.Map<ConversationResponse>(conversation);
+        //}
+
+        //public async Task<ConversationResponse> UpdateConversationById(Guid id, ConversationRequest request)
+        //{
+        //    var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
+        //    var existingConversation = await conversationRepository.GetByIdAsync(id);
+
+        //    if (existingConversation == null)
+        //    {
+        //        throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
+        //    }
+
+        //    _mapper.Map(request, existingConversation);
+        //    await conversationRepository.UpdateAsync(existingConversation);
+
+        //    return _mapper.Map<ConversationResponse>(existingConversation);
+        //}
+
+        //public async Task<ConversationResponse> DeleteConversation(Guid id, ConversationRequest request)
+        //{
+        //    var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
+        //    var existingConversation = await conversationRepository.GetByIdAsync(id);
+
+        //    if (existingConversation == null)
+        //    {
+        //        throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
+        //    }
+
+        //    await conversationRepository.DeleteAsync(existingConversation);
+
+        //    return _mapper.Map<ConversationResponse>(existingConversation);
+        //}
     }
 }

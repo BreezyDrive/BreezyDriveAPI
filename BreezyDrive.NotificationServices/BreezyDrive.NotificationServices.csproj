@@ -36,4 +36,9 @@
       <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Infrastructure\Persistance\" />
+      <Folder Include="Infrastructure\Repositories\" />
+    </ItemGroup>
+
 </Project>
