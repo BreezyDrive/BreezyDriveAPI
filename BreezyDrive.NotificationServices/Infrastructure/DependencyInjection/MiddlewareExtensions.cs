@@ -1,6 +1,5 @@
 ﻿using BreezyDrive.CommonService.Middleware;
 using BreezyDrive.NotificationServices.Application.Hubs;
-using BreezyDrive.NotificationServices.Infrastructure.Persistance;
 
 namespace BreezyDrive.NotificationServices.Infrastructure.DependencyInjection
 {
@@ -8,11 +7,6 @@ namespace BreezyDrive.NotificationServices.Infrastructure.DependencyInjection
     {
         public static WebApplication UseApplicationMiddleware(this WebApplication app)
         {
-            using (var scope = app.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<NotificationDBContext>();
-                Console.WriteLine("✅ NotificationDBContext has been resolved successfully.");
-            }
             app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseRouting();
