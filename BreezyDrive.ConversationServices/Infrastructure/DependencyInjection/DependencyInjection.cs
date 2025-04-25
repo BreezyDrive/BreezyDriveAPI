@@ -1,10 +1,20 @@
 ﻿using BreezyDrive.CommonService.Application.Mapper;
+using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
+using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Application.Messaging;
 using BreezyDrive.ConversationServices.Application.Services;
 using BreezyDrive.ConversationServices.Infrastructure.Persistance;
+using BreezyDrive.ConversationServices.Infrastructure.Repositories;
+using BreezyDrive.NotificationServices.Application.Interfaces;
 using BreezyDrive.NotificationServices.Application.Messaging;
+using BreezyDrive.NotificationServices.Application.Services;
+using BreezyDrive.NotificationServices.Infrastructure.Persistance;
+using BreezyDrive.NotificationServices.Infrastructure.Repositories;
+using BreezyDrive.UserServices.Application.Interfaces;
+using BreezyDrive.UserServices.Application.Services;
+using BreezyDrive.UserServices.Infrastructure.Persistance;
 using Library.EventContracts.Events.NotificationEvents.Request;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
@@ -19,7 +29,6 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
     {
         public static IServiceCollection InfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDatabase(configuration);
             services.AddCoreServices();         // CORS, Controllers, HttpContext
             services.AddInfrastructure(configuration);  // Database, Repository, External APIs
             services.AddAuthenticationServices(); // JWT, Identity
@@ -35,6 +44,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
         {
             services.AddControllers();
             services.AddHttpContextAccessor();
+            services.AddSignalR();
 
             services.AddCors(options =>
             {
@@ -105,8 +115,14 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 
         public static void AddRepositories(this IServiceCollection services)
         {
-            //services.AddScoped<IUnitOfWork, UnitOfWork<ConversationDbContext>>();
+            // MongoDB UnitOfWork for Conversation service
+            services.AddScoped<IMongoUnitiOfWork, MongoUnitOfWork1>();
 
+            // MongoDB UnitOfWork for Notification service
+            services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
+            
+            // MySQL UnitOfWork for User service
+            services.AddScoped<IUnitOfWork, UnitOfWork<UserDbContext>>();
         }
 
         /// Đăng ký Interface với Service
@@ -114,12 +130,29 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
         {
             services.AddScoped<IConversationService, ConversationService>();
             services.AddScoped<IConversationMessageService, ConversationMessageService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<INotificationService, NotificationService>();
         }
 
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
+            // MongoDB Database for Conversation service
             services.AddSingleton<ConversationDbContext>(provider =>
                 new ConversationDbContext(provider.GetRequiredService<IConfiguration>()));
+
+            // MongoDB Database for Notification service
+            services.AddSingleton<NotificationDBContext>(provider =>
+                new NotificationDBContext(provider.GetRequiredService<IConfiguration>()));
+
+            // MySQL Database for User service
+            services.AddDbContext<UserDbContext>(options =>
+            {
+                var connectionString = configuration.GetConnectionString("UserDB");
+                options.UseSqlServer(connectionString, sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(DependencyInjection).Assembly.FullName);
+                });
+            });
         }
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)

@@ -16,12 +16,11 @@ namespace BreezyDrive.CommonService.Infrastuctures.DependencyInjection
             services.AddService();
             return services;
         }
-
+        
         private static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IHashing, Hash>();
-
             return services;
         }
 

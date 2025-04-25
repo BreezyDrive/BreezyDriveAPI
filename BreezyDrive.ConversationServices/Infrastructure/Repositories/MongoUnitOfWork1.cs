@@ -4,12 +4,12 @@ using MongoDB.Driver;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.Repositories
 {
-    public class MongoUnitOfWork : IMongoUnitiOfWork
+    public class MongoUnitOfWork1 : IMongoUnitiOfWork
     {
 
         private readonly ConversationDbContext _dbContext;
 
-        public MongoUnitOfWork (ConversationDbContext dbContext)
+        public MongoUnitOfWork1 (ConversationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
