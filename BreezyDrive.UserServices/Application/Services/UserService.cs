@@ -53,7 +53,7 @@ namespace BreezyDrive.UserServices.Application.Services
                 IsSeen = false
             };
 
-            Console.WriteLine($"📢 Đang publish NotificationEvent: {notificationEvent.Description}, Name: {notificationEvent.Name}, NotiType : {notificationEvent.NotificationType}, ReceiverId: {notificationEvent.ReceiverId}");
+            Console.WriteLine($"Đang publish NotificationEvent: {notificationEvent.Description}, Name: {notificationEvent.Name}, NotiType : {notificationEvent.NotificationType}, ReceiverId: {notificationEvent.ReceiverId}");
 
             await _publishEndpoint.Publish(notificationEvent);
             var userResponse = _mapper.Map<UserResponse>(user);

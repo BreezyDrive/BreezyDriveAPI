@@ -1,16 +1,13 @@
 ﻿using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
+using BreezyDrive.CommonService.Infrastuctures.Data;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using BreezyDrive.CommonService.Utils;
-using BreezyDrive.NotificationServices.Application.DTOs.Request;
-using BreezyDrive.NotificationServices.Application.DTOs.Response;
 using BreezyDrive.NotificationServices.Application.Hubs;
 using BreezyDrive.NotificationServices.Application.Interfaces;
 using BreezyDrive.NotificationServices.Application.Messaging;
 using BreezyDrive.NotificationServices.Application.Services;
-using BreezyDrive.NotificationServices.Infrastructure.Persistance;
-using BreezyDrive.NotificationServices.Infrastructure.Repositories;
 using Library.EventContracts.Events.NotificationEvents.Request;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,6 +15,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -31,7 +29,6 @@ namespace BreezyDrive.NotificationServices.Infrastructure.DependencyInjection
             services.AddCoreServices();
             services.AddAuthenticationAuthorized(configuration);
             services.AddSwaggerDocumentation();
-            services.AddRepositories();
             services.AddServices();
             services.AddAuthorization();
             services.AddMasstransit(configuration);
@@ -40,9 +37,18 @@ namespace BreezyDrive.NotificationServices.Infrastructure.DependencyInjection
         }
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<NotificationDBContext>(provider =>
-                new NotificationDBContext(provider.GetRequiredService<IConfiguration>()));
+            var connectionString = configuration.GetConnectionString("MongoDB");
+
+            var databaseName = configuration["DatabaseSettings:DatabaseName"];
+
+            var database = MongoDbInitializer.Initialize(connectionString, databaseName);
+
+            services.AddSingleton<IMongoDatabase>(database);
+            services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+            services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
         }
+
+
         private static IServiceCollection AddCoreServices(this IServiceCollection services)
         {
             services.AddControllers();
@@ -160,10 +166,6 @@ namespace BreezyDrive.NotificationServices.Infrastructure.DependencyInjection
             return services;
         }
 
-        private static void AddRepositories(this IServiceCollection services)
-        {
-            services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
-        }
 
         private static void AddServices(this IServiceCollection services)
         {

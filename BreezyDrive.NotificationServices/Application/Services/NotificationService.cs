@@ -5,7 +5,6 @@ using BreezyDrive.NotificationServices.Application.DTOs.Request;
 using BreezyDrive.NotificationServices.Application.DTOs.Response;
 using BreezyDrive.NotificationServices.Application.Interfaces;
 using BreezyDrive.NotificationServices.Domain.Entities;
-using BreezyDrive.NotificationServices.Infrastructure.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -14,63 +13,58 @@ namespace BreezyDrive.NotificationServices.Application.Services
 {
     public class NotificationService : INotificationService
     {
-        private readonly IMongoUnitOfWork _unitOfWork;
+        private readonly IMongoRepository<Notification> _notificationRepository;
         private readonly IMapper _mapper;
 
         public NotificationService(IMongoUnitOfWork unitOfWork, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _notificationRepository = unitOfWork.Repository<Notification>("Notifications");
             _mapper = mapper;
         }
 
         public async Task<NotificationResponse> CreateNotificationAsync(NotificationRequest request)
         {
-            var noti = _mapper.Map<Notification>(request);
+            var notification = _mapper.Map<Notification>(request);
+            notification.CreateDate = DateTimeOffset.UtcNow;
 
-            noti.CreateDate = DateTimeOffset.UtcNow;
-            await _unitOfWork.Notifications.InsertOneAsync(noti);
+            await _notificationRepository.InsertAsync(notification);
 
-            return _mapper.Map<NotificationResponse>(noti);
+            return _mapper.Map<NotificationResponse>(notification);
         }
-
 
         public async Task<IEnumerable<NotificationResponse>> GetNotificationByUser(Guid receiverId)
         {
-            var filter = Builders<Notification>.Filter.Eq(n => n.ReceiverId, receiverId);
 
-            var sort = Builders<Notification>.Sort.Descending(n => n.CreateDate);
+            var all = await _notificationRepository.GetAllAsync();
 
-            var notifications = await _unitOfWork.Notifications
-                                                   .Find(filter)
-                                                   .Sort(sort)
-                                                   .ToListAsync();
+            var filtered = all
+                .Where(n => n.ReceiverId == receiverId)
+                .OrderByDescending(n => n.CreateDate)
+                .ToList();
 
-            return _mapper.Map<IEnumerable<NotificationResponse>>(notifications);
+            return _mapper.Map<IEnumerable<NotificationResponse>>(filtered);
         }
 
         public async Task UpdateIsSeenStatus(Guid id)
         {
-            var filter = Builders<Notification>.Filter.Eq(n => n.Id, id);
-
-            var update = Builders<Notification>.Update.Set(n => n.IsSeen, true);
-
-            var result = await _unitOfWork.Notifications.UpdateOneAsync(filter, update);
-
-            if (result.MatchedCount == 0)
-            {
+            var existing = await _notificationRepository.GetByIdAsync(id.ToString());
+            if (existing == null)
                 throw new CustomExceptions.DataNotFoundException("Notification not found.");
-            }
 
-            Console.WriteLine($"Notification with Id {id} updated to IsSeen = true.");
+            existing.IsSeen = true;
+            await _notificationRepository.UpdateAsync(id.ToString(), existing);
         }
+
         public async Task UpdateAllIsSeenStatus(Guid receiverId)
         {
-            var filter = Builders<Notification>.Filter.Eq(n => n.ReceiverId, receiverId);
+            var all = await _notificationRepository.GetAllAsync();
+            var toUpdate = all.Where(n => n.ReceiverId == receiverId).ToList();
 
-            var update = Builders<Notification>.Update.Set(n => n.IsSeen, true);
-
-            await _unitOfWork.Notifications.UpdateManyAsync(filter, update);
+            foreach (var noti in toUpdate)
+            {
+                noti.IsSeen = true;
+                await _notificationRepository.UpdateAsync(noti.Id.ToString(), noti);
+            }
         }
-
     }
 }
