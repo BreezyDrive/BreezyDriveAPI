@@ -17,7 +17,9 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
 
         public bool IsSeen { get; set; }
 
-        public Guid ReplyToMessageId { get; set; }
+        public Guid? ReplyToMessageId { get; set; }
+
+        public List<MessageFile> Files { get; set; } = new List<MessageFile>();
 
     }
 }

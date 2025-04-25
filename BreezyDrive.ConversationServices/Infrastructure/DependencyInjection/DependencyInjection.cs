@@ -1,9 +1,14 @@
 ﻿using BreezyDrive.CommonService.Application.Mapper;
-using BreezyDrive.CommonService.Domain.Interfaces;
-using BreezyDrive.CommonService.Infrastuctures.Repositories;
+using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.ConversationServices.Application.Interfaces;
+using BreezyDrive.ConversationServices.Application.Messaging;
 using BreezyDrive.ConversationServices.Application.Services;
 using BreezyDrive.ConversationServices.Infrastructure.Persistance;
+using BreezyDrive.NotificationServices.Application.Messaging;
+using Library.EventContracts.Events.NotificationEvents.Request;
+using Library.EventContracts.Events.UserEvents.Request;
+using Library.EventContracts.Events.UserEvents.Response;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -14,6 +19,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
     {
         public static IServiceCollection InfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDatabase(configuration);
             services.AddCoreServices();         // CORS, Controllers, HttpContext
             services.AddInfrastructure(configuration);  // Database, Repository, External APIs
             services.AddAuthenticationServices(); // JWT, Identity
@@ -21,8 +27,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-
-
+            services.AddMasstransit(configuration); //RabbitMQ
             return services;
         }
 
@@ -100,7 +105,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 
         public static void AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork<ConversationDbContext>>();
+            //services.AddScoped<IUnitOfWork, UnitOfWork<ConversationDbContext>>();
 
         }
 
@@ -113,14 +118,36 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ConversationDbContext>(options =>
+            services.AddSingleton<ConversationDbContext>(provider =>
+                new ConversationDbContext(provider.GetRequiredService<IConfiguration>()));
+        }
+
+        private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IMessageHandler<NotificationEvent, NotificationResponseEvent>, NotificationHandler>();
+            services.AddScoped<IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>, CheckUserExistHandler>();
+            services.AddMassTransit(config =>
             {
-                var connectionString = configuration.GetConnectionString("ConversationDB");
-                options.UseSqlServer(connectionString, sqlOptions =>
+                config.AddConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>();
+                config.AddConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>();
+                config.UsingRabbitMq((context, cfg) =>
                 {
-                    sqlOptions.MigrationsAssembly(typeof(DependencyInjection).Assembly.FullName);
+                    var configuration = context.GetRequiredService<IConfiguration>();
+                    var rabbitMQSettings = configuration.GetSection("RabbitMQ");
+
+                    cfg.Host(rabbitMQSettings["Host"], h =>
+                    {
+                        h.Username(rabbitMQSettings["Username"]);
+                        h.Password(rabbitMQSettings["Password"]);
+                    });
+
+                    cfg.ReceiveEndpoint("notification-queue", e =>
+                    {
+                        e.ConfigureConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>(context);
+                    });
                 });
             });
+            return services;
         }
     }
 }

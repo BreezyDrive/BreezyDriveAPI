@@ -12,6 +12,8 @@
 
     <ItemGroup>
       <Folder Include="EventContracts\Events\CarEvent\Response\" />
+      <Folder Include="EventContracts\Events\ConversationEvents\Request\" />
+      <Folder Include="EventContracts\Events\ConversationEvents\Response\" />
     </ItemGroup>
 
 </Project>
