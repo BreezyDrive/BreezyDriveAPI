@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BreezyDrive.AuthenticationServices.Domain.Interfaces;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Utils;

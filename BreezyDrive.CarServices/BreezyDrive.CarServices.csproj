@@ -11,7 +11,7 @@
         <PackageReference Include="CoreApiResponse" Version="1.0.1" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0-develop.2236" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
           <PrivateAssets>all</PrivateAssets>
@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\AuthenticationServices\BreezyDrive.AuthenticationServices.csproj" />
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
       <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>

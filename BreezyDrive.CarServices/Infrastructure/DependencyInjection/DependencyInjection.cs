@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using BreezyDrive.AuthenticationServices.Infrastructure.Extensions;
 using BreezyDrive.CarServices.Application.Interfaces;
 using BreezyDrive.CarServices.Application.Messaging;
 using BreezyDrive.CarServices.Application.Services;
@@ -25,7 +26,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
         {
             services.AddCoreServices();         // CORS, Controllers, HttpContext
             services.AddInfrastructure(configuration);  // Database, Repository, External APIs
-            services.AddAuthenticationServices(); // JWT, Identity
+            services.AddAuthenticationServices(configuration); // JWT, Identity
             services.AddRepositories();         // UnitOfWork, Repository
             services.AddServices();             // Map Interface với Service
             services.AddSwaggerDocumentation();  // Swagger
@@ -67,8 +68,9 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             return services;
         }
 
-        private static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
+        private static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAuthenticationAuthorized(configuration);
             return services;
         }
 

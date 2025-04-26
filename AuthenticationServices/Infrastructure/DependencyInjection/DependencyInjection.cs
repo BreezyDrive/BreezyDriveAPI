@@ -14,6 +14,7 @@ using Swashbuckle.AspNetCore.Filters;
 using AuthenticationService = BreezyDrive.AuthenticationServices.Application.Services.AuthenticationService;
 using IAuthenticationService = BreezyDrive.AuthenticationServices.Application.Interfaces.IAuthenticationService;
 using BreezyDrive.AuthenticationServices.Application.Messaging;
+using BreezyDrive.AuthenticationServices.Infrastructure.Extensions;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
@@ -95,57 +96,7 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
 
         private static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                        {
-                            context.Response.Headers.Add("Token-Expired", "true");
-                        }
-                        return Task.CompletedTask;
-                    }
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var accessToken = context.Request.Query["access_token"]; // Lấy token từ query string
-
-                        // Nếu request là cho SignalR thì sử dụng token từ query
-                        if (!string.IsNullOrEmpty(accessToken) &&
-                            context.HttpContext.Request.Path.StartsWithSegments("/notification"))
-                        {
-                            context.Token = accessToken;
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
-            })
-            .AddGoogle(options =>
-            {
-                options.ClientId = configuration["Google:ClientId"]!;
-                options.ClientSecret = configuration["Google:ClientSecret"]!;
-            });
+            services.AddAuthenticationAuthorized(configuration);
 
             services.AddScoped<IAuthentication, Authen>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
