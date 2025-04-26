@@ -14,8 +14,6 @@ using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using BreezyDrive.CommonService.Utils;
 using Library.EventContracts.Events.CommonResponse;
-using BreezyDrive.AuthenticationServices.Domain.Interfaces;
-using BreezyDrive.AuthenticationServices.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace BreezyDrive.UserServices.Infrastructure.DependencyInjection

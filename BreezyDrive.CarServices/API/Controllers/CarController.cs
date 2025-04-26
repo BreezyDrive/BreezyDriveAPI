@@ -9,6 +9,7 @@ using Library.EventContracts.Events;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BreezyDrive.CarServices.API.Controllers;
