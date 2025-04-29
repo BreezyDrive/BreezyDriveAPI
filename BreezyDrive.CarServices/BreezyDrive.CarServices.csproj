@@ -28,8 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AuthenticationServices\BreezyDrive.AuthenticationServices.csproj" />
-      <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
+        <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
       <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>
 
