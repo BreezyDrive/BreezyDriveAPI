@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
-using BreezyDrive.AuthenticationServices.Infrastructure.Extensions;
 using BreezyDrive.CarServices.Application.Interfaces;
 using BreezyDrive.CarServices.Application.Messaging;
 using BreezyDrive.CarServices.Application.Services;
 using BreezyDrive.CarServices.Infrastructure.Persistence;
 using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
+using BreezyDrive.CommonService.Infrastuctures.Extensions;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using Library.EventContracts.Events.CarEvent.Request;

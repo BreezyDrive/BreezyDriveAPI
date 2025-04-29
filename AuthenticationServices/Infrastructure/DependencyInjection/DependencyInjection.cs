@@ -14,7 +14,7 @@ using Swashbuckle.AspNetCore.Filters;
 using AuthenticationService = BreezyDrive.AuthenticationServices.Application.Services.AuthenticationService;
 using IAuthenticationService = BreezyDrive.AuthenticationServices.Application.Interfaces.IAuthenticationService;
 using BreezyDrive.AuthenticationServices.Application.Messaging;
-using BreezyDrive.AuthenticationServices.Infrastructure.Extensions;
+using BreezyDrive.CommonService.Infrastuctures.Extensions;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;

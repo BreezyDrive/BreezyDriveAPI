@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Application\DTOs\Response\" />
+    <Folder Include="Infrastructure\Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
