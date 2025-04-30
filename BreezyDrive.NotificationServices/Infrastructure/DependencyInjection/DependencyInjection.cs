@@ -37,7 +37,7 @@ namespace BreezyDrive.NotificationServices.Infrastructure.DependencyInjection
         }
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("MongoDB");
+            var connectionString = configuration.GetConnectionString("NotificationDB");
 
             var databaseName = configuration["DatabaseSettings:DatabaseName"];
 
