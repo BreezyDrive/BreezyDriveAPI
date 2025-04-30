@@ -11,7 +11,9 @@ public static class ClusterConfigurationHelper
         ("users", "http://localhost:8180", false),
         ("cars", "http://localhost:8280", false),
         ("conversations", "http://localhost:8380", false),
-        ("authentication", "http://localhost:8480", false)
+        ("authentications", "http://localhost:8480", false),
+        ("bookings", "http://localhost:8580", false),
+        ("notifications", "http://localhost:8680", false),
     ];
 
     public static RouteConfig[] GetRoutes()

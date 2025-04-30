@@ -22,12 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
       <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>
@@ -40,6 +34,12 @@
       <Folder Include="Infrastructure\Plugins\" />
       <Folder Include="Infrastructure\Repositories\" />
       <Folder Include="Migrations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
