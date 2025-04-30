@@ -1,23 +1,27 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 8380
+EXPOSE 8381
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BreezyDrive.Conversations/BreezyDrive.Conversations.csproj", "BreezyDrive.Conversations/"]
-RUN dotnet restore "BreezyDrive.Conversations/BreezyDrive.Conversations.csproj"
+COPY ["BreezyDrive.ConversationServices/BreezyDrive.ConversationServices.csproj", "BreezyDrive.ConversationServices/"]
+COPY ["BreezyDrive.CommonService/BreezyDrive.CommonService.csproj", "BreezyDrive.CommonService/"]
+COPY ["Library/Library.csproj", "Library/"]
+COPY ["BreezyDrive.NotificationServices/BreezyDrive.NotificationServices.csproj", "BreezyDrive.NotificationServices/"]
+COPY ["BreezyDrive.UserServices/BreezyDrive.UserServices.csproj", "BreezyDrive.UserServices/"]
+RUN dotnet restore "BreezyDrive.ConversationServices/BreezyDrive.ConversationServices.csproj"
 COPY . .
-WORKDIR "/src/BreezyDrive.Conversations"
-RUN dotnet build "BreezyDrive.Conversations.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/BreezyDrive.ConversationServices"
+RUN dotnet build "./BreezyDrive.ConversationServices.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "BreezyDrive.Conversations.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./BreezyDrive.ConversationServices.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BreezyDrive.Conversations.dll"]
+ENTRYPOINT ["dotnet", "BreezyDrive.ConversationServices.dll"]

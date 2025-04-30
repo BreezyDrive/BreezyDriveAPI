@@ -1,23 +1,25 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 8280
+EXPOSE 8281
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BreezyDrive.Cars/BreezyDrive.Cars.csproj", "BreezyDrive.Cars/"]
-RUN dotnet restore "BreezyDrive.Cars/BreezyDrive.Cars.csproj"
+COPY ["BreezyDrive.CarServices/BreezyDrive.CarServices.csproj", "BreezyDrive.CarServices/"]
+COPY ["BreezyDrive.CommonService/BreezyDrive.CommonService.csproj", "BreezyDrive.CommonService/"]
+COPY ["Library/Library.csproj", "Library/"]
+RUN dotnet restore "BreezyDrive.CarServices/BreezyDrive.CarServices.csproj"
 COPY . .
-WORKDIR "/src/BreezyDrive.Cars"
-RUN dotnet build "BreezyDrive.Cars.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/BreezyDrive.CarServices"
+RUN dotnet build "./BreezyDrive.CarServices.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "BreezyDrive.Cars.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./BreezyDrive.CarServices.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BreezyDrive.Cars.dll"]
+ENTRYPOINT ["dotnet", "BreezyDrive.CarServices.dll"]

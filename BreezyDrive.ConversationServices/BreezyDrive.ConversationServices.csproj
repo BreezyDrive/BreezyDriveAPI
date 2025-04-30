@@ -28,12 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
       <ProjectReference Include="..\BreezyDrive.NotificationServices\BreezyDrive.NotificationServices.csproj" />
       <ProjectReference Include="..\BreezyDrive.UserServices\BreezyDrive.UserServices.csproj" />
@@ -41,6 +35,12 @@
 
     <ItemGroup>
       <Folder Include="Domain\Enums\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

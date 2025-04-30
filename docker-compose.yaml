@@ -1,0 +1,37 @@
+﻿services:
+  apicontroller:
+    image: api-gateway
+    build:
+      context: .
+      dockerfile: APIGateway/Dockerfile
+
+  breezydrive.users:
+    image: breezydrive-userservice
+    build:
+      context: .
+      dockerfile: BreezyDrive.UserServices/Dockerfile
+
+  breezydrive.cars:
+    image: breezydrive.carservice
+    build:
+      context: .
+      dockerfile: BreezyDrive.CarServices/Dockerfile
+
+  breezydrive.bookings:
+    image: breezydrive.bookingservice
+    build:
+      context: .
+      dockerfile: BreezyDrive.BookingServices/Dockerfile
+
+
+  breezydrive.notifications:
+    image: breezydrive.notificationservice
+    build:
+      context: .
+      dockerfile: BreezyDrive.NotificationServices/Dockerfile
+
+  breezydrive.conversations:
+    image: breezydrive.conversationservice
+    build:
+      context: .
+      dockerfile: BreezyDrive.ConversationServices/Dockerfile

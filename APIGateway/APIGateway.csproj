@@ -16,17 +16,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BreezyDrive.BookingServices\BreezyDrive.BookingServices.csproj" />
-      <ProjectReference Include="..\BreezyDrive.CarServices\BreezyDrive.CarServices.csproj" />
-      <ProjectReference Include="..\BreezyDrive.ConversationServices\BreezyDrive.ConversationServices.csproj" />
-      <ProjectReference Include="..\BreezyDrive.NotificationServices\BreezyDrive.NotificationServices.csproj" />
-      <ProjectReference Include="..\BreezyDrive.UserServices\BreezyDrive.UserServices.csproj" />
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

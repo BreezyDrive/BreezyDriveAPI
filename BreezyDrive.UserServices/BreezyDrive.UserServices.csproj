@@ -18,6 +18,9 @@
       <Content Remove="Application\Exceptions\**" />
       <Content Remove="Infrastructure\Email\**" />
       <Content Remove="Infrastructure\Repositories\**" />
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
       <EmbeddedResource Remove="API\Filters\**" />
       <EmbeddedResource Remove="API\Middlewares\**" />
       <EmbeddedResource Remove="Application\Exceptions\**" />
@@ -49,12 +52,6 @@
         </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
     </ItemGroup>
 
     <ItemGroup>
