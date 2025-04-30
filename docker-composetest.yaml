@@ -1,25 +1,92 @@
 ﻿services:
-  apicontroller:
+  apigateway:
     image: api-gateway
     build:
       context: .
       dockerfile: APIGateway/Dockerfile
+    container_name: apigateway-container
+    ports:
+      - "${PORT_API_GATEWAY}:${PORT_API_GATEWAY}"
+    depends_on:
+      - breezydrive.users
+      - breezydrive.cars
+      - breezydrive.authentication
+      - breezydrive.bookings
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:${PORT_API_GATEWAY}
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - breezydrive-network
 
   breezydrive.users:
     image: breezydrive-userservice
     build:
       context: .
       dockerfile: BreezyDrive.UserServices/Dockerfile
+    container_name: breezydrive-users-container
+    ports:
+      - "${PORT_USERS}:${PORT_USERS}"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:${PORT_USERS}
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - breezydrive-network
 
   breezydrive.cars:
-    image: breezydrive.carservice
+    image: breezydrive-carservice
     build:
       context: .
       dockerfile: BreezyDrive.CarServices/Dockerfile
+    container_name: breezydrive-cars-container
+    ports:
+      - "${PORT_CARS}:${PORT_CARS}"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:${PORT_CARS}
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - breezydrive-network
 
 
-  breezydrive.conversations:
-    image: breezydrive.conversationservice
+  breezydrive.authentication:
+    image: breezydrive-authenticationservice
     build:
       context: .
-      dockerfile: BreezyDrive.ConversationServices/Dockerfile
+      dockerfile: BreezyDrive.AuthenticationServices/Dockerfile
+    container_name: breezydrive-authentication-container
+    ports:
+      - "${PORT_AUTH}:${PORT_AUTH}"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:${PORT_AUTH}
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - breezydrive-network
+
+  breezydrive.bookings:
+    image: breezydrive-bookingservice
+    build:
+      context: .
+      dockerfile: BreezyDrive.BookingServices/Dockerfile
+    container_name: breezydrive-bookings-container
+    ports:
+      - "${PORT_BOOKINGS}:${PORT_BOOKINGS}"
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_URLS=http://+:${PORT_BOOKINGS}
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - breezydrive-network
+
+
+
+networks:
+  breezydrive-network:
+    driver: bridge
