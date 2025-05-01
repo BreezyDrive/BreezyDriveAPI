@@ -1,31 +1,40 @@
 ﻿using BreezyDrive.CommonService.Infrastuctures.Messaging;
-using BreezyDrive.UserServices.Application.Interfaces;
 using Library.EventContracts.Events;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
+using MassTransit;
 
 namespace BreezyDrive.ConversationServices.Application.Messaging;
 
 public class CheckUserExistHandler : IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>
 {
-    private readonly IUserService _userService;
+    private readonly IRequestClient<CheckUserExistRequest> _requestClient;
     private readonly ILogger<CheckUserExistHandler> _logger;
 
-    public CheckUserExistHandler(IUserService userService, ILogger<CheckUserExistHandler> logger)
+    public CheckUserExistHandler(IRequestClient<CheckUserExistRequest> requestClient, ILogger<CheckUserExistHandler> logger)
     {
-        _userService = userService;
+        _requestClient = requestClient;
         _logger = logger;
     }
     
     public async Task<CheckUserExistResponse> HandleMessageAsync(CheckUserExistRequest message)
     {
-        _logger.LogInformation("Handling CheckUserExistRequest for user {UserId}", message.UserId);
+        _logger.LogInformation("Sending CheckUserExistRequest for user {UserId}", message.UserId);
 
-        var user = await _userService.isUserExists(message.UserId);
-        
-        _logger.LogWarning("User {UserId} not found", message.UserId);
+        try
+        {
+            // Send request and wait for response
+            var response = await _requestClient.GetResponse<CheckUserExistResponse>(message);
+            
+            _logger.LogInformation("Received response for user {UserId}: {Exists}", 
+                message.UserId, response.Message.IsUserExists);
 
-        return new CheckUserExistResponse { IsUserExists = user };
-
+            return response.Message;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error checking user existence for {UserId}", message.UserId);
+            throw;
+        }
     }
 }
