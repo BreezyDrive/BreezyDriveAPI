@@ -56,5 +56,20 @@ namespace BreezyDrive.ConversationServices.API.Controllers
             var conversations = await _conversationService.DeleteConversation(id, request);
             return CustomResult("Cập nhật dữ liệu thành công", conversations);
         }
+
+        [SwaggerOperation(Summary = "Khởi tạo database MongoDB")]
+        [HttpPost("initialize-database")]
+        public async Task<IActionResult> InitializeDatabase()
+        {
+            try
+            {
+                var result = await _conversationService.InitializeDatabase();
+                return CustomResult("Khởi tạo database thành công", result);
+            }
+            catch (Exception ex)
+            {
+                return CustomResult("Khởi tạo database thất bại", ex.Message, System.Net.HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }

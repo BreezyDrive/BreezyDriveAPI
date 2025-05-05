@@ -12,6 +12,7 @@ using MassTransit;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using MongoDB.Driver;
+using BreezyDrive.ConversationServices.Infrastructure.Persistance;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
@@ -109,6 +110,9 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
                 return mongoClient.GetDatabase(databaseName);
             });
 
+            // Register ConversationDbContext
+            services.AddScoped<ConversationDbContext>();
+
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
             services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
         }
@@ -134,7 +138,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
                     });
 
                     // Configure request client
-                    cfg.RequestClient<CheckUserExistRequest>(new Uri("queue:user-check-queue"));
+                    //cfg.RequestClient<CheckUserExistRequest>(new Uri("queue:user-check-queue"));
 
                     cfg.ReceiveEndpoint("notification-queue", e =>
                     {

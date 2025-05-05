@@ -11,5 +11,6 @@ namespace BreezyDrive.ConversationServices.Application.Interfaces
         Task<ConversationResponse> CreateConversation(ConversationRequest request);
         Task<ConversationResponse> UpdateConversationById(Guid id, ConversationRequest request);
         Task<ConversationResponse> DeleteConversation(Guid id, ConversationRequest request);
+        Task<object> InitializeDatabase();
     }
 }
