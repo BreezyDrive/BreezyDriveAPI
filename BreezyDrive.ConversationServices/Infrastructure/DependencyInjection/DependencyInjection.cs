@@ -102,7 +102,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
             // MongoDB Database for Conversation service
             services.AddSingleton<IMongoDatabase>(provider =>
             {
-                var mongoSettings = configuration.GetSection("MongoDB");
+                var mongoSettings = configuration.GetSection("MongoDB:Conversation");
                 var connectionString = mongoSettings["ConnectionString"];
                 var databaseName = mongoSettings["DatabaseName"];
 

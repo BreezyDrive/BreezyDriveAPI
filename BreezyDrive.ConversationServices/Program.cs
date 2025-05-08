@@ -3,6 +3,11 @@ using BreezyDrive.NotificationServices.Application.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .AddJsonFile(Path.GetFullPath(Path.Combine(@"../BreezyDrive.CommonService/shared.appsettings.json")), optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
 // Đăng ký các services
 builder.Services.InfrastructureService(builder.Configuration);
 
