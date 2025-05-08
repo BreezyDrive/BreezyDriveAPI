@@ -16,7 +16,7 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_API_GATEWAY}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
@@ -32,7 +32,7 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_USERS}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
@@ -48,7 +48,7 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_CARS}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
@@ -65,7 +65,7 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_AUTH}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
@@ -81,7 +81,7 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_BOOKINGS}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 

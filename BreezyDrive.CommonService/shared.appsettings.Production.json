@@ -1,0 +1,24 @@
+﻿{
+  "ConnectionStrings": {
+    "CarDB": "Server=localhost,1433;Database=BreezyDriveCarService;User Id=sa;Password=BreezyDrive123;TrustServerCertificate=True",
+    "NotificationDB": "mongodb://localhost:27017/BreezyDriveDB",
+    "UserDB": "Server=localhost,1433;Database=UserBreezyDrive;User Id=sa;Password=BreezyDrive123;TrustServerCertificate=True",
+    "ConversationDB": "Server=localhost,1433;Database=ConversationBreezyDrive;User Id=sa;Password=12345;TrustServerCertificate=True"
+
+  },
+
+  "RabbitMQ": {
+    "Host": "rabbitmq://localhost",
+    "Username": "rabbitMQ",
+    "Password": "12345"
+  },
+  "Jwt": {
+    "Key": "Kt5lOVWi9tAwQbRFAVj1XZ3ZbAiuyukuiytkih6PsBvd",
+    "Issuer": "BreezyDrive",
+    "Audience": "BreezyDrive"
+  },
+  "Google": {
+    "ClientId": "853782158170-5cujgcl8g8daf8un5rb8mv2l6rsivr25.apps.googleusercontent.com",
+    "ClientSecret": "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"
+  }
+}
