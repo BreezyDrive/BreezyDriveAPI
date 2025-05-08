@@ -5,20 +5,14 @@ using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Application.Messaging;
 using BreezyDrive.ConversationServices.Application.Services;
-using BreezyDrive.NotificationServices.Application.Interfaces;
-using BreezyDrive.NotificationServices.Application.Messaging;
-using BreezyDrive.NotificationServices.Application.Services;
-using BreezyDrive.UserServices.Application.Interfaces;
-using BreezyDrive.UserServices.Application.Services;
-using BreezyDrive.UserServices.Infrastructure.Persistance;
 using Library.EventContracts.Events.NotificationEvents.Request;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using MongoDB.Driver;
+using BreezyDrive.ConversationServices.Infrastructure.Persistance;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
@@ -27,7 +21,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
         public static IServiceCollection InfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCoreServices();         // CORS, Controllers, HttpContext
-            services.AddInfrastructure(configuration);  // Database, Repository, External APIs
+            services.AddInfrastructure(configuration);  // Database, Repository
             services.AddAuthenticationServices(); // JWT, Identity
             services.AddRepositories();         // UnitOfWork, Repository
             services.AddServices();             // Map Interface với Service
@@ -51,7 +45,6 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
                         .AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        /*.AllowCredentials()*/
                         .SetIsOriginAllowed(_ => true);
                 });
             });
@@ -87,23 +80,6 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
                     Scheme = "Bearer"
                 });
 
-                /*option.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header
-                        },
-                        new List<string>()
-                    }
-                });*/
                 option.OperationFilter<SecurityRequirementsOperationFilter>();
             });
 
@@ -112,17 +88,13 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 
         public static void AddRepositories(this IServiceCollection services)
         {
-            // MySQL UnitOfWork for User service
-            services.AddScoped<IUnitOfWork, UnitOfWork<UserDbContext>>();
+            // Không cần thêm gì ở đây vì đã sử dụng MongoDB repository từ Common package
         }
 
-        /// Đăng ký Interface với Service
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped<IConversationService, ConversationService>();
             services.AddScoped<IConversationMessageService, ConversationMessageService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<INotificationService, NotificationService>();
         }
 
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -130,7 +102,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
             // MongoDB Database for Conversation service
             services.AddSingleton<IMongoDatabase>(provider =>
             {
-                var mongoSettings = configuration.GetSection("MongoDB");
+                var mongoSettings = configuration.GetSection("MongoDB:Conversation");
                 var connectionString = mongoSettings["ConnectionString"];
                 var databaseName = mongoSettings["DatabaseName"];
 
@@ -138,28 +110,22 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
                 return mongoClient.GetDatabase(databaseName);
             });
 
+            // Register ConversationDbContext
+            services.AddScoped<ConversationDbContext>();
+
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
             services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
-
-            // MySQL Database for User service
-            services.AddDbContext<UserDbContext>(options =>
-            {
-                var connectionString = configuration.GetConnectionString("UserDB");
-                options.UseSqlServer(connectionString, sqlOptions =>
-                {
-                    sqlOptions.MigrationsAssembly(typeof(DependencyInjection).Assembly.FullName);
-                });
-            });
         }
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IMessageHandler<NotificationEvent, NotificationResponseEvent>, NotificationHandler>();
             services.AddScoped<IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>, CheckUserExistHandler>();
+            
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>();
                 config.AddConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>();
+
                 config.UsingRabbitMq((context, cfg) =>
                 {
                     var configuration = context.GetRequiredService<IConfiguration>();
@@ -171,12 +137,21 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
                         h.Password(rabbitMQSettings["Password"]);
                     });
 
+                    // Configure request client
+                    //cfg.RequestClient<CheckUserExistRequest>(new Uri("queue:user-check-queue"));
+
                     cfg.ReceiveEndpoint("notification-queue", e =>
                     {
                         e.ConfigureConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>(context);
                     });
+
+                    cfg.ReceiveEndpoint("user-check-queue", e =>
+                    {
+                        e.ConfigureConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>(context);
+                    });
                 });
             });
+
             return services;
         }
     }
