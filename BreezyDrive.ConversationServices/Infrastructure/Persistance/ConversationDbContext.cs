@@ -38,9 +38,12 @@ namespace BreezyDrive.ConversationServices.Infrastructure.Persistance
                 throw new ArgumentNullException(nameof(configuration));
             }
 
-            var mongoSettings = configuration.GetSection("MongoDB:Conversation");
-            var connectionString = mongoSettings["ConnectionString"];
-            var databaseName = mongoSettings["DatabaseName"];
+            var connectionString = configuration.GetConnectionString("ConversationDB");
+            Console.WriteLine($"ConnectionString: {connectionString}");
+
+            var databaseName = configuration["DatabaseSettings:DatabaseName"];
+
+            var database = MongoDbInitializer.Initialize(connectionString, databaseName);
 
             Console.WriteLine($"🔍 MongoDB Connection String: {connectionString}");
             Console.WriteLine($"📂 Database Name: {databaseName}");
