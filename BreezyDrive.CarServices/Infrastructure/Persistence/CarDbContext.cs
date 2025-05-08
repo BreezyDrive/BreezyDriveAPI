@@ -28,6 +28,7 @@ public class CarDbContext : BaseDbContext<CarDbContext>
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
+                .AddJsonFile(Path.GetFullPath(Path.Combine(@"../BreezyDrive.CommonService/shared.appsettings.json")), optional: true, reloadOnChange: true)
                 .Build();
             var connectionString = configuration.GetConnectionString("CarDB");
 

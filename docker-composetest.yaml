@@ -12,13 +12,11 @@
       - breezydrive.cars
       - breezydrive.authentication
       - breezydrive.bookings
-      - breezydrive.notifications
-      - breezydrive.conversations
     env_file:
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_API_GATEWAY}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
@@ -34,7 +32,7 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_USERS}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
@@ -50,25 +48,10 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_CARS}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
-  breezydrive.conversations:
-    image: breezydrive-conversationservice
-    build:
-      context: .
-      dockerfile: BreezyDrive.ConversationServices/Dockerfile
-    container_name: breezydrive-conversations-container
-    ports:
-      - "${PORT_CONVERSATIONS}:${PORT_CONVERSATIONS}"
-    env_file:
-      - .env
-    environment:
-      - ASPNETCORE_URLS=http://+:${PORT_CONVERSATIONS}
-      - ASPNETCORE_ENVIRONMENT=Development
-    networks:
-      - breezydrive-network
 
   breezydrive.authentication:
     image: breezydrive-authenticationservice
@@ -82,7 +65,7 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_AUTH}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
@@ -98,25 +81,11 @@
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:${PORT_BOOKINGS}
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - breezydrive-network
 
-  breezydrive.notifications:
-    image: breezydrive-notificationservice
-    build:
-      context: .
-      dockerfile: BreezyDrive.NotificationServices/Dockerfile
-    container_name: breezydrive-notifications-container
-    ports:
-      - "${PORT_NOTIFICATIONS}:${PORT_NOTIFICATIONS}"
-    env_file:
-      - .env
-    environment:
-      - ASPNETCORE_URLS=http://+:${PORT_NOTIFICATIONS}
-      - ASPNETCORE_ENVIRONMENT=Development
-    networks:
-      - breezydrive-network
+
 
 networks:
   breezydrive-network:

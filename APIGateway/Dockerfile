@@ -8,13 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["APIGateway/APIGateway.csproj", "APIGateway/"]
-COPY ["BreezyDrive.BookingServices/BreezyDrive.BookingServices.csproj", "BreezyDrive.BookingServices/"]
-COPY ["BreezyDrive.CarServices/BreezyDrive.CarServices.csproj", "BreezyDrive.CarServices/"]
-COPY ["BreezyDrive.CommonService/BreezyDrive.CommonService.csproj", "BreezyDrive.CommonService/"]
-COPY ["Library/Library.csproj", "Library/"]
-COPY ["BreezyDrive.ConversationServices/BreezyDrive.ConversationServices.csproj", "BreezyDrive.ConversationServices/"]
-COPY ["BreezyDrive.NotificationServices/BreezyDrive.NotificationServices.csproj", "BreezyDrive.NotificationServices/"]
-COPY ["BreezyDrive.UserServices/BreezyDrive.UserServices.csproj", "BreezyDrive.UserServices/"]
+
 RUN dotnet restore "APIGateway/APIGateway.csproj"
 COPY . .
 WORKDIR "/src/APIGateway"

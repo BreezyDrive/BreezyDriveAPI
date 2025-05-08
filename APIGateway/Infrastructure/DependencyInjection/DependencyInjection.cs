@@ -50,8 +50,8 @@ public static class DependencyInjection
         //     .LoadFromMemory(GetRoutes(), GetClusters()).AddSwagger(GetSwaggerConfig());
         
         services.AddReverseProxy()
-            .LoadFromMemory(ClusterConfigurationHelper.GetRoutes(), ClusterConfigurationHelper.GetClusters())
-            .AddSwagger(ClusterConfigurationHelper.GetSwaggerConfig());
+            .LoadFromMemory(ClusterConfigurationHelper.GetRoutes(), ClusterConfigurationHelper.GetClusters(configuration))
+            .AddSwagger(ClusterConfigurationHelper.GetSwaggerConfig(configuration));
 
 
         return services;
