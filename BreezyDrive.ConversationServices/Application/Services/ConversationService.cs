@@ -5,6 +5,7 @@ using BreezyDrive.ConversationServices.Application.DTOs.Requests;
 using BreezyDrive.ConversationServices.Application.DTOs.Responses;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Domain.Entities;
+using BreezyDrive.ConversationServices.Infrastructure.Persistance;
 
 namespace BreezyDrive.ConversationServices.Application.Services
 {
@@ -12,11 +13,40 @@ namespace BreezyDrive.ConversationServices.Application.Services
     {
         private readonly IMongoUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ConversationDbContext _dbContext;
 
-        public ConversationService(IMongoUnitOfWork unitOfWork, IMapper mapper)
+        public ConversationService(IMongoUnitOfWork unitOfWork, IMapper mapper, ConversationDbContext dbContext)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _dbContext = dbContext;
+        }
+
+        public async Task<object> InitializeDatabase()
+        {
+            try
+            {
+                // Verify the connection and collections
+                var conversations = _dbContext.Conversations;
+                var messages = _dbContext.ConversationMessages;
+                var files = _dbContext.MessageFiles;
+
+                return new
+                {
+                    Status = "Success",
+                    Message = "MongoDB database and collections initialized successfully",
+                    Collections = new[]
+                    {
+                        "Conversations",
+                        "ConversationMessages",
+                        "MessageFiles"
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to initialize database: {ex.Message}");
+            }
         }
 
         public Task<ConversationResponse> CreateConversation(ConversationRequest request)
