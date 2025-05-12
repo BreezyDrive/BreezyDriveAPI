@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using MongoDB.Driver;
 using BreezyDrive.ConversationServices.Infrastructure.Persistance;
+using BreezyDrive.CommonService.Infrastuctures.Data;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
@@ -100,18 +101,26 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             // MongoDB Database for Conversation service
-            services.AddSingleton<IMongoDatabase>(provider =>
-            {
-                var mongoSettings = configuration.GetSection("MongoDB:Conversation");
-                var connectionString = mongoSettings["ConnectionString"];
-                var databaseName = mongoSettings["DatabaseName"];
+            //services.AddSingleton<IMongoDatabase>(provider =>
+            //{
+            //    var mongoSettings = configuration.GetSection("MongoDB:Conversation");
+            //    var connectionString = mongoSettings["ConnectionString"];
+            //    var databaseName = mongoSettings["DatabaseName"];
 
-                var mongoClient = new MongoClient(connectionString);
-                return mongoClient.GetDatabase(databaseName);
-            });
+            //    var mongoClient = new MongoClient(connectionString);
+            //    return mongoClient.GetDatabase(databaseName);
+            //});
+
+            var connectionString = configuration.GetConnectionString("ConversationDB");
+            Console.WriteLine($"ConnectionString: {connectionString}");
+
+            var databaseName = configuration["DatabaseSettings:DatabaseName"];
+
+            var database = MongoDbInitializer.Initialize(connectionString, databaseName);
 
             // Register ConversationDbContext
             services.AddScoped<ConversationDbContext>();
+            services.AddSingleton<IMongoDatabase>(database);
 
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
             services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
