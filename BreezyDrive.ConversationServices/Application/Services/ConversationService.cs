@@ -49,6 +49,24 @@ namespace BreezyDrive.ConversationServices.Application.Services
             }
         }
 
+        public async Task<List<ConversationResponse>> GetAllConversations()
+        {
+            var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
+            var conversations = await conversationRepository.GetAllAsync();
+
+            if (!conversations.Any())
+            {
+                throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
+            }
+
+            return _mapper.Map<List<ConversationResponse>>(conversations);
+        }
+
+        public Task<ConversationResponse> GetConversationByID(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ConversationResponse> CreateConversation(ConversationRequest request)
         {
             throw new NotImplementedException();
@@ -58,16 +76,8 @@ namespace BreezyDrive.ConversationServices.Application.Services
         {
             throw new NotImplementedException();
         }
-
-        public Task<List<ConversationResponse>> GetAllConversations()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ConversationResponse> GetConversationByID(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        
+        
 
         public Task<ConversationResponse> UpdateConversationById(Guid id, ConversationRequest request)
         {

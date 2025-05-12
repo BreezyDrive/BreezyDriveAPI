@@ -11,7 +11,7 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
 
         public Guid SenderId { get; set; }
 
-        public DateTime CreateTime { get; set; }
+        public DateTimeOffset CreateTime { get; set; }
 
         public string Content { get; set; }
 
@@ -20,6 +20,11 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
         public Guid? ReplyToMessageId { get; set; }
 
         public List<MessageFile> Files { get; set; } = new List<MessageFile>();
+
+        public ConversationMessage()
+        {
+            CreateTime = DateTimeOffset.Now;
+        }
 
     }
 }
