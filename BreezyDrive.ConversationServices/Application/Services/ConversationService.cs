@@ -6,18 +6,21 @@ using BreezyDrive.ConversationServices.Application.DTOs.Responses;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Domain.Entities;
 using BreezyDrive.ConversationServices.Infrastructure.Persistance;
+using BreezyDrive.NotificationServices.Domain.Entities;
 
 namespace BreezyDrive.ConversationServices.Application.Services
 {
     public class ConversationService : IConversationService
     {
-        private readonly IMongoUnitOfWork _unitOfWork;
+        private readonly IMongoRepository<Conversation> _conversationRepository;
+        //private readonly IMongoRepository<ConversationMessage> _conversationMessageRepository;
+        //private readonly IMongoRepository<MessageFile> _messagefileRepository;
         private readonly IMapper _mapper;
         private readonly ConversationDbContext _dbContext;
 
         public ConversationService(IMongoUnitOfWork unitOfWork, IMapper mapper, ConversationDbContext dbContext)
         {
-            _unitOfWork = unitOfWork;
+            _conversationRepository = unitOfWork.Repository<Conversation>("Conversations");
             _mapper = mapper;
             _dbContext = dbContext;
         }
@@ -49,28 +52,21 @@ namespace BreezyDrive.ConversationServices.Application.Services
             }
         }
 
-        public async Task<List<ConversationResponse>> GetAllConversations()
+        public async Task<ConversationResponse> CreateConversation(ConversationRequest request)
         {
-            var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
-            var conversations = await conversationRepository.GetAllAsync();
+            //var existConversation = await _unitOfWork.Repository<Conversation>("Conversations");
 
-            if (!conversations.Any())
-            {
-                throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
-            }
-
-            return _mapper.Map<List<ConversationResponse>>(conversations);
+            
+            throw new NotImplementedException();
         }
+
 
         public Task<ConversationResponse> GetConversationByID(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ConversationResponse> CreateConversation(ConversationRequest request)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public Task<ConversationResponse> DeleteConversation(Guid id, ConversationRequest request)
         {
