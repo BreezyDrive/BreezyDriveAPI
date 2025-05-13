@@ -25,6 +25,7 @@ public class CarDbContext : BaseDbContext<CarDbContext>
     {
         if (!optionsBuilder.IsConfigured)
         {
+            
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
