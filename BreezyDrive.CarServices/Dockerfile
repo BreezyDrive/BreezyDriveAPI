@@ -9,6 +9,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BreezyDrive.CarServices/BreezyDrive.CarServices.csproj", "BreezyDrive.CarServices/"]
 COPY ["BreezyDrive.CommonService/BreezyDrive.CommonService.csproj", "BreezyDrive.CommonService/"]
+COPY ["BreezyDrive.CommonService/shared.appsettings.Production.json", "BreezyDrive.CommonService/"]
 COPY ["Library/Library.csproj", "Library/"]
 RUN dotnet restore "BreezyDrive.CarServices/BreezyDrive.CarServices.csproj"
 COPY . .
@@ -22,4 +23,6 @@ RUN dotnet publish "./BreezyDrive.CarServices.csproj" -c $BUILD_CONFIGURATION -o
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["BreezyDrive.CommonService/shared.appsettings.Production.json", "."]
+
 ENTRYPOINT ["dotnet", "BreezyDrive.CarServices.dll"]
