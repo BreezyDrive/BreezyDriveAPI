@@ -6,7 +6,7 @@
     "ConversationDB": "Server=host.docker.internal,1433;Database=ConversationBreezyDrive;User Id=sa;Password=12345;TrustServerCertificate=True"
 
   },
-
+  
   "RabbitMQ": {
     "Host": "rabbitmq://host.docker.internal",
     "Username": "rabbitMQ",

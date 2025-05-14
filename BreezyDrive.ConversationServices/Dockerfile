@@ -9,6 +9,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BreezyDrive.ConversationServices/BreezyDrive.ConversationServices.csproj", "BreezyDrive.ConversationServices/"]
 COPY ["BreezyDrive.CommonService/BreezyDrive.CommonService.csproj", "BreezyDrive.CommonService/"]
+COPY ["BreezyDrive.CommonService/shared.appsettings.Production.json", "BreezyDrive.CommonService/"]
 COPY ["Library/Library.csproj", "Library/"]
 COPY ["BreezyDrive.NotificationServices/BreezyDrive.NotificationServices.csproj", "BreezyDrive.NotificationServices/"]
 COPY ["BreezyDrive.UserServices/BreezyDrive.UserServices.csproj", "BreezyDrive.UserServices/"]
@@ -24,4 +25,5 @@ RUN dotnet publish "./BreezyDrive.ConversationServices.csproj" -c $BUILD_CONFIGU
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["BreezyDrive.CommonService/shared.appsettings.Production.json", "."]
 ENTRYPOINT ["dotnet", "BreezyDrive.ConversationServices.dll"]

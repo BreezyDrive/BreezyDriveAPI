@@ -15,13 +15,15 @@ if (builder.Environment.IsDevelopment())
         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
         .AddEnvironmentVariables();
 }
+
 else
 {
     builder.Configuration
-        .AddJsonFile(Path.GetFullPath(Path.Combine(@"../BreezyDrive.CommonService/shared.appsettings.Production.json")), optional: true, reloadOnChange: true)
+        .AddJsonFile("shared.appsettings.Production.json", optional: true, reloadOnChange: true)
         .AddJsonFile("appsettings.Production.json", optional: true, reloadOnChange: true)
         .AddEnvironmentVariables();
 }
+
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
