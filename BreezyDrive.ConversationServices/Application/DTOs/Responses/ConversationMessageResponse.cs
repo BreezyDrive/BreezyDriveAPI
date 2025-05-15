@@ -4,19 +4,19 @@ using BreezyDrive.ConversationServices.Domain.Entities;
 
 namespace BreezyDrive.ConversationServices.Application.DTOs.Responses
 {
-    public class ConversationMessageResponse : IMapFrom<ConversationMessageResponse>
+    public class ConversationMessageResponse : IMapFrom<ConversationMessage>
     {
-        public Guid ConverationId { get; set; }
+        public Guid ConversationId { get; set; }
 
         public Guid SenderId { get; set; }
 
-        public DateTime CreateTime { get; set; }
+        public DateTimeOffset CreateTime { get; set; }
 
         public string Content { get; set; }
 
         public bool IsSeen { get; set; }
 
-        public Guid ReplyToMessageId { get; set; }
+        public Guid? ReplyToMessageId { get; set; }
 
         public void Mapping(Profile profile)
         {

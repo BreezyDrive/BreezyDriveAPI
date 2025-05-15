@@ -17,40 +17,33 @@ namespace BreezyDrive.ConversationServices.API.Controllers
             _conversationService = conversationService;
         }
 
-        [SwaggerOperation(Summary = "Get All Conversation For System")]
-        [HttpGet("GetAllConversation")]
-        public async Task<IActionResult> GetAllConversations()
-        {
-            var conversations = await _conversationService.GetAllConversations();
-            return CustomResult("Lấy dữ liệu thành công", conversations);
-        }
+        /* CHƯA ĐỤNG VÀO */
+        //[SwaggerOperation(Summary = "Get Conversation Id For System")]
+        //[HttpGet("GetConversation/{id}")]
+        //public async Task<IActionResult> GetConversationByID(Guid id)
+        //{
+        //    var conversations = await _conversationService.GetConversationByID(id);
+        //    return CustomResult("Lấy dữ liệu thành công", conversations);
+        //}
         
-        
-        [SwaggerOperation(Summary = "Get Conversation Id For System")]
-        [HttpGet("GetConversation/{id}")]
-        public async Task<IActionResult> GetConversationByID(Guid id)
-        {
-            var conversations = await _conversationService.GetConversationByID(id);
-            return CustomResult("Lấy dữ liệu thành công", conversations);
-        }
-        
-
+        // Chưa Test
         [SwaggerOperation(Summary = "Create Conversation For System")]
         [HttpPost("CreateConversation")]
-        public async Task<IActionResult> CreateConversation(ConversationRequest request)
+
+        public async Task<IActionResult> CreateConversation([FromBody] ConversationRequest request)
         {
             var conversations = await _conversationService.CreateConversation(request);
             return CustomResult("Tạo dữ liệu thành công", conversations);
         }
 
-
-        [SwaggerOperation(Summary = "Update Conversation Ids For System")]
-        [HttpPatch("UpdateConversation/{id}")]
-        public async Task<IActionResult> UpdateConversationById(Guid id, ConversationRequest request)
-        {
-            var conversations = await _conversationService.UpdateConversationById(id, request);
-            return CustomResult("Cập nhật dữ liệu thành công", conversations);
-        }
+        /* CHƯA ĐỤNG VÀO */
+        //[SwaggerOperation(Summary = "Update Conversation Ids For System")]
+        //[HttpPatch("UpdateConversation/{id}")]
+        //public async Task<IActionResult> UpdateConversationById(Guid id, ConversationRequest request)
+        //{
+        //    var conversations = await _conversationService.UpdateConversationById(id, request);
+        //    return CustomResult("Cập nhật dữ liệu thành công", conversations);
+        //}
 
         //[SwaggerOperation(Summary = "Thu hồi Conversation Id For System")]
         //[HttpPatch("DeleteConversation/{id}")]
@@ -60,7 +53,7 @@ namespace BreezyDrive.ConversationServices.API.Controllers
         //    return CustomResult("Cập nhật dữ liệu thành công", conversations);
         //}
 
-         
+
         [SwaggerOperation(Summary = "Khởi tạo database MongoDB")]
         [HttpPost("initialize-database")]
         public async Task<IActionResult> InitializeDatabase()
