@@ -14,6 +14,8 @@ using Swashbuckle.AspNetCore.Filters;
 using MongoDB.Driver;
 using BreezyDrive.ConversationServices.Infrastructure.Persistance;
 using BreezyDrive.CommonService.Infrastuctures.Data;
+using Library.EventContracts.Events.CarEvent.Request;
+using Library.EventContracts.Events.CommonResponse;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
@@ -128,39 +130,41 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>, CheckUserExistHandler>();
-            
-            services.AddMassTransit(config =>
+            services.AddMassTransit(configure =>
             {
-                config.AddConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>();
-                config.AddConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>();
+                configure.SetKebabCaseEndpointNameFormatter();
 
-                config.UsingRabbitMq((context, cfg) =>
+                // Add consumers
+                configure.AddConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>();
+
+                // Add request clients
+                configure.AddRequestClient<CheckUserExistRequest>();
+
+                configure.UsingRabbitMq((context, cfg) =>
                 {
-                    var configuration = context.GetRequiredService<IConfiguration>();
-                    var rabbitMQSettings = configuration.GetSection("RabbitMQ");
+                    var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+                    var host = rabbitMqConfig["Host"];
+                    var username = rabbitMqConfig["Username"];
+                    var password = rabbitMqConfig["Password"];
 
-                    cfg.Host(rabbitMQSettings["Host"], h =>
+                    // Kiểm tra xem các giá trị có null hoặc rỗng không
+                    if (string.IsNullOrWhiteSpace(host))
+                        throw new Exception("RabbitMQ Host is not configured.");
+                    if (string.IsNullOrWhiteSpace(username))
+                        throw new Exception("RabbitMQ Username is not configured.");
+                    if (string.IsNullOrWhiteSpace(password))
+                        throw new Exception("RabbitMQ Password is not configured.");
+
+                    cfg.Host(new Uri(host), h =>
                     {
-                        h.Username(rabbitMQSettings["Username"]);
-                        h.Password(rabbitMQSettings["Password"]);
+                        h.Username(username);
+                        h.Password(password);
                     });
 
-                    // Configure request client
-                    //cfg.RequestClient<CheckUserExistRequest>(new Uri("queue:user-check-queue"));
-
-                    cfg.ReceiveEndpoint("notification-queue", e =>
-                    {
-                        e.ConfigureConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>(context);
-                    });
-
-                    cfg.ReceiveEndpoint("user-check-queue", e =>
-                    {
-                        e.ConfigureConsumer<GenericConsumer<CheckUserExistRequest, CheckUserExistResponse>>(context);
-                    });
+                    // Tự động cấu hình endpoints cho tất cả consumers
+                    cfg.ConfigureEndpoints(context);
                 });
             });
-
             return services;
         }
     }

@@ -1,6 +1,8 @@
-﻿using BreezyDrive.CommonService.Infrastuctures.Data;
-using BreezyDrive.ConversationServices.Domain.Entities;
+﻿using BreezyDrive.ConversationServices.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.Persistance
@@ -11,7 +13,21 @@ namespace BreezyDrive.ConversationServices.Infrastructure.Persistance
         private readonly IMongoCollection<Conversation> _conversationColletion;
         private readonly IMongoCollection<ConversationMessage> _conversationMessageColletion;
         private readonly IMongoCollection<MessageFile> _messageColletion;
-
+        
+        static ConversationDbContext()
+        {
+            // Register GUID serializer only once when the class is first used
+            if (!BsonSerializer.TryRegisterSerializer(typeof(Guid), new GuidSerializer(GuidRepresentation.Standard)))
+            {
+                // If registration fails, the serializer is already registered
+                var currentSerializer = BsonSerializer.LookupSerializer<Guid>();
+                if (currentSerializer is GuidSerializer guidSerializer && guidSerializer.GuidRepresentation != GuidRepresentation.Standard)
+                {
+                    // If the current serializer uses a different representation, we might want to log a warning
+                    Console.WriteLine("Warning: Existing Guid serializer uses different representation");
+                }
+            }
+        }
 
         //private void EnsureCollectionsExist()
         //{
@@ -43,7 +59,11 @@ namespace BreezyDrive.ConversationServices.Infrastructure.Persistance
 
             var databaseName = configuration["DatabaseSettings:DatabaseName"];
 
-            var database = MongoDbInitializer.Initialize(connectionString, databaseName);
+            var mongoClientSettings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+            mongoClientSettings.ServerApi = new ServerApi(ServerApiVersion.V1);
+
+            var mongoClient = new MongoClient(mongoClientSettings);
+            _mongoDatabase = mongoClient.GetDatabase(databaseName);
 
             Console.WriteLine($"🔍 MongoDB Connection String: {connectionString}");
             Console.WriteLine($"📂 Database Name: {databaseName}");
@@ -53,9 +73,6 @@ namespace BreezyDrive.ConversationServices.Infrastructure.Persistance
                 Console.WriteLine("❌ MongoDB connection string is empty!");
                 throw new InvalidOperationException("MongoDB connection string is missing in appsettings.json.");
             }
-
-            var mongoClient = new MongoClient(connectionString);
-            _mongoDatabase = mongoClient.GetDatabase(databaseName);
 
             // Create collections if they don't exist
             var existingCollections = _mongoDatabase.ListCollectionNames().ToList();

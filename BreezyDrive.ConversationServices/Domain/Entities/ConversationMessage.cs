@@ -1,4 +1,6 @@
 ﻿using BreezyDrive.CommonService.Domain.Entities;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,8 +9,10 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
     [Table("ConversationMessage")]
     public class ConversationMessage : BaseEntities
     {
-        public Guid ConverationId { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        public Guid ConversationId { get; set; }
 
+        [BsonRepresentation(BsonType.String)]
         public Guid SenderId { get; set; }
 
         public DateTimeOffset CreateTime { get; set; }
@@ -17,6 +21,7 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
 
         public bool IsSeen { get; set; }
 
+        [BsonRepresentation(BsonType.String)]
         public Guid? ReplyToMessageId { get; set; }
 
         public List<MessageFile> Files { get; set; } = new List<MessageFile>();
@@ -25,6 +30,5 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
         {
             CreateTime = DateTimeOffset.Now;
         }
-
     }
 }

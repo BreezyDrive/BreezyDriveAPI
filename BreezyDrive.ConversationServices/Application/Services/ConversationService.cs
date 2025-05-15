@@ -13,8 +13,6 @@ namespace BreezyDrive.ConversationServices.Application.Services
     public class ConversationService : IConversationService
     {
         private readonly IMongoRepository<Conversation> _conversationRepository;
-        //private readonly IMongoRepository<ConversationMessage> _conversationMessageRepository;
-        //private readonly IMongoRepository<MessageFile> _messagefileRepository;
         private readonly IMapper _mapper;
         private readonly ConversationDbContext _dbContext;
 
@@ -55,9 +53,22 @@ namespace BreezyDrive.ConversationServices.Application.Services
         public async Task<ConversationResponse> CreateConversation(ConversationRequest request)
         {
             //var existConversation = await _unitOfWork.Repository<Conversation>("Conversations");
+            var existConversation = await _conversationRepository.GetAllAsync();
 
-            
-            throw new NotImplementedException();
+            var conversationCheck = existConversation
+                .Where(n => n.UserId1 == request.UserId1 && n.UserId2 == request.UserId2
+                    || n.UserId2 == request.UserId1 && n.UserId1 == request.UserId2)
+                .FirstOrDefault();
+
+            var newConversation = new Conversation
+            {
+                UserId1 = request.UserId1,
+                UserId2 = request.UserId2,
+            };
+
+            await _conversationRepository.InsertAsync(newConversation);
+            return _mapper.Map<ConversationResponse>(newConversation);
+
         }
 
 

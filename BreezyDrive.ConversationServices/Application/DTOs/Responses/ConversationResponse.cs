@@ -6,6 +6,8 @@ namespace BreezyDrive.ConversationServices.Application.DTOs.Responses
 {
     public class ConversationResponse : IMapFrom<Conversation>
     {
+        public Guid Id { get; set; }
+
         public Guid UserId1 { get; set; }
 
         public Guid UserId2 { get; set; }
