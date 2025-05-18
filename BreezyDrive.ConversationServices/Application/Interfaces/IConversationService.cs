@@ -6,7 +6,6 @@ namespace BreezyDrive.ConversationServices.Application.Interfaces
 {
     public interface IConversationService
     {
-        Task<List<ConversationResponse>> GetAllConversations();
         Task<ConversationResponse> GetConversationByID(Guid id);
         Task<ConversationResponse> CreateConversation(ConversationRequest request);
         Task<ConversationResponse> UpdateConversationById(Guid id, ConversationRequest request);

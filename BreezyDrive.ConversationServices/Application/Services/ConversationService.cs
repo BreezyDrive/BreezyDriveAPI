@@ -6,18 +6,19 @@ using BreezyDrive.ConversationServices.Application.DTOs.Responses;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Domain.Entities;
 using BreezyDrive.ConversationServices.Infrastructure.Persistance;
+using BreezyDrive.NotificationServices.Domain.Entities;
 
 namespace BreezyDrive.ConversationServices.Application.Services
 {
     public class ConversationService : IConversationService
     {
-        private readonly IMongoUnitOfWork _unitOfWork;
+        private readonly IMongoRepository<Conversation> _conversationRepository;
         private readonly IMapper _mapper;
         private readonly ConversationDbContext _dbContext;
 
         public ConversationService(IMongoUnitOfWork unitOfWork, IMapper mapper, ConversationDbContext dbContext)
         {
-            _unitOfWork = unitOfWork;
+            _conversationRepository = unitOfWork.Repository<Conversation>("Conversations");
             _mapper = mapper;
             _dbContext = dbContext;
         }
@@ -49,28 +50,34 @@ namespace BreezyDrive.ConversationServices.Application.Services
             }
         }
 
-        public async Task<List<ConversationResponse>> GetAllConversations()
+        public async Task<ConversationResponse> CreateConversation(ConversationRequest request)
         {
-            var conversationRepository = _unitOfWork.Repository<Conversation>("Conversations");
-            var conversations = await conversationRepository.GetAllAsync();
+            //var existConversation = await _unitOfWork.Repository<Conversation>("Conversations");
+            var existConversation = await _conversationRepository.GetAllAsync();
 
-            if (!conversations.Any())
+            var conversationCheck = existConversation
+                .Where(n => n.UserId1 == request.UserId1 && n.UserId2 == request.UserId2
+                    || n.UserId2 == request.UserId1 && n.UserId1 == request.UserId2)
+                .FirstOrDefault();
+
+            var newConversation = new Conversation
             {
-                throw new CustomExceptions.DataNotFoundException("Không tìm thấy dữ liệu");
-            }
+                UserId1 = request.UserId1,
+                UserId2 = request.UserId2,
+            };
 
-            return _mapper.Map<List<ConversationResponse>>(conversations);
+            await _conversationRepository.InsertAsync(newConversation);
+            return _mapper.Map<ConversationResponse>(newConversation);
+
         }
+
 
         public Task<ConversationResponse> GetConversationByID(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ConversationResponse> CreateConversation(ConversationRequest request)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public Task<ConversationResponse> DeleteConversation(Guid id, ConversationRequest request)
         {
