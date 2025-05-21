@@ -17,16 +17,19 @@ namespace BreezyDrive.ConversationServices.Application.Services
         private readonly IMongoRepository<Conversation> _conversationRepository;
         private readonly IMapper _mapper;
         private readonly IRequestClient<CheckUserExistRequest> _requestClient;
+        private readonly IMessageFileService _messageFileService;
 
         public ConversationMessageService(
             IMongoUnitOfWork unitOfWork, 
             IMapper mapper,
-            IRequestClient<CheckUserExistRequest> requestClient)
+            IRequestClient<CheckUserExistRequest> requestClient,
+            IMessageFileService messageFileService)
         {
             _conversationMessageRepository = unitOfWork.Repository<ConversationMessage>("ConversationMessages");
             _conversationRepository = unitOfWork.Repository<Conversation>("Conversations");
             _mapper = mapper;
             _requestClient = requestClient;
+            _messageFileService = messageFileService;
         }
 
         public async Task<List<ConversationMessageResponse>> GetAllConversationMessages()
@@ -86,11 +89,22 @@ namespace BreezyDrive.ConversationServices.Application.Services
             };
             await _conversationMessageRepository.InsertAsync(message);
 
+            // Upload files if any
+            if (request.Files != null && request.Files.Any())
+            {
+                foreach (var file in request.Files)
+                {
+                    await _messageFileService.UploadFile(message.Id, file);
+                }
+            }
+
             // Cập nhật LastMessage của conversation
             conversation.LastMessage = request.Content;
             await _conversationRepository.UpdateAsync(conversationId.ToString(), conversation);
 
-            return _mapper.Map<ConversationMessageResponse>(message);
+            var response = _mapper.Map<ConversationMessageResponse>(message);
+            response.Files = await _messageFileService.GetMessageFiles(message.Id);
+            return response;
         }
     }
 }

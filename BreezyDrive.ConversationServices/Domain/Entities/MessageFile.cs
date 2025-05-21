@@ -1,7 +1,6 @@
 ﻿using BreezyDrive.CommonService.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BreezyDrive.ConversationServices.Domain.Entities
@@ -13,6 +12,21 @@ namespace BreezyDrive.ConversationServices.Domain.Entities
         public Guid MessageId { get; set; }
 
         [BsonRepresentation(BsonType.String)]
-        public Guid FiledId { get; set; }
+        public string FiledId { get; set; }
+
+        public string FileName { get; set; }
+
+        public string ContentType { get; set; }
+
+        public long FileSize { get; set; }
+
+        public string FileUrl { get; set; }
+
+        //public DateTimeOffset UploadTime { get; set; }
+
+        //public MessageFile()
+        //{
+        //    UploadTime = DateTimeOffset.Now;
+        //}
     }
 }
