@@ -1,7 +1,6 @@
 ﻿using BreezyDrive.ConversationServices.Application.DTOs.Requests;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using CoreApiResponse;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,7 +11,7 @@ namespace BreezyDrive.ConversationServices.API.Controllers
     public class ConversationController : BaseController
     {
         private readonly IConversationService _conversationService;
-        public ConversationController (IConversationService conversationService)
+        public ConversationController(IConversationService conversationService)
         {
             _conversationService = conversationService;
         }
@@ -25,7 +24,7 @@ namespace BreezyDrive.ConversationServices.API.Controllers
         //    var conversations = await _conversationService.GetConversationByID(id);
         //    return CustomResult("Lấy dữ liệu thành công", conversations);
         //}
-        
+
         // Chưa Test
         [SwaggerOperation(Summary = "Create Conversation For System")]
         [HttpPost("CreateConversation")]

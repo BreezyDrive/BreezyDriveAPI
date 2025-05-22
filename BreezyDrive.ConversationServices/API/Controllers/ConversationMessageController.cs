@@ -1,11 +1,9 @@
 ﻿using BreezyDrive.ConversationServices.Application.DTOs.Requests;
 using BreezyDrive.ConversationServices.Application.Interfaces;
-using BreezyDrive.ConversationServices.Application.Messaging;
 using CoreApiResponse;
 using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using MassTransit;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -16,10 +14,16 @@ namespace BreezyDrive.ConversationServices.API.Controllers
     public class ConversationMessageController : BaseController
     {
         private readonly IConversationMessageService _conversationMessageService;
+        private readonly IMessageFileService _messageFileService;
         private readonly IRequestClient<CheckUserExistRequest> _requestClient;
-        public ConversationMessageController(IConversationMessageService conversationMessageService, IRequestClient<CheckUserExistRequest> requestClient)
+
+        public ConversationMessageController(
+            IConversationMessageService conversationMessageService,
+            IMessageFileService messageFileService,
+            IRequestClient<CheckUserExistRequest> requestClient)
         {
             _conversationMessageService = conversationMessageService;
+            _messageFileService = messageFileService;
             _requestClient = requestClient;
         }
 
@@ -34,7 +38,7 @@ namespace BreezyDrive.ConversationServices.API.Controllers
 
         [SwaggerOperation(Summary = "SendMessage to conversation")]
         [HttpPost("SendMessage/{conversationId}")]
-        public async Task<IActionResult> SendMessage([FromRoute] Guid conversationId, [FromBody] ConversationMessageRequest request)
+        public async Task<IActionResult> SendMessage([FromRoute] Guid conversationId, [FromForm] ConversationMessageRequest request)
         {
             var sendMessage = await _conversationMessageService.SendMessage(conversationId, request);
             return CustomResult("Gửi Thành Công", sendMessage);
@@ -48,6 +52,30 @@ namespace BreezyDrive.ConversationServices.API.Controllers
                 new CheckUserExistRequest { UserId = id });
 
             return CustomResult("Success", response);
+        }
+
+        [SwaggerOperation(Summary = "Download message file")]
+        [HttpGet("DownloadFile/{fileId}")]
+        public async Task<IActionResult> DownloadFile(Guid fileId)
+        {
+            var fileBytes = await _messageFileService.DownloadFile(fileId);
+            return File(fileBytes, "application/octet-stream");
+        }
+
+        [SwaggerOperation(Summary = "Delete message file")]
+        [HttpDelete("DeleteFile/{fileId}")]
+        public async Task<IActionResult> DeleteFile(Guid fileId)
+        {
+            await _messageFileService.DeleteFile(fileId);
+            return CustomResult("File deleted successfully");
+        }
+
+        [SwaggerOperation(Summary = "Get message files")]
+        [HttpGet("GetMessageFiles/{messageId}")]
+        public async Task<IActionResult> GetMessageFiles(Guid messageId)
+        {
+            var files = await _messageFileService.GetMessageFiles(messageId);
+            return CustomResult("Files retrieved successfully", files);
         }
     }
 }
