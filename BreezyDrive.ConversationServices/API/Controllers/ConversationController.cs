@@ -17,13 +17,13 @@ namespace BreezyDrive.ConversationServices.API.Controllers
         }
 
         /* CHƯA ĐỤNG VÀO */
-        //[SwaggerOperation(Summary = "Get Conversation Id For System")]
-        //[HttpGet("GetConversation/{id}")]
-        //public async Task<IActionResult> GetConversationByID(Guid id)
-        //{
-        //    var conversations = await _conversationService.GetConversationByID(id);
-        //    return CustomResult("Lấy dữ liệu thành công", conversations);
-        //}
+        [SwaggerOperation(Summary = "Get Conversation Id For System")]
+        [HttpGet("GetConversation/{id}")]
+        public async Task<IActionResult> GetConversationByID(Guid id)
+        {
+            var conversations = await _conversationService.GetConversationByID(id);
+            return CustomResult("Lấy dữ liệu thành công", conversations);
+        }
 
         // Chưa Test
         [SwaggerOperation(Summary = "Create Conversation For System")]

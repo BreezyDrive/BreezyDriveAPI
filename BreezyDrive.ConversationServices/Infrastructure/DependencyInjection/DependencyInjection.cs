@@ -99,6 +99,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
             services.AddScoped<IConversationService, ConversationService>();
             services.AddScoped<IConversationMessageService, ConversationMessageService>();
             services.AddScoped<IMessageFileService, MessageFileService>();
+            services.AddScoped<IConversationHubService, ConversationHubService>();
         }
 
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

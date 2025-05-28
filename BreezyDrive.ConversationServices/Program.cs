@@ -1,4 +1,5 @@
-﻿using BreezyDrive.ConversationServices.Infrastructure.DependencyInjection;
+﻿using BreezyDrive.ConversationServices.Application.Hubs;
+using BreezyDrive.ConversationServices.Infrastructure.DependencyInjection;
 using BreezyDrive.NotificationServices.Application.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,5 +31,6 @@ app.UseSwaggerDocumentation();
 app.UseApplicationMiddleware();
 app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub");
+app.MapHub<ConversationHub>("/conversationHub");
 
 app.Run();
