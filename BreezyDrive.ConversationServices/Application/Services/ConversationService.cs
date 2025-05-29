@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.ConversationServices.Application.DTOs.Requests;
 using BreezyDrive.ConversationServices.Application.DTOs.Responses;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Domain.Entities;
 using BreezyDrive.ConversationServices.Infrastructure.Persistance;
-using BreezyDrive.NotificationServices.Domain.Entities;
 
 namespace BreezyDrive.ConversationServices.Application.Services
 {
@@ -77,14 +75,14 @@ namespace BreezyDrive.ConversationServices.Application.Services
             throw new NotImplementedException();
         }
 
-        
+
 
         public Task<ConversationResponse> DeleteConversation(Guid id, ConversationRequest request)
         {
             throw new NotImplementedException();
         }
-        
-        
+
+
 
         public Task<ConversationResponse> UpdateConversationById(Guid id, ConversationRequest request)
         {

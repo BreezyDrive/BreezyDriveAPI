@@ -18,6 +18,8 @@ namespace BreezyDrive.ConversationServices.Application.DTOs.Responses
 
         public Guid? ReplyToMessageId { get; set; }
 
+        public List<MessageFile> Files { get; set; } = new List<MessageFile>();
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ConversationMessage, ConversationMessageResponse>();
