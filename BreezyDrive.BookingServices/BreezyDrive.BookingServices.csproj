@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="CoreApiResponse" Version="1.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13"/>
         <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
@@ -22,6 +23,12 @@
     <ItemGroup>
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
       <ProjectReference Include="..\Library\Library.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Application\Messaging\" />
+      <Folder Include="Application\Validators\" />
+      <Folder Include="Infrastructure\Persistence\" />
     </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ namespace BreezyDrive.CommonService.Infrastuctures.Repositories
         public async Task<IEnumerable<T>> GetAllAsync()
             => await _collection.Find(Builders<T>.Filter.Empty).ToListAsync();
 
-        public async Task<T> GetByIdAsync(string id)
+        public async Task<T> GetByIdAsync(object id)
         {
             var filter = Builders<T>.Filter.Eq("Id", id);
             return await _collection.Find(filter).FirstOrDefaultAsync();
@@ -29,13 +29,13 @@ namespace BreezyDrive.CommonService.Infrastuctures.Repositories
         public async Task InsertAsync(T entity)
             => await _collection.InsertOneAsync(entity);
 
-        public async Task UpdateAsync(string id, T entity)
+        public async Task UpdateAsync(object id, T entity)
         {
             var filter = Builders<T>.Filter.Eq("Id", id);
             await _collection.ReplaceOneAsync(filter, entity);
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(object id)
         {
             var filter = Builders<T>.Filter.Eq("Id", id);
             await _collection.DeleteOneAsync(filter);
