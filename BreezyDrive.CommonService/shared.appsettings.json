@@ -2,8 +2,9 @@
   "ConnectionStrings": {
     "CarDB": "Server=localhost,1433;Database=BreezyDriveCarService;User Id=sa;Password=BreezyDrive123;TrustServerCertificate=True",
     "UserDB": "Server=localhost,1433;Database=UserBreezyDrive;User Id=sa;Password=BreezyDrive123;TrustServerCertificate=True",
-    "NotificationDB": "mongodb://localhost:27017/BreezyDriveDB",
-    "ConversationDB": "mongodb://admin:12345@localhost:27017"
+    "NotificationDB": "mongodb://localhost:27017/NotificationDB",
+    "ConversationDB": "mongodb://admin:12345@localhost:27017",
+    "BookingDB": "mongodb://localhost:27017/BookingDB" 
   },
 
   "RabbitMQ": {

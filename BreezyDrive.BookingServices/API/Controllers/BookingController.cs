@@ -1,6 +1,48 @@
-﻿namespace BreezyDrive.BookingServices.API.Controllers;
+﻿using BreezyDrive.BookingServices.Application.Dto.Requests;
+using BreezyDrive.BookingServices.Application.Interfaces;
+using CoreApiResponse;
+using Microsoft.AspNetCore.Mvc;
 
-public class BookingController
+namespace BreezyDrive.BookingServices.API.Controllers;
+
+
+[Route("api/[controller]")]
+[ApiController]
+public class BookingController (IBookingService bookingService) : BaseController
 {
+    [HttpGet("GetAllBooking")]
+    public async Task<IActionResult> GetAllBooking()
+    {
+       
+        return CustomResult( "Success",  await bookingService.GetAllBookingsAsync());
+    }
+    
+    [HttpGet("GetBookingById/{bookingId}")]
+    public async Task<IActionResult> GetBookingById(Guid bookingId)
+    {
+       
+        return CustomResult( "Success",  await bookingService.GetBookingByIdAsync(bookingId));
+    }
+
+    [HttpPost("CreateBooking")]
+    public async Task<IActionResult> CreateBooking([FromBody]BookingRequest bookingRequest)
+    {
+        var booking = await bookingService.CreateBookingAsync(bookingRequest);
+        return CustomResult("Success", booking);
+    }
+
+    [HttpPatch("UpdateBooking/{bookingId}")]
+    public async Task<IActionResult> UpdateBooking(Guid bookingId, [FromBody] BookingRequest bookingRequest)
+    {
+        var booking = await bookingService.UpdateBookingAsync(bookingId, bookingRequest);
+        return CustomResult("Success", booking);
+    }
+    
+    [HttpDelete("DeleteBooking/{bookingId}")]
+    public async Task<IActionResult> DeleteBooking(Guid bookingId)
+    {
+        var isDeleted = await bookingService.DeleteBookingAsync(bookingId);
+        return CustomResult("Success", isDeleted);
+    }
     
 }
