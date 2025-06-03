@@ -30,7 +30,5 @@ app.UseSwaggerDocumentation();
 // Cấu hình Middleware
 app.UseApplicationMiddleware();
 app.MapControllers();
-app.MapHub<NotificationHub>("/notificationHub");
-app.MapHub<ConversationHub>("/conversationHub");
 
 app.Run();

@@ -44,11 +44,14 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
+                    // Thay thế AllowAnyOrigin() và SetIsOriginAllowed(_ => true)
+                    // bằng WithOrigins() và chỉ định rõ các origin được phép
                     builder
-                        .AllowAnyOrigin()
+                        .WithOrigins("http://localhost:5173"
+                                    , "https://localhost:8081/swagger") // API Gateway của bạn
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .SetIsOriginAllowed(_ => true);
+                        .AllowCredentials(); // Rất quan trọng cho SignalR
                 });
             });
 

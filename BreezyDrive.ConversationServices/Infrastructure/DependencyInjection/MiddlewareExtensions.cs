@@ -1,4 +1,5 @@
 ﻿using BreezyDrive.CommonService.Middleware;
+using BreezyDrive.ConversationServices.Application.Hubs;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
@@ -12,6 +13,10 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
             app.UseAuthentication();
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<ConversationHub>("/conversationHub");
+            });
 
             return app;
         }
