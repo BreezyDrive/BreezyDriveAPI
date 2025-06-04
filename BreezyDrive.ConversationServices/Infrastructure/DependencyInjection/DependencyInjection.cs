@@ -1,21 +1,19 @@
 ﻿using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
+using BreezyDrive.CommonService.Infrastuctures.Data;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
+using BreezyDrive.ConversationServices.Application.Hubs;
 using BreezyDrive.ConversationServices.Application.Interfaces;
-using BreezyDrive.ConversationServices.Application.Messaging;
 using BreezyDrive.ConversationServices.Application.Services;
+using BreezyDrive.ConversationServices.Infrastructure.Persistance;
 using Library.EventContracts.Events.NotificationEvents.Request;
 using Library.EventContracts.Events.UserEvents.Request;
-using Library.EventContracts.Events.UserEvents.Response;
 using MassTransit;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 using MongoDB.Driver;
-using BreezyDrive.ConversationServices.Infrastructure.Persistance;
-using BreezyDrive.CommonService.Infrastuctures.Data;
-using Library.EventContracts.Events.CarEvent.Request;
-using Library.EventContracts.Events.CommonResponse;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
 {
@@ -38,17 +36,21 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
         {
             services.AddControllers();
             services.AddHttpContextAccessor();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             services.AddSignalR();
 
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
+                    // Thay thế AllowAnyOrigin() và SetIsOriginAllowed(_ => true)
+                    // bằng WithOrigins() và chỉ định rõ các origin được phép
                     builder
-                        .AllowAnyOrigin()
+                        .WithOrigins("http://localhost:5173"
+                                    , "https://localhost:8081/swagger") // API Gateway của bạn
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .SetIsOriginAllowed(_ => true);
+                        .AllowCredentials(); // Rất quan trọng cho SignalR
                 });
             });
 
@@ -99,6 +101,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
             services.AddScoped<IConversationService, ConversationService>();
             services.AddScoped<IConversationMessageService, ConversationMessageService>();
             services.AddScoped<IMessageFileService, MessageFileService>();
+            services.AddScoped<IConversationHubService, ConversationHubService>();
         }
 
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
