@@ -1,8 +1,6 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 using BreezyDrive.ConversationServices.Application.Hubs;
 using BreezyDrive.ConversationServices.Application.Interfaces;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BreezyDrive.ConversationServices.Application.Services
 {
@@ -28,6 +26,8 @@ namespace BreezyDrive.ConversationServices.Application.Services
             // Gửi cho cả sender và receiver
             await _hubContext.Clients.Users(new[] { senderId.ToString(), receiverId.ToString() })
                 .SendAsync("ReceiveMessage", messageData);
+
+            Console.WriteLine($"Received message from client: ConversationId={conversationId}, SenderId={senderId}, Content={content}");
         }
     }
 } 
