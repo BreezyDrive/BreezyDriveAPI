@@ -5,6 +5,8 @@ using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Infrastuctures.Extensions;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
@@ -22,9 +24,11 @@ public static class DependencyInjection
         services.AdDatabaseServices(configuration);
         services.AddSwaggerDocumentation();
         services.AddMasstransit(configuration);
+        services.AddValidator(configuration);
         services.AddAuthenticationServices(configuration);
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         
+
         return services;
     }
 
@@ -57,30 +61,31 @@ public static class DependencyInjection
     private static IServiceCollection AdDatabaseServices(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("BookingDB");
-        
+
         var mongoUrl = MongoUrl.Create(connectionString);
         var databaseName = mongoUrl.DatabaseName;
 
         var mongoClient = new MongoClient(mongoUrl);
         var database = mongoClient.GetDatabase(databaseName);
-        
+
         services.AddSingleton<IMongoDatabase>(database);
-        
+
         services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
         services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
-        
-        
+
+
         return services;
     }
-    
-    
-    private static IServiceCollection AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
+
+
+    private static IServiceCollection AddAuthenticationServices(this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddAuthenticationAuthorized(configuration);
         return services;
-    }    
-    
-    
+    }
+
+
     private static IServiceCollection AddSwaggerDocumentation(this IServiceCollection services)
     {
         services.AddSwaggerGen(option =>
@@ -124,63 +129,66 @@ public static class DependencyInjection
         //add scope
         service.AddScoped<IBookingService, BookingService>();
     }
-    
-      private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
-        {
-            //thêm dòng này cho từng event
-            //services.AddGenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse, CheckCarExistHandler>();
 
-            services.AddMassTransit(configure =>
+    private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
+    {
+        //thêm dòng này cho từng event
+        //services.AddGenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse, CheckCarExistHandler>();
+
+        services.AddMassTransit(configure =>
+        {
+            configure.SetKebabCaseEndpointNameFormatter();
+
+            //thêm consumer vào đây
+            //configure.AddConsumer<GenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse>>();
+
+
+            configure.UsingRabbitMq((context, cfg) =>
             {
-                configure.SetKebabCaseEndpointNameFormatter();
+                var rabbitMqConfig = configuration.GetSection("RabbitMQ");
+                var host = rabbitMqConfig["Host"];
+                var username = rabbitMqConfig["Username"];
+                var password = rabbitMqConfig["Password"];
 
-                //thêm consumer vào đây
-                //configure.AddConsumer<GenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse>>();
+                // Kiểm tra xem các giá trị có null hoặc rỗng không
+                if (string.IsNullOrWhiteSpace(host))
+                    throw new Exception("RabbitMQ Host is not configured.");
+                if (string.IsNullOrWhiteSpace(username))
+                    throw new Exception("RabbitMQ Username is not configured.");
+                if (string.IsNullOrWhiteSpace(password))
+                    throw new Exception("RabbitMQ Password is not configured.");
 
-
-                configure.UsingRabbitMq((context, cfg) =>
+                cfg.Host(new Uri(host), h =>
                 {
-                    var rabbitMqConfig = configuration.GetSection("RabbitMQ");
-                    var host = rabbitMqConfig["Host"];
-                    var username = rabbitMqConfig["Username"];
-                    var password = rabbitMqConfig["Password"];
-
-                    // Kiểm tra xem các giá trị có null hoặc rỗng không
-                    if (string.IsNullOrWhiteSpace(host))
-                        throw new Exception("RabbitMQ Host is not configured.");
-                    if (string.IsNullOrWhiteSpace(username))
-                        throw new Exception("RabbitMQ Username is not configured.");
-                    if (string.IsNullOrWhiteSpace(password))
-                        throw new Exception("RabbitMQ Password is not configured.");
-
-                    cfg.Host(new Uri(host), h =>
-                    {
-                        h.Username(username);
-                        h.Password(password);
-                    });
-
-                    cfg.ConfigureEndpoints(context);
+                    h.Username(username);
+                    h.Password(password);
                 });
+
+                cfg.ConfigureEndpoints(context);
             });
-            return services;
-        }
+        });
+        return services;
+    }
 
-        private static IServiceCollection AddGenericConsumer<TMessage, TResponse, THandler>(this IServiceCollection services)
-            where TMessage : class
-            where TResponse : class
-            where THandler : class, IMessageHandler<TMessage, TResponse>
-        {
-            // Đăng ký handler cho message
-            services.AddScoped<IMessageHandler<TMessage, TResponse>, THandler>();
-        
-            // Đăng ký GenericConsumer
-            services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
-        
-            return services;
-        }
-    
-    
-        
+    private static IServiceCollection AddGenericConsumer<TMessage, TResponse, THandler>(
+        this IServiceCollection services)
+        where TMessage : class
+        where TResponse : class
+        where THandler : class, IMessageHandler<TMessage, TResponse>
+    {
+        // Đăng ký handler cho message
+        services.AddScoped<IMessageHandler<TMessage, TResponse>, THandler>();
 
- 
+        // Đăng ký GenericConsumer
+        services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddValidator(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
+        return services;
+    }
 }

@@ -8,7 +8,7 @@ public static class MiddewareExtentions
     {
         app.UseHttpsRedirection();
         app.UseRouting();
-        //app.UseCors("CorsPolicy");
+        //app.UseCors("AllowAll");
         app.UseAuthentication();
         app.UseMiddleware<ExceptionMiddleware>();
         app.UseAuthorization();
