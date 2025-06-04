@@ -9,10 +9,10 @@ namespace BreezyDrive.CommonService.Domain.Interfaces
     public interface IMongoRepository<T>
     {
         Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(string id);
+        Task<T> GetByIdAsync(object id);
         Task InsertAsync(T entity);
-        Task UpdateAsync(string id, T entity);
-        Task DeleteAsync(string id);
+        Task UpdateAsync(object id, T entity);
+        Task DeleteAsync(object id);
     }
 
 }

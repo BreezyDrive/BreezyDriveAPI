@@ -4,6 +4,7 @@
     "UserDB": "Server=localhost,1433;Database=UserBreezyDrive;User Id=sa;Password=BreezyDrive123;TrustServerCertificate=True",
     "NotificationDB": "mongodb://admin:12345@localhost:27017",
     "ConversationDB": "mongodb://admin:12345@localhost:27017"
+    "BookingDB": "mongodb://localhost:27017/BookingDB" 
   },
 
   "RabbitMQ": {
