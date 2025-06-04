@@ -2,11 +2,8 @@ using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.ConversationServices.Application.Interfaces;
 using BreezyDrive.ConversationServices.Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
-using System.Linq;
 
 namespace BreezyDrive.ConversationServices.Application.Services
 {

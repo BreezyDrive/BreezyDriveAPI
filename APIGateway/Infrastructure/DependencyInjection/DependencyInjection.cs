@@ -27,10 +27,11 @@ public static class DependencyInjection
             options.AddPolicy("CorsPolicy", builder =>
             {
                 builder
-                    .AllowAnyOrigin()
+                    //.AllowAnyOrigin()
+                    .WithOrigins("http://localhost:5173", "https://localhost:8081")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    /*.AllowCredentials()*/
+                    .AllowCredentials()
                     .SetIsOriginAllowed(_ => true);
             });
         });

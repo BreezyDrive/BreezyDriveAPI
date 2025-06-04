@@ -70,9 +70,14 @@ namespace BreezyDrive.ConversationServices.Application.Services
         }
 
 
-        public Task<ConversationResponse> GetConversationByID(Guid id)
+        public async Task<ConversationResponse> GetConversationByID(Guid id)
         {
-            throw new NotImplementedException();
+            var conversationList = await _conversationRepository.GetAllAsync();
+            var conversatioId = conversationList
+                .Where(c => c.Id == id)
+                .FirstOrDefault();
+
+            return _mapper.Map<ConversationResponse>(conversatioId);
         }
 
 

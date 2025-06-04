@@ -18,18 +18,21 @@ namespace BreezyDrive.ConversationServices.Application.Services
         private readonly IMapper _mapper;
         private readonly IRequestClient<CheckUserExistRequest> _requestClient;
         private readonly IMessageFileService _messageFileService;
+        private readonly IConversationHubService _hubService;
 
         public ConversationMessageService(
             IMongoUnitOfWork unitOfWork, 
             IMapper mapper,
             IRequestClient<CheckUserExistRequest> requestClient,
-            IMessageFileService messageFileService)
+            IMessageFileService messageFileService,
+            IConversationHubService hubService)
         {
             _conversationMessageRepository = unitOfWork.Repository<ConversationMessage>("ConversationMessages");
             _conversationRepository = unitOfWork.Repository<Conversation>("Conversations");
             _mapper = mapper;
             _requestClient = requestClient;
             _messageFileService = messageFileService;
+            _hubService = hubService;
         }
 
         public async Task<List<ConversationMessageResponse>> GetAllConversationMessages()
@@ -104,6 +107,11 @@ namespace BreezyDrive.ConversationServices.Application.Services
 
             var response = _mapper.Map<ConversationMessageResponse>(message);
             response.Files = await _messageFileService.GetMessageFiles(message.Id);
+
+            // Gửi realtime qua hub service
+            var receiverId = conversation.UserId1 == request.SenderId ? conversation.UserId2 : conversation.UserId1;
+            await _hubService.SendMessageToUserAsync(conversationId, request.SenderId, request.Content, message.Id, message.CreateTime, receiverId);
+
             return response;
         }
     }

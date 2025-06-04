@@ -63,11 +63,12 @@ else
             c.SwaggerEndpoint($"/swagger/{cluster.Key}/swagger.json", cluster.Key);
         }
     });
-    
+
 }
 
 
 app.UseHttpsRedirection();
+app.UseWebSockets();
 app.UseRouting();
 app.UseAuthorization();
 app.UseCors("CorsPolicy");
