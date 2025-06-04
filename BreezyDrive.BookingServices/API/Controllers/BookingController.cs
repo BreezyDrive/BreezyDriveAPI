@@ -1,6 +1,9 @@
 ﻿using BreezyDrive.BookingServices.Application.Dto.Requests;
 using BreezyDrive.BookingServices.Application.Interfaces;
 using CoreApiResponse;
+using Library.EventContracts.Events.UserEvents.Request;
+using Library.EventContracts.Events.UserEvents.Response;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BreezyDrive.BookingServices.API.Controllers;
@@ -8,7 +11,7 @@ namespace BreezyDrive.BookingServices.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class BookingController (IBookingService bookingService) : BaseController
+public class BookingController (IBookingService bookingService, IRequestClient<CheckUserExistRequest> client) : BaseController
 {
     [HttpGet("GetAllBooking")]
     public async Task<IActionResult> GetAllBooking()
@@ -43,6 +46,16 @@ public class BookingController (IBookingService bookingService) : BaseController
     {
         var isDeleted = await bookingService.DeleteBookingAsync(bookingId);
         return CustomResult("Success", isDeleted);
+    }
+    
+    //test rabbitmq
+    [HttpGet("CheckIfUserExist/{id}")]
+    public async Task<IActionResult> CheckIfUserExist(Guid id)
+    {
+        var response = await client.GetResponse<CheckUserExistResponse>(
+            new CheckUserExistRequest { UserId = id });
+        
+        return CustomResult("Success", response);
     }
     
 }

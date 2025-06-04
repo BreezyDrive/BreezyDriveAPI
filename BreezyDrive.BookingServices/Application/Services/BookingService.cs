@@ -11,7 +11,6 @@ namespace BreezyDrive.BookingServices.Application.Services;
 public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBookingService
 {
     private readonly IMongoRepository<Booking> _bookingRepository = unitOfWork.Repository<Booking> ("Bookings");
-    private readonly IMapper _mapper = mapper;
 
 
     public async Task<IEnumerable<BookingResponse>> GetAllBookingsAsync()
@@ -30,7 +29,7 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
 
     public async Task<BookingResponse> CreateBookingAsync(BookingRequest request)
     {
-        var booking = _mapper.Map<Booking>(request);
+        var booking = mapper.Map<Booking>(request);
         await _bookingRepository.InsertAsync(booking);
         return mapper.Map<BookingResponse>(booking);
     }
