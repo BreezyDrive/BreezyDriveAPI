@@ -6,7 +6,7 @@ using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.UserServices.Application.Messaging;
 
-public class CheckUserExistHandler : IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>
+public class CheckUserExistHandler : IMessageHandler<CheckUserExistRequestEvent, CheckUserExistResponse>
 {
     private readonly IUserService _userService;
     private readonly ILogger<CheckUserExistHandler> _logger;
@@ -17,13 +17,13 @@ public class CheckUserExistHandler : IMessageHandler<CheckUserExistRequest, Chec
         _logger = logger;
     }
     
-    public async Task<CheckUserExistResponse> HandleMessageAsync(CheckUserExistRequest message)
+    public async Task<CheckUserExistResponse> HandleMessageAsync(CheckUserExistRequestEvent message)
     {
-        _logger.LogInformation("Handling CheckUserExistRequest for user {UserId}", message.UserId);
+        _logger.LogInformation("Handling CheckUserExistRequestEvent for user {UserId}", message.UserId);
 
         var user = await _userService.isUserExists(message.UserId);
         
-        _logger.LogWarning("User {UserId} not found", message.UserId);
+        if(!user) _logger.LogWarning("User {UserId} not found", message.UserId);
 
         return new CheckUserExistResponse { IsUserExists = user };
 

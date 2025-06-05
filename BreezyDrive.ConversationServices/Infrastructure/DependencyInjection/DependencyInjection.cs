@@ -142,7 +142,7 @@ namespace BreezyDrive.ConversationServices.Infrastructure.DependencyInjection
                 configure.AddConsumer<GenericConsumer<NotificationEvent, NotificationResponseEvent>>();
 
                 // Add request clients
-                configure.AddRequestClient<CheckUserExistRequest>();
+                configure.AddRequestClient<CheckUserExistRequestEvent>();
 
                 configure.UsingRabbitMq((context, cfg) =>
                 {

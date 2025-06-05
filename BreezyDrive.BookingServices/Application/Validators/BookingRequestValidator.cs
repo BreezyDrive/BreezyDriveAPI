@@ -10,11 +10,11 @@ namespace BreezyDrive.BookingServices.Application.Validators;
 
 public class BookingRequestValidator : AbstractValidator<BookingRequest>
 {
-    private readonly IRequestClient<CheckUserExistRequest> _userExistsClient;
+    private readonly IRequestClient<CheckUserExistRequestEvent> _userExistsClient;
     private readonly IRequestClient<CheckCarExistRequestEvent> _carExistsClient;
 
 
-    public BookingRequestValidator(IRequestClient<CheckUserExistRequest> userExistsClient,
+    public BookingRequestValidator(IRequestClient<CheckUserExistRequestEvent> userExistsClient,
         IRequestClient<CheckCarExistRequestEvent> carExistsClient)
     {
         _userExistsClient = userExistsClient;
@@ -22,18 +22,19 @@ public class BookingRequestValidator : AbstractValidator<BookingRequest>
 
         RuleFor(x => x.RentUserId)
             .Must(g => g != Guid.Empty).WithMessage("UserId không được là Guid trống.")
-            .Must(UserExists).WithMessage("User not found");
-          RuleFor(x => x.CarId)
-              .Must(g => g != Guid.Empty).WithMessage("UserId không được là Guid trống.");
-           // .Must(CarExists).WithMessage("Car not found");
+            .Must(UserExists).WithMessage("User không tồn tại.");
+        RuleFor(x => x.CarId)
+            .Must(g => g != Guid.Empty).WithMessage("CarId không được là Guid trống.")
+            .Must(CarExists).WithMessage("Car không tồn tại.");
         RuleFor(x => x.EndDate)
-            .GreaterThan(x => x.StartDate);
+            .GreaterThanOrEqualTo(x => x.StartDate);
     }
 
-    private bool UserExists(Guid rentUserId)
+    private bool UserExists(Guid userId)
     {
         var response =
-            _userExistsClient.GetResponse<CheckUserExistResponse>(new CheckUserExistRequest { UserId = rentUserId });
+            _userExistsClient.GetResponse<CheckUserExistResponse>(
+                new CheckUserExistRequestEvent { UserId = userId });
         return response.Result.Message.IsUserExists;
     }
 

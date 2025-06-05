@@ -14,6 +14,7 @@ using Library.EventContracts.Events.UserEvents.Request;
 using Library.EventContracts.Events.UserEvents.Response;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Library.EventContracts.Events.CarEvent.Response;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -148,14 +149,14 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
             //thêm dòng này cho từng event
-            services.AddGenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse, CheckCarExistHandler>();
+            services.AddGenericConsumer<CheckCarExistRequestEvent, CheckCarExistResponseEvent, CheckCarExistHandler>();
 
             services.AddMassTransit(configure =>
             {
                 configure.SetKebabCaseEndpointNameFormatter();
 
                 //thêm consumer vào đây
-                configure.AddConsumer<GenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse>>();
+                configure.AddConsumer<GenericConsumer<CheckCarExistRequestEvent, CheckCarExistResponseEvent>>();
 
 
                 configure.UsingRabbitMq((context, cfg) =>

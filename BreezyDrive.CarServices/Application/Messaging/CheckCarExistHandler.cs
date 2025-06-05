@@ -1,11 +1,12 @@
 ﻿using BreezyDrive.CarServices.Application.Interfaces;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using Library.EventContracts.Events.CarEvent.Request;
+using Library.EventContracts.Events.CarEvent.Response;
 using Library.EventContracts.Events.CommonResponse;
 
 namespace BreezyDrive.CarServices.Application.Messaging
 {
-    public class CheckCarExistHandler : IMessageHandler<CheckCarExistRequestEvent, EventSuccessResponse>
+    public class CheckCarExistHandler : IMessageHandler<CheckCarExistRequestEvent, CheckCarExistResponseEvent>
     {
         private readonly ICarService _carServices;
 
@@ -14,9 +15,9 @@ namespace BreezyDrive.CarServices.Application.Messaging
             _carServices = carServices;
         }
 
-        public async Task<EventSuccessResponse> HandleMessageAsync(CheckCarExistRequestEvent message)
+        public async Task<CheckCarExistResponseEvent> HandleMessageAsync(CheckCarExistRequestEvent message)
         {
-            return new EventSuccessResponse { IsSuccess = await _carServices.CheckCarExist(message.CarId) };
+            return new CheckCarExistResponseEvent { IsCarExists = await _carServices.CheckCarExist(message.CarId) };
         }
     }
 }

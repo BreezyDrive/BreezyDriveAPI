@@ -16,7 +16,7 @@ namespace BreezyDrive.CarServices.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CarController(ICarService carService, IRequestClient<CheckUserExistRequest> client) : BaseController
+public class CarController(ICarService carService, IRequestClient<CheckUserExistRequestEvent> client) : BaseController
 {
     [HttpGet("GetAllCars")]
     public async Task<IActionResult> GetAllCars()
@@ -54,7 +54,7 @@ public class CarController(ICarService carService, IRequestClient<CheckUserExist
     public async Task<IActionResult> CheckIfUserExist(Guid id)
     {
         var response = await client.GetResponse<CheckUserExistResponse>(
-            new CheckUserExistRequest { UserId = id });
+            new CheckUserExistRequestEvent { UserId = id });
         
         return CustomResult("Success", response);
     }
