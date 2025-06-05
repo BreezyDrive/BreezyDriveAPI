@@ -11,11 +11,9 @@ public class BookingRequest : IMapFrom<Booking>
     
     public string? Location { get; set; }
     
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
     
-    public DateTime EndDate { get; set; }
-    
-    public int TotalDays { get; set; }
+    public DateOnly EndDate { get; set; }
     
     public double TotalPrice { get; set; }
 }

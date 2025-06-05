@@ -1,6 +1,6 @@
 ﻿namespace Library.EventContracts.Events.UserEvents.Request;
 
-public record CheckUserExistRequest
+public record CheckUserExistRequestEvent
 {
     public Guid UserId { get; init; }
 

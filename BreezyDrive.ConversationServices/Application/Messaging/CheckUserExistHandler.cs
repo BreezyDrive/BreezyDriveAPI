@@ -6,20 +6,20 @@ using MassTransit;
 
 namespace BreezyDrive.ConversationServices.Application.Messaging;
 
-public class CheckUserExistHandler : IMessageHandler<CheckUserExistRequest, CheckUserExistResponse>
+public class CheckUserExistHandler : IMessageHandler<CheckUserExistRequestEvent, CheckUserExistResponse>
 {
-    private readonly IRequestClient<CheckUserExistRequest> _requestClient;
+    private readonly IRequestClient<CheckUserExistRequestEvent> _requestClient;
     private readonly ILogger<CheckUserExistHandler> _logger;
 
-    public CheckUserExistHandler(IRequestClient<CheckUserExistRequest> requestClient, ILogger<CheckUserExistHandler> logger)
+    public CheckUserExistHandler(IRequestClient<CheckUserExistRequestEvent> requestClient, ILogger<CheckUserExistHandler> logger)
     {
         _requestClient = requestClient;
         _logger = logger;
     }
     
-    public async Task<CheckUserExistResponse> HandleMessageAsync(CheckUserExistRequest message)
+    public async Task<CheckUserExistResponse> HandleMessageAsync(CheckUserExistRequestEvent message)
     {
-        _logger.LogInformation("Sending CheckUserExistRequest for user {UserId}", message.UserId);
+        _logger.LogInformation("Sending CheckUserExistRequestEvent for user {UserId}", message.UserId);
 
         try
         {

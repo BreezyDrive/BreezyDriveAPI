@@ -15,12 +15,12 @@ namespace BreezyDrive.ConversationServices.API.Controllers
     {
         private readonly IConversationMessageService _conversationMessageService;
         private readonly IMessageFileService _messageFileService;
-        private readonly IRequestClient<CheckUserExistRequest> _requestClient;
+        private readonly IRequestClient<CheckUserExistRequestEvent> _requestClient;
 
         public ConversationMessageController(
             IConversationMessageService conversationMessageService,
             IMessageFileService messageFileService,
-            IRequestClient<CheckUserExistRequest> requestClient)
+            IRequestClient<CheckUserExistRequestEvent> requestClient)
         {
             _conversationMessageService = conversationMessageService;
             _messageFileService = messageFileService;
@@ -49,7 +49,7 @@ namespace BreezyDrive.ConversationServices.API.Controllers
         public async Task<IActionResult> CheckIfUserExist(Guid id)
         {
             var response = await _requestClient.GetResponse<CheckUserExistResponse>(
-                new CheckUserExistRequest { UserId = id });
+                new CheckUserExistRequestEvent { UserId = id });
 
             return CustomResult("Success", response);
         }

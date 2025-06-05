@@ -9,10 +9,10 @@ namespace BreezyDrive.CarServices.Application.Validator;
 public class CarRequestValidator : AbstractValidator<CarRequest>
 {
     
-    private readonly IRequestClient<CheckUserExistRequest> _userClient;
+    private readonly IRequestClient<CheckUserExistRequestEvent> _userClient;
 
     
-    public CarRequestValidator(IRequestClient<CheckUserExistRequest> userClient)
+    public CarRequestValidator(IRequestClient<CheckUserExistRequestEvent> userClient)
     {
         
         _userClient = userClient;
@@ -71,7 +71,7 @@ public class CarRequestValidator : AbstractValidator<CarRequest>
     
     private bool UserExists(Guid userId)
     {
-        var response = _userClient.GetResponse<CheckUserExistResponse>(new CheckUserExistRequest { UserId = userId });
+        var response = _userClient.GetResponse<CheckUserExistResponse>(new CheckUserExistRequestEvent { UserId = userId });
         return response.Result.Message.IsUserExists;
     }
     

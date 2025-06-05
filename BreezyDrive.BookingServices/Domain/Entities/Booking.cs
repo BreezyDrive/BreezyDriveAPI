@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.InteropServices.JavaScript;
 using BreezyDrive.CommonService.Domain.Entities;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -16,11 +17,11 @@ public class Booking : BaseEntities
     
     public string Location { get; set; }
     
-    public DateTime StartDate { get; set; }
+    public DateOnly StartDate { get; set; }
     
-    public DateTime EndDate { get; set; }
+    public DateOnly EndDate { get; set; }
     
-    public int TotalDays { get; set; }
+    public int TotalDays => (EndDate.DayNumber - StartDate.DayNumber + 1);
     
     public double TotalPrice { get; set; }
     

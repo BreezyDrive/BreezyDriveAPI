@@ -16,14 +16,14 @@ namespace BreezyDrive.ConversationServices.Application.Services
         private readonly IMongoRepository<ConversationMessage> _conversationMessageRepository;
         private readonly IMongoRepository<Conversation> _conversationRepository;
         private readonly IMapper _mapper;
-        private readonly IRequestClient<CheckUserExistRequest> _requestClient;
+        private readonly IRequestClient<CheckUserExistRequestEvent> _requestClient;
         private readonly IMessageFileService _messageFileService;
         private readonly IConversationHubService _hubService;
 
         public ConversationMessageService(
             IMongoUnitOfWork unitOfWork, 
             IMapper mapper,
-            IRequestClient<CheckUserExistRequest> requestClient,
+            IRequestClient<CheckUserExistRequestEvent> requestClient,
             IMessageFileService messageFileService,
             IConversationHubService hubService)
         {
@@ -55,7 +55,7 @@ namespace BreezyDrive.ConversationServices.Application.Services
         {
             // Check if sender exists using RabbitMQ
             var userCheckResponse = await _requestClient.GetResponse<CheckUserExistResponse>(
-                new CheckUserExistRequest { UserId = request.SenderId });
+                new CheckUserExistRequestEvent { UserId = request.SenderId });
 
             if (!userCheckResponse.Message.IsUserExists)
             {
