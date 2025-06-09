@@ -15,5 +15,4 @@ public class BookingRequest : IMapFrom<Booking>
     
     public DateOnly EndDate { get; set; }
     
-    public double TotalPrice { get; set; }
 }

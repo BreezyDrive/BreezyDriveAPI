@@ -128,6 +128,8 @@ public static class DependencyInjection
     {
         //add scope
         service.AddScoped<IBookingService, BookingService>();
+        service.AddScoped<IBookingScheduleService, BookingScheduleService>();
+        service.AddScoped<IExistenceCheckerService,  ExistenceCheckerService>();
     }
 
     private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)

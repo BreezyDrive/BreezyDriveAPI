@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BreezyDrive.BookingServices.Domain.Entities;
 
-[Table("Booking")]
+[Table("Bookings")]
 public class Booking : BaseEntities
 {
     [BsonRepresentation(BsonType.String)]
