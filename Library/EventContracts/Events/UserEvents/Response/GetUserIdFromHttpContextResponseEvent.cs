@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.EventContracts.Events.UserEvents.Response
 {
-    public class GetUserIdResponseEvent
+    public class GetUserIdFromHttpContextResponseEvent
     {
         public bool IsSuccess { get; set; }
         public Guid UserId { get; set; }

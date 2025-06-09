@@ -107,14 +107,14 @@ namespace BreezyDrive.AuthenticationServices.Infrastructure.DependencyInjection
 
         private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddGenericConsumer<GetUserIdRequestEvent, GetUserIdResponseEvent, GetUserIdHandler>();
+            services.AddGenericConsumer<GetUserIdFromHttpContextRequestEvent, GetUserIdFromHttpContextResponseEvent, GetUserIdFronHttpContextHandler>();
 
 
             services.AddMassTransit(configure =>
             {
                 configure.SetKebabCaseEndpointNameFormatter();
 
-                configure.AddConsumer<GenericConsumer<GetUserIdRequestEvent, GetUserIdResponseEvent>>();
+                configure.AddConsumer<GenericConsumer<GetUserIdFromHttpContextRequestEvent, GetUserIdFromHttpContextResponseEvent>>();
 
                 configure.UsingRabbitMq((context, cfg) =>
                 {

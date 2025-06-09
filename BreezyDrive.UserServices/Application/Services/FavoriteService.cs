@@ -19,12 +19,12 @@ namespace BreezyDrive.UserServices.Application.Services
         private readonly IMapper _mapper;
         private readonly IRequestClient<CheckCarExistRequestEvent> _carExistClient; 
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IRequestClient<GetUserIdRequestEvent> _userIdRequestClient; 
+        private readonly IRequestClient<GetUserIdFromHttpContextRequestEvent> _userIdRequestClient; 
         private readonly ITokenService _tokenService;
 
 
         public FavoriteService(IUnitOfWork unitOfWork, IMapper mapper, IRequestClient<CheckCarExistRequestEvent> carExistClient,
-         IRequestClient<GetUserIdRequestEvent> userIdRequestClient,
+         IRequestClient<GetUserIdFromHttpContextRequestEvent> userIdRequestClient,
          IHttpContextAccessor httpContextAccessor,
          ITokenService tokenService)
         {

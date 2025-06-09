@@ -5,22 +5,22 @@ using Library.EventContracts.Events.UserEvents.Response;
 
 namespace BreezyDrive.AuthenticationServices.Application.Messaging
 {
-    public class GetUserIdHandler : IMessageHandler<GetUserIdRequestEvent, GetUserIdResponseEvent>
+    public class GetUserIdFronHttpContextHandler : IMessageHandler<GetUserIdFromHttpContextRequestEvent, GetUserIdFromHttpContextResponseEvent>
     {
         private readonly IAuthentication _authentication;
 
-        public GetUserIdHandler(IAuthentication authentication)
+        public GetUserIdFronHttpContextHandler(IAuthentication authentication)
         {
             _authentication = authentication;
         }
 
-        public Task<GetUserIdResponseEvent> HandleMessageAsync(GetUserIdRequestEvent message)
+        public Task<GetUserIdFromHttpContextResponseEvent> HandleMessageAsync(GetUserIdFromHttpContextRequestEvent message)
         {
             try
             {
                 var userId = _authentication.GetUserIdFromToken(message.JwtToken);
 
-                return Task.FromResult(new GetUserIdResponseEvent
+                return Task.FromResult(new GetUserIdFromHttpContextResponseEvent
                 {
                     IsSuccess = true,
                     UserId = userId
@@ -28,7 +28,7 @@ namespace BreezyDrive.AuthenticationServices.Application.Messaging
             }
             catch (Exception)
             {
-                return Task.FromResult(new GetUserIdResponseEvent
+                return Task.FromResult(new GetUserIdFromHttpContextResponseEvent
                 {
                     IsSuccess = false
                 });
