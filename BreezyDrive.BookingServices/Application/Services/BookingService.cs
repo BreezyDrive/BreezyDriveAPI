@@ -24,7 +24,7 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
     public async Task<BookingResponse> GetBookingByIdAsync(Guid bookingId)
     {
         var booking = await _bookingRepository.GetByIdAsync(bookingId);
-        if (booking == null) throw new CustomExceptions.DataNotFoundException("No Booking found");
+        if (booking == null) throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking!");
         return mapper.Map<BookingResponse>(booking);
     }
 
@@ -34,6 +34,8 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
             await _bookingRepository.GetAsync(filter: filter => filter.CarId == carId, 
                 modify: modify => modify.SortByDescending(booking => booking.EndDate)
         );
+        
+        if (bookingList == null) throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking với xe này!");
         
         return mapper.Map<IEnumerable<BookingResponse>>(bookingList);
         
@@ -52,7 +54,7 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
     public async Task<BookingResponse> UpdateBookingAsync(Guid bookingId, BookingRequest request)
     {
         var booking = await _bookingRepository.GetByIdAsync(bookingId);
-        if (booking == null) throw new CustomExceptions.DataNotFoundException("No Booking found");
+        if (booking == null) throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking!");
 
         mapper.Map(request, booking);
         await _bookingRepository.UpdateAsync(bookingId, booking);
@@ -63,7 +65,7 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
     public async Task<bool> DeleteBookingAsync(Guid bookingId)
     {
         var booking = await _bookingRepository.GetByIdAsync(bookingId);
-        if (booking == null) throw new CustomExceptions.DataNotFoundException("No Booking found");
+        if (booking == null) throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking!");
         await _bookingRepository.DeleteAsync(bookingId);
         return true;
     }

@@ -29,6 +29,28 @@ public class BookingScheduleService(IMongoUnitOfWork unitOfWork, IMapper mapper)
         return scheduleRequest;
     }
 
+    public async Task<IEnumerable<BookingSchedule>> GenerateBookingSchedules(Booking booking)
+    {
+        var schedules = new List<BookingSchedule>();
+
+        for (var date = booking.StartDate; date <= booking.EndDate; date = date.AddDays(1))
+        {
+            var schedule = new BookingSchedule
+            {
+                CarId = booking.CarId,
+                BookingId = booking.Id,
+                Date = date,
+            };
+
+            //gọi hàm create booking schedule
+            var created = await CreateBookingScheduleAsync(schedule);
+            schedules.Add(created);
+        }
+
+        return schedules;
+    }
+
+
     public async Task<BookingSchedule> UpdateBookingScheduleAsync(Guid bookingScheduleId ,BookingSchedule scheduleRequest)
     {
         var bookingSchedule = await _bookingScheduleRepository.GetByIdAsync(bookingScheduleId);
