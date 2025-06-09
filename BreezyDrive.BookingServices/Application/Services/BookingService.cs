@@ -3,6 +3,7 @@ using BreezyDrive.BookingServices.Application.Dto.Requests;
 using BreezyDrive.BookingServices.Application.Dto.Responses;
 using BreezyDrive.BookingServices.Application.Interfaces;
 using BreezyDrive.BookingServices.Domain.Entities;
+using BreezyDrive.BookingServices.Domain.Enums;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
 
@@ -27,9 +28,17 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
         return mapper.Map<BookingResponse>(booking);
     }
 
+    public Task<IEnumerable<BookingResponse>> GetAllBookingByCarIdAsync(Guid carId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<BookingResponse> CreateBookingAsync(BookingRequest request)
     {
         var booking = mapper.Map<Booking>(request);
+        //pending status khi khởi tạo lần đầu
+        booking.BookingStatus = BookingStatus.Pending;
+        
         await _bookingRepository.InsertAsync(booking);
         return mapper.Map<BookingResponse>(booking);
     }
