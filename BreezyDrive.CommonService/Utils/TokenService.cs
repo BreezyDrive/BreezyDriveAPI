@@ -15,11 +15,11 @@ namespace BreezyDrive.CommonService.Utils
 {
     public class TokenService : ITokenService
     {
-        private readonly IRequestClient<GetUserIdRequestEvent> _userIdRequestClient;
+        private readonly IRequestClient<GetUserIdFromHttpContextRequestEvent> _userIdRequestClient;
 
 
 
-        public TokenService(IHttpContextAccessor httpContextAccessor, IRequestClient<GetUserIdRequestEvent> userIdRequestClient)
+        public TokenService(IHttpContextAccessor httpContextAccessor, IRequestClient<GetUserIdFromHttpContextRequestEvent> userIdRequestClient)
         {
  
             _userIdRequestClient = userIdRequestClient;
@@ -42,8 +42,8 @@ namespace BreezyDrive.CommonService.Utils
         {
             var token = GetTokenFromHttpContext(httpContextAccessor);
 
-            var response = await _userIdRequestClient.GetResponse<GetUserIdResponseEvent>(
-                new GetUserIdRequestEvent
+            var response = await _userIdRequestClient.GetResponse<GetUserIdFromHttpContextResponseEvent>(
+                new GetUserIdFromHttpContextRequestEvent
                 {
                     JwtToken = token
                 });

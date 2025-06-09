@@ -1,4 +1,5 @@
 ﻿using BreezyDrive.BookingServices.Domain.Entities;
+using BreezyDrive.BookingServices.Domain.Enums;
 using BreezyDrive.CommonService.Application.Mapper;
 
 namespace BreezyDrive.BookingServices.Application.Dto.Responses;
@@ -14,6 +15,8 @@ public class BookingResponse : IMapFrom<Booking>
     public DateOnly StartDate { get; set; }
     
     public DateOnly EndDate { get; set; }
+    
+    public BookingStatus BookingStatus { get; set; }
     
     public int TotalDays { get; set; }
     

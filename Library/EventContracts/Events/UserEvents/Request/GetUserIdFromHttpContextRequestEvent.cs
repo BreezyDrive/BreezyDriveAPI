@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.EventContracts.Events.UserEvents.Request
 {
-    public class GetUserIdRequestEvent
+    public class GetUserIdFromHttpContextRequestEvent
     {
         public string JwtToken { get; set; }
     }
