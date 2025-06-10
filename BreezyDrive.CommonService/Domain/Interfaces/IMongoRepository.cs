@@ -12,8 +12,8 @@ namespace BreezyDrive.CommonService.Domain.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAsync(
-            Expression<Func<T, bool>> filter = null,
-            Func<IFindFluent<T, T>, IFindFluent<T, T>> modify = null,
+            Expression<Func<T, bool>>? filter = null,
+            Func<IFindFluent<T, T>, IFindFluent<T, T>>? modify = null,
             int? pageIndex = null,
             int? pageSize = null);
 

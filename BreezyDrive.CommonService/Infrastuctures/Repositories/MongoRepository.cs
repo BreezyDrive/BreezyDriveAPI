@@ -22,8 +22,8 @@ namespace BreezyDrive.CommonService.Infrastuctures.Repositories
             => await _collection.Find(Builders<T>.Filter.Empty).ToListAsync();
 
         public async Task<IEnumerable<T>> GetAsync(
-            Expression<Func<T, bool>> filter = null,
-            Func<IFindFluent<T, T>, IFindFluent<T, T>> modify = null, 
+            Expression<Func<T, bool>>? filter = null,
+            Func<IFindFluent<T, T>, IFindFluent<T, T>>? modify = null, 
             int? pageIndex = null, int? pageSize = null)
         {
             var query = _collection.Find(filter ?? (_ => true));

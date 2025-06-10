@@ -29,6 +29,12 @@ public class BookingController(
         return CustomResult("Success", await bookingService.GetBookingByIdAsync(bookingId));
     }
 
+    [HttpGet("GetBookingByCarId/{carId}")]
+    public async Task<IActionResult> GetBookingByCarId(Guid carId)
+    {
+        return CustomResult("Success", await bookingService.GetAllBookingByCarIdAsync(carId));
+    }
+
     [HttpPost("CreateBooking")]
     public async Task<IActionResult> CreateBooking([FromBody] BookingRequest bookingRequest)
     {

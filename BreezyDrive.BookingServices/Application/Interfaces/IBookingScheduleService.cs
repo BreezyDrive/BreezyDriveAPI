@@ -11,6 +11,9 @@ public interface IBookingScheduleService
     
     Task<BookingSchedule> CreateBookingScheduleAsync(BookingSchedule scheduleRequest);
     
+    Task<IEnumerable<BookingSchedule>> GenerateBookingSchedules(Booking booking);
+
+    
     Task<BookingSchedule> UpdateBookingScheduleAsync(Guid bookingScheduleId ,BookingSchedule scheduleRequest);
     
     Task<bool> DeleteBookingScheduleAsync(Guid id);
