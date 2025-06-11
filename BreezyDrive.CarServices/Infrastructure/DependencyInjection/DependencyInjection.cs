@@ -150,6 +150,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
         {
             //thêm dòng này cho từng event
             services.AddGenericConsumer<CheckCarExistRequestEvent, CheckCarExistResponseEvent, CheckCarExistHandler>();
+            services.AddGenericConsumer<GetCarInformationRequestEvent, GetCarInformationResponseEvent, GetCarInformationHandler>();
 
             services.AddMassTransit(configure =>
             {
@@ -157,7 +158,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
 
                 //thêm consumer vào đây
                 configure.AddConsumer<GenericConsumer<CheckCarExistRequestEvent, CheckCarExistResponseEvent>>();
-
+                configure.AddConsumer<GenericConsumer<GetCarInformationRequestEvent, GetCarInformationResponseEvent>>();
 
                 configure.UsingRabbitMq((context, cfg) =>
                 {

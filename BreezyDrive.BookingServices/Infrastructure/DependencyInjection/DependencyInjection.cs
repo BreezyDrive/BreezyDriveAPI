@@ -5,6 +5,7 @@ using BreezyDrive.CommonService.Domain.Interfaces;
 using BreezyDrive.CommonService.Infrastuctures.Extensions;
 using BreezyDrive.CommonService.Infrastuctures.Messaging;
 using BreezyDrive.CommonService.Infrastuctures.Repositories;
+using BreezyDrive.CommonService.Utils;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MassTransit;
@@ -130,6 +131,10 @@ public static class DependencyInjection
         service.AddScoped<IBookingService, BookingService>();
         service.AddScoped<IBookingScheduleService, BookingScheduleService>();
         service.AddScoped<IExistenceCheckerService,  ExistenceCheckerService>();
+        service.AddScoped<IBookingPermissionChecker,  BookingPermissionChecker>();
+        service.AddScoped<IBookingStatusHandler,  BookingStatusHandler>();
+        service.AddScoped<IBookingPreviewService,  BookingPreviewService>();
+        service.AddScoped<ITokenService,  TokenService>();
     }
 
     private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
