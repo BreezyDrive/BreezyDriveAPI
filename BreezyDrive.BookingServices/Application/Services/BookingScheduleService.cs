@@ -62,7 +62,7 @@ public class BookingScheduleService(IMongoUnitOfWork unitOfWork, IMapper mapper)
 
     public async Task<bool> DeleteBookingScheduleAsync(Guid id)
     {
-        var bookingSchedule = _bookingScheduleRepository.GetByIdAsync(id);
+        var bookingSchedule = await _bookingScheduleRepository.GetByIdAsync(id);
         if (bookingSchedule == null) throw new CustomExceptions.DataNotFoundException("Booking Schedule not found");
         
         await _bookingScheduleRepository.DeleteAsync(bookingSchedule.Id);

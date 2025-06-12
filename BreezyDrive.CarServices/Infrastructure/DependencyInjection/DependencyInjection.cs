@@ -196,7 +196,7 @@ namespace BreezyDrive.CarServices.Infrastructure.DependencyInjection
             services.AddScoped<IMessageHandler<TMessage, TResponse>, THandler>();
 
             // Đăng ký GenericConsumer
-            services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
+            // services.AddScoped<IConsumer<TMessage>, GenericConsumer<TMessage, TResponse>>();
 
             return services;
         }
