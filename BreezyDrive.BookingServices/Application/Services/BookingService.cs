@@ -6,11 +6,16 @@ using BreezyDrive.BookingServices.Domain.Entities;
 using BreezyDrive.BookingServices.Domain.Enums;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 
 namespace BreezyDrive.BookingServices.Application.Services;
 
-public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBookingService
+public class BookingService(
+    IMongoUnitOfWork unitOfWork, 
+    IMapper mapper,
+    ITokenService tokenService,
+    IHttpContextAccessor httpContextAccessor) : IBookingService
 {
     private readonly IMongoRepository<Booking> _bookingRepository = unitOfWork.Repository<Booking>("Bookings");
 
@@ -18,6 +23,10 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
     public async Task<IEnumerable<BookingResponse>> GetAllBookingsAsync()
     {
         var bookings = await _bookingRepository.GetAllAsync();
+        if (bookings.IsNullOrEmpty())
+        {
+            throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking!");
+        }
         return mapper.Map<IEnumerable<BookingResponse>>(bookings);
     }
 
@@ -28,17 +37,27 @@ public class BookingService(IMongoUnitOfWork unitOfWork, IMapper mapper) : IBook
         return mapper.Map<BookingResponse>(booking);
     }
 
+    public async Task<IEnumerable<BookingResponse>> GetAllBookingByUserLoggingIn()
+    {
+        var userId = await tokenService.GetUserIdFromHttpContext(httpContextAccessor);
+        var bookings = await _bookingRepository.GetAsync(x => x.RentUserId == userId);
+        if (bookings.IsNullOrEmpty())
+        {
+            throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking!");
+        }
+        return mapper.Map<IEnumerable<BookingResponse>>(bookings);
+    }
+
     public async Task<IEnumerable<BookingResponse>> GetAllBookingByCarIdAsync(Guid carId)
     {
-        var bookingList = 
-            await _bookingRepository.GetAsync(filter: filter => filter.CarId == carId, 
+        var bookingList =
+            await _bookingRepository.GetAsync(filter: filter => filter.CarId == carId,
                 modify: modify => modify.SortByDescending(booking => booking.EndDate)
-        );
-        
-        if (bookingList == null) throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking với xe này!");
-        
+            );
+
+        if (bookingList.IsNullOrEmpty()) throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking với xe này!");
+
         return mapper.Map<IEnumerable<BookingResponse>>(bookingList);
-        
     }
 
     public async Task<BookingResponse> CreateBookingAsync(BookingRequest request)
