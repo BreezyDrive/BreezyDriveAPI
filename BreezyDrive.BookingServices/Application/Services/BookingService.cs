@@ -14,6 +14,7 @@ namespace BreezyDrive.BookingServices.Application.Services;
 public class BookingService(
     IMongoUnitOfWork unitOfWork, 
     IMapper mapper,
+    IBookingScheduleService bookingScheduleService,
     ITokenService tokenService,
     IHttpContextAccessor httpContextAccessor) : IBookingService
 {
@@ -61,8 +62,14 @@ public class BookingService(
     }
 
     public async Task<BookingResponse> CreateBookingAsync(BookingRequest request)
-    {
+    {        
+        //check xem đã có booking trong khoảng thời gian đó chưa
+        //hàm đã throw luôn exception khi đã có lịch book
+        await bookingScheduleService.CheckScheduleExistsAsync(request.CarId, request.StartDate, request.EndDate);
+        
+        
         var booking = mapper.Map<Booking>(request);
+        
         //pending status khi khởi tạo lần đầu
         booking.BookingStatus = BookingStatus.Pending;
 
