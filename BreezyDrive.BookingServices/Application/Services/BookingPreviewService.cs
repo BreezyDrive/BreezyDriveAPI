@@ -1,6 +1,8 @@
-﻿using BreezyDrive.BookingServices.Application.Dto.Requests;
+﻿using System.Reflection;
+using BreezyDrive.BookingServices.Application.Dto.Requests;
 using BreezyDrive.BookingServices.Application.Dto.Responses;
 using BreezyDrive.BookingServices.Application.Interfaces;
+using BreezyDrive.CommonService.Domain.Exceptions;
 using Library.EventContracts.Events.CarEvent.Request;
 using Library.EventContracts.Events.CarEvent.Response;
 using MassTransit;
@@ -11,15 +13,14 @@ public class BookingPreviewService(
     IExistenceCheckerService existenceCheckerService,
     IRequestClient<GetCarInformationRequestEvent> carInformationRequestClient) : IBookingPreviewService
 {
-    private readonly IExistenceCheckerService _existenceCheckerService = existenceCheckerService;
-
-    private readonly IRequestClient<GetCarInformationRequestEvent> _carInformationRequestClient =
-        carInformationRequestClient;
-
-
     public async Task<BookingPreviewResponse> CalculateBooking(BookingPreviewRequest request)
     {
-        var carResponse  = await _carInformationRequestClient.GetResponse<GetCarInformationResponseEvent>(
+        var isCarExists = existenceCheckerService.IsCarExists(request.CarId);
+        if (!isCarExists)
+        {
+            throw new CustomExceptions.DataNotFoundException("Không tìm thấy xe!");
+        }
+        var carResponse  = await carInformationRequestClient.GetResponse<GetCarInformationResponseEvent>(
             new GetCarInformationRequestEvent { CarId = request.CarId });
 
         var car = carResponse.Message;

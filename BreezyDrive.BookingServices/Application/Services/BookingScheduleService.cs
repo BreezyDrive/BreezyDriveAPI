@@ -3,6 +3,7 @@ using BreezyDrive.BookingServices.Application.Interfaces;
 using BreezyDrive.BookingServices.Domain.Entities;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BreezyDrive.BookingServices.Application.Services;
 
@@ -48,6 +49,26 @@ public class BookingScheduleService(IMongoUnitOfWork unitOfWork, IMapper mapper)
         }
 
         return schedules;
+    }
+
+    public async Task<bool> CheckScheduleExistsAsync(Guid carId, DateOnly startDate, DateOnly endDate)
+    {
+        var bookingSchedule = await _bookingScheduleRepository
+            .GetAsync(filter: x => x.CarId == carId && x.Date >= startDate && x.Date <= endDate);
+        if (!bookingSchedule.IsNullOrEmpty())
+        {
+            throw new CustomExceptions.InvalidDataException("A schedule for this car with the same dates already exists");
+        }
+        return false;
+    }
+ 
+    public async Task<IEnumerable<Guid>> GetCarIdsAlreadyScheduled(DateOnly startDate, DateOnly endDate)
+    {
+        var schedules = await _bookingScheduleRepository.GetAsync(filter:x => x.Date >= startDate && x.Date <= endDate);
+        var carIds = schedules
+            .Select(x => x.CarId)
+            .Distinct();
+        return carIds;
     }
 
 

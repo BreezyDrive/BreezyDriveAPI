@@ -13,6 +13,9 @@ public interface IBookingScheduleService
     
     Task<IEnumerable<BookingSchedule>> GenerateBookingSchedules(Booking booking);
 
+    Task<bool> CheckScheduleExistsAsync(Guid carId, DateOnly startDate, DateOnly endDate);
+    
+    Task<IEnumerable<Guid>>GetCarIdsAlreadyScheduled(DateOnly startDate, DateOnly endDate);
     
     Task<BookingSchedule> UpdateBookingScheduleAsync(Guid bookingScheduleId ,BookingSchedule scheduleRequest);
     

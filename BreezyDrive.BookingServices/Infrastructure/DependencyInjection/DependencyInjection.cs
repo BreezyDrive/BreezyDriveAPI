@@ -1,4 +1,5 @@
 ﻿using BreezyDrive.BookingServices.Application.Interfaces;
+using BreezyDrive.BookingServices.Application.Messaging;
 using BreezyDrive.BookingServices.Application.Services;
 using BreezyDrive.CommonService.Application.Mapper;
 using BreezyDrive.CommonService.Domain.Interfaces;
@@ -8,6 +9,8 @@ using BreezyDrive.CommonService.Infrastuctures.Repositories;
 using BreezyDrive.CommonService.Utils;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Library.EventContracts.Events.BookingEvents.Requests;
+using Library.EventContracts.Events.BookingEvents.Responses;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
@@ -140,14 +143,14 @@ public static class DependencyInjection
     private static IServiceCollection AddMasstransit(this IServiceCollection services, IConfiguration configuration)
     {
         //thêm dòng này cho từng event
-        //services.AddGenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse, CheckCarExistHandler>();
-
+        services.AddGenericConsumer<GetScheduledCarsIdRequest, GetScheduledCarsIdResponse, GetScheduledCarsIdHandler>();
+        
         services.AddMassTransit(configure =>
         {
             configure.SetKebabCaseEndpointNameFormatter();
 
             //thêm consumer vào đây
-            //configure.AddConsumer<GenericConsumer<CheckCarExistRequestEvent, EventSuccessResponse>>();
+            configure.AddConsumer<GenericConsumer<GetScheduledCarsIdRequest, GetScheduledCarsIdResponse>>();
 
 
             configure.UsingRabbitMq((context, cfg) =>
