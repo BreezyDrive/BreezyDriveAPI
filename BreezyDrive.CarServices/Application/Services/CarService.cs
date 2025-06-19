@@ -5,19 +5,48 @@ using BreezyDrive.CarServices.Application.Interfaces;
 using BreezyDrive.CarServices.Domain.Entities;
 using BreezyDrive.CommonService.Domain.Exceptions;
 using BreezyDrive.CommonService.Domain.Interfaces;
+using Library.EventContracts.Events.BookingEvents.Requests;
+using Library.EventContracts.Events.BookingEvents.Responses;
+using MassTransit;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BreezyDrive.CarServices.Application.Services;
 
-public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
+public class CarService(
+    IUnitOfWork unitOfWork, 
+    IMapper mapper,
+    IRequestClient<GetScheduledCarsIdRequest> getScheduledCarsRequest) : ICarService
 {
     public async Task<IEnumerable<CarResponse>> GetAllCarsAsync()
     {
-        var cars =  unitOfWork.Repository<Cars>().Get( includeProperties: "CarModel.CarBrand");
+        var cars = await unitOfWork.Repository<Cars>().GetAsync(includeProperties: "CarModel.CarBrand");
         if (cars.IsNullOrEmpty())
         {
             throw new CustomExceptions.DataNotFoundException("No cars found");
         }
+
+        return mapper.Map<IEnumerable<CarResponse>>(cars);
+    }
+
+    public async Task<IEnumerable<CarResponse>> GetAllCarsFilterByDateAsync(DateOnly startDate, DateOnly endDate)
+    {
+        //gọi qua booking service lấy những xe đã có lịch
+        var response = await getScheduledCarsRequest.GetResponse<GetScheduledCarsIdResponse>
+        (
+            new GetScheduledCarsIdRequest
+            {
+                StartDate = startDate,
+                EndDate = endDate
+            }
+        );
+        var scheduledCarIds = response.Message.CarIds;
+     
+        //filter các xe đã có lịch
+        var cars = await unitOfWork.Repository<Cars>().GetAsync(
+            filter: cars => !scheduledCarIds.Contains(cars.Id), 
+            includeProperties: "CarModel.CarBrand");
+        
+        //mapper về dto response
         return mapper.Map<IEnumerable<CarResponse>>(cars);
     }
 
@@ -63,12 +92,14 @@ public class CarService (IUnitOfWork unitOfWork, IMapper mapper) : ICarService
 
     private async Task<Cars> GetCarByIdAsync(Guid carId)
     {
-        var car = await unitOfWork.Repository<Cars>().GetFirstOrDefaultAsync(cars => cars.Id == carId, includeProperties: "CarModel.CarBrand");
-        
+        var car = await unitOfWork.Repository<Cars>()
+            .GetFirstOrDefaultAsync(cars => cars.Id == carId, includeProperties: "CarModel.CarBrand");
+
         if (car == null)
         {
             throw new CustomExceptions.DataNotFoundException("Car not found");
         }
+
         return car;
     }
 
