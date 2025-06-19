@@ -13,13 +13,10 @@ public class BookingPreviewService(
 {
     private readonly IExistenceCheckerService _existenceCheckerService = existenceCheckerService;
 
-    private readonly IRequestClient<GetCarInformationRequestEvent> _carInformationRequestClient =
-        carInformationRequestClient;
-
 
     public async Task<BookingPreviewResponse> CalculateBooking(BookingPreviewRequest request)
     {
-        var carResponse  = await _carInformationRequestClient.GetResponse<GetCarInformationResponseEvent>(
+        var carResponse  = await carInformationRequestClient.GetResponse<GetCarInformationResponseEvent>(
             new GetCarInformationRequestEvent { CarId = request.CarId });
 
         var car = carResponse.Message;
