@@ -63,12 +63,15 @@ public class BookingService(
 
     public async Task<BookingResponse> CreateBookingAsync(BookingRequest request)
     {        
+
+        var userId = await tokenService.GetUserIdFromHttpContext(httpContextAccessor);
+
         //check xem đã có booking trong khoảng thời gian đó chưa
         //hàm đã throw luôn exception khi đã có lịch book
         await bookingScheduleService.CheckScheduleExistsAsync(request.CarId, request.StartDate, request.EndDate);
         
-        
         var booking = mapper.Map<Booking>(request);
+        booking.RentUserId = userId;
         
         //pending status khi khởi tạo lần đầu
         booking.BookingStatus = BookingStatus.Pending;

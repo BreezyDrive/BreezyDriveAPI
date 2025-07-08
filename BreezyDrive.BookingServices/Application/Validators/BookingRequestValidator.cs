@@ -13,9 +13,9 @@ public class BookingRequestValidator : AbstractValidator<BookingRequest>
 {
     public BookingRequestValidator(IExistenceCheckerService existenceCheckerService)
     {
-        RuleFor(x => x.RentUserId)
-            .Must(g => g != Guid.Empty).WithMessage("UserId không được là Guid trống.")
-            .Must(existenceCheckerService.IsUserExists).WithMessage("User không tồn tại.");
+        // RuleFor(x => x.RentUserId)
+        //     .Must(g => g != Guid.Empty).WithMessage("UserId không được là Guid trống.")
+        //     .Must(existenceCheckerService.IsUserExists).WithMessage("User không tồn tại.");
         RuleFor(x => x.CarId)
             .Must(g => g != Guid.Empty).WithMessage("CarId không được là Guid trống.")
             .Must(existenceCheckerService.IsCarExists).WithMessage("Car không tồn tại.");
