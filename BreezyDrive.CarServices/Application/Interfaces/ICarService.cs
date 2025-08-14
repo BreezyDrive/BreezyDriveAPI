@@ -8,6 +8,9 @@ public interface ICarService
 {
     Task<IEnumerable<CarResponse>> GetAllCarsAsync();
     
+    Task<IEnumerable<CarResponse>> GetAllCarsFilterByDateAsync(DateOnly startDate, DateOnly endDate);
+    
+    
     Task<CarResponse> GetByGuidAsync(Guid guid);
     
     Task<CarResponse> GetByModelName(string modelName);

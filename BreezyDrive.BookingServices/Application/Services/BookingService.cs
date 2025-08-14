@@ -15,6 +15,7 @@ public class BookingService(
     IMongoUnitOfWork unitOfWork, 
     IMapper mapper,
     IBookingScheduleService bookingScheduleService,
+    BookingPermissionChecker bookingPermissionChecker,
     ITokenService tokenService,
     IHttpContextAccessor httpContextAccessor) : IBookingService
 {
@@ -51,9 +52,12 @@ public class BookingService(
 
     public async Task<IEnumerable<BookingResponse>> GetAllBookingByCarIdAsync(Guid carId)
     {
+        //check xem có phải chủ xe hay không
+        await bookingPermissionChecker.EnsureUserIsCarOwnerAsync(carId, await tokenService.GetUserIdFromHttpContext(httpContextAccessor));
+        
         var bookingList =
             await _bookingRepository.GetAsync(filter: filter => filter.CarId == carId,
-                modify: modify => modify.SortByDescending(booking => booking.EndDate)
+                modify: modify => modify.SortByDescending(booking => booking.StartDate)
             );
 
         if (bookingList.IsNullOrEmpty()) throw new CustomExceptions.DataNotFoundException("Không tìm thấy booking với xe này!");
@@ -63,12 +67,15 @@ public class BookingService(
 
     public async Task<BookingResponse> CreateBookingAsync(BookingRequest request)
     {        
+
+        var userId = await tokenService.GetUserIdFromHttpContext(httpContextAccessor);
+
         //check xem đã có booking trong khoảng thời gian đó chưa
         //hàm đã throw luôn exception khi đã có lịch book
         await bookingScheduleService.CheckScheduleExistsAsync(request.CarId, request.StartDate, request.EndDate);
         
-        
         var booking = mapper.Map<Booking>(request);
+        booking.RentUserId = userId;
         
         //pending status khi khởi tạo lần đầu
         booking.BookingStatus = BookingStatus.Pending;
