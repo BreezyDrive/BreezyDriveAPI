@@ -33,7 +33,7 @@ public class BookingStatusHandler(
         // Lấy thông tin xe để xác minh chủ xe
         await bookingPermissionChecker.EnsureUserIsCarOwnerAsync(booking.CarId, currentUserId);
        
-
+        
         // Cập nhật trạng thái booking
         booking.BookingStatus = BookingStatus.Accepted;
 
