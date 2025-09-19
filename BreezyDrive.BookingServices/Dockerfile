@@ -8,6 +8,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BreezyDrive.BookingServices/BreezyDrive.BookingServices.csproj", "BreezyDrive.BookingServices/"]
+COPY ["BreezyDrive.CommonService/BreezyDrive.CommonService.csproj", "BreezyDrive.CommonService/"]
+COPY ["BreezyDrive.CommonService/shared.appsettings.Production.json", "BreezyDrive.CommonService/"]
+COPY ["Library/Library.csproj", "Library/"]
 RUN dotnet restore "BreezyDrive.BookingServices/BreezyDrive.BookingServices.csproj"
 COPY . .
 WORKDIR "/src/BreezyDrive.BookingServices"
@@ -20,4 +23,5 @@ RUN dotnet publish "./BreezyDrive.BookingServices.csproj" -c $BUILD_CONFIGURATIO
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["BreezyDrive.CommonService/shared.appsettings.Production.json", "."]
 ENTRYPOINT ["dotnet", "BreezyDrive.BookingServices.dll"]

@@ -18,18 +18,18 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
       <ProjectReference Include="..\Library\Library.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Infrastructure\Persistence\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

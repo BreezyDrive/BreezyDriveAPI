@@ -15,7 +15,7 @@ public class BookingService(
     IMongoUnitOfWork unitOfWork, 
     IMapper mapper,
     IBookingScheduleService bookingScheduleService,
-    BookingPermissionChecker bookingPermissionChecker,
+    IBookingPermissionChecker bookingPermissionChecker,
     ITokenService tokenService,
     IHttpContextAccessor httpContextAccessor) : IBookingService
 {
