@@ -1,68 +1,65 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <Compile Remove="API\Filters\**" />
-      <Compile Remove="API\Middlewares\**" />
-      <Compile Remove="Application\Exceptions\**" />
-      <Compile Remove="Infrastructure\Email\**" />
-      <Compile Remove="Infrastructure\Repositories\**" />
-      <Content Remove="API\Filters\**" />
-      <Content Remove="API\Middlewares\**" />
-      <Content Remove="Application\Exceptions\**" />
-      <Content Remove="Infrastructure\Email\**" />
-      <Content Remove="Infrastructure\Repositories\**" />
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-      <EmbeddedResource Remove="API\Filters\**" />
-      <EmbeddedResource Remove="API\Middlewares\**" />
-      <EmbeddedResource Remove="Application\Exceptions\**" />
-      <EmbeddedResource Remove="Infrastructure\Email\**" />
-      <EmbeddedResource Remove="Infrastructure\Repositories\**" />
-      <None Remove="API\Filters\**" />
-      <None Remove="API\Middlewares\**" />
-      <None Remove="Application\Exceptions\**" />
-      <None Remove="Infrastructure\Email\**" />
-      <None Remove="Infrastructure\Repositories\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="CoreApiResponse" Version="1.0.1" />
-        <PackageReference Include="Google.Apis.Auth" Version="1.69.0" />
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.14" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.13" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.13" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.13">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-        <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
-      <ProjectReference Include="..\Library\Library.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Domain\Enums\" />
-      <Folder Include="Domain\Interfaces\" />
-      <Folder Include="Infrastructure\Identity\" />
-    </ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="API\Filters\**" />
+    <Compile Remove="API\Middlewares\**" />
+    <Compile Remove="Application\Exceptions\**" />
+    <Compile Remove="Infrastructure\Email\**" />
+    <Compile Remove="Infrastructure\Repositories\**" />
+    <Content Remove="API\Filters\**" />
+    <Content Remove="API\Middlewares\**" />
+    <Content Remove="Application\Exceptions\**" />
+    <Content Remove="Infrastructure\Email\**" />
+    <Content Remove="Infrastructure\Repositories\**" />
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
+    <EmbeddedResource Remove="API\Filters\**" />
+    <EmbeddedResource Remove="API\Middlewares\**" />
+    <EmbeddedResource Remove="Application\Exceptions\**" />
+    <EmbeddedResource Remove="Infrastructure\Email\**" />
+    <EmbeddedResource Remove="Infrastructure\Repositories\**" />
+    <None Remove="API\Filters\**" />
+    <None Remove="API\Middlewares\**" />
+    <None Remove="Application\Exceptions\**" />
+    <None Remove="Infrastructure\Email\**" />
+    <None Remove="Infrastructure\Repositories\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CoreApiResponse" />
+    <PackageReference Include="Google.Apis.Auth" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="MongoDB.Bson" />
+    <PackageReference Include="MassTransit.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BreezyDrive.CommonService\BreezyDrive.CommonService.csproj" />
+    <ProjectReference Include="..\Library\Library.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\Enums\" />
+    <Folder Include="Domain\Interfaces\" />
+    <Folder Include="Infrastructure\Identity\" />
+  </ItemGroup>
 </Project>

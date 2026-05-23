@@ -1,54 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-    <PackageReference Include="Firebase.Auth" Version="1.0.0" />
-    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
-    <PackageReference Include="MassTransit.Abstractions" Version="8.4.0-develop.2236" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.13">
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="Firebase.Auth" />
+    <PackageReference Include="FirebaseStorage.net" />
+    <PackageReference Include="MassTransit.Abstractions" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-    <PackageReference Include="MongoDB.Bson" Version="3.2.1" />
-    <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="MongoDB.Bson" />
+    <PackageReference Include="MongoDB.Driver" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Contracts\" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="C:\Users\Kaneki\.nuget\packages\tesseract\5.2.0\build\\..\x86\leptonica-1.82.0.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="C:\Users\Kaneki\.nuget\packages\tesseract\5.2.0\build\\..\x86\tesseract50.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="C:\Users\Kaneki\.nuget\packages\tesseract\5.2.0\build\\..\x86\leptonica-1.82.0.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="C:\Users\Kaneki\.nuget\packages\tesseract\5.2.0\build\\..\x86\tesseract50.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Library\Library.csproj" />
   </ItemGroup>
-
 </Project>
